@@ -125,6 +125,7 @@ const corsOptions = {
         configuredDomains.some((d) => hostname === d || hostname.endsWith(`.${d}`)) ||
         /^https?:\/\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
         /\.onrender\.com$/.test(hostname) ||
+        /\.vercel\.app$/.test(hostname) ||
         /\.cloudfront\.net$/.test(hostname) ||
         /\.amazonaws\.com$/.test(hostname) ||
         /(^|\.)dreamxec\.(com|org)$/.test(hostname);
@@ -450,60 +451,66 @@ redis.on("ready", async () => {
 
 const donationService = require("./src/modules/donations/donation.service");
 
-const PORT = parseInt(String(process.env.PORT || 5000).replace(/[^0-9]/g, ""), 10) || 5000;
-const server = app.listen(PORT, "0.0.0.0", () => {
-  prisma
-    .$connect()
-    .then(async () => {
-      console.log("Database connected successfully");
-      await PermissionService.seedPermissions();
-      
-      // Auto-expire stale pending transactions on startup and schedule periodic sweeper (every 5 mins, 30m timeout)
-      const paymentTimeoutMinutes = parseInt(process.env.PAYMENT_TIMEOUT_MINUTES || '30', 10);
-      try {
-        await donationService.autoExpireStaleTransactions(paymentTimeoutMinutes);
-      } catch (err) {
-        console.warn("⚠️ Failed initial stale transaction sweep:", err.message);
-      }
-      setInterval(async () => {
+// Export app instance for serverless / testing / Vercel
+module.exports = app;
+
+// Only start standalone HTTP listener when not running in Vercel Serverless environment
+if (process.env.VERCEL !== "1" && !process.env.NOW_REGION) {
+  const PORT = parseInt(String(process.env.PORT || 5000).replace(/[^0-9]/g, ""), 10) || 5000;
+  const server = app.listen(PORT, "0.0.0.0", () => {
+    prisma
+      .$connect()
+      .then(async () => {
+        console.log("Database connected successfully");
+        await PermissionService.seedPermissions();
+        
+        // Auto-expire stale pending transactions on startup and schedule periodic sweeper (every 5 mins, 30m timeout)
+        const paymentTimeoutMinutes = parseInt(process.env.PAYMENT_TIMEOUT_MINUTES || '30', 10);
         try {
           await donationService.autoExpireStaleTransactions(paymentTimeoutMinutes);
         } catch (err) {
-          console.warn("⚠️ Error running periodic stale transaction sweep:", err.message);
+          console.warn("⚠️ Failed initial stale transaction sweep:", err.message);
         }
-      }, 5 * 60 * 1000).unref();
+        setInterval(async () => {
+          try {
+            await donationService.autoExpireStaleTransactions(paymentTimeoutMinutes);
+          } catch (err) {
+            console.warn("⚠️ Error running periodic stale transaction sweep:", err.message);
+          }
+        }, 5 * 60 * 1000).unref();
 
-      console.log(`🚀 Server running on port ${PORT}`);
-      if (typeof process.send === 'function') {
-        process.send('ready');
-      }
-    })
-    .catch((err) => console.error("Database connection failed:", err));
-});
-
-// ALB & Reverse Proxy TCP Keep-Alive Configuration (Avoids 502 Bad Gateway under load)
-const keepAliveTimeout = parseInt(process.env.SERVER_KEEP_ALIVE_TIMEOUT || "65000", 10);
-const headersTimeout = parseInt(process.env.SERVER_HEADERS_TIMEOUT || "66000", 10);
-server.keepAliveTimeout = keepAliveTimeout; // 65s default (must exceed ALB default 60s idle timeout)
-server.headersTimeout = headersTimeout;     // 66s default
-
-function gracefulShutdown(signal) {
-  console.log(`Received ${signal}, shutting down gracefully...`);
-  server.close(async () => {
-    try {
-      await prisma.$disconnect();
-      if (redis && redis.quit) {
-        await redis.quit();
-      }
-    } catch (_) {}
-    process.exit(0);
+        console.log(`🚀 Server running on port ${PORT}`);
+        if (typeof process.send === 'function') {
+          process.send('ready');
+        }
+      })
+      .catch((err) => console.error("Database connection failed:", err));
   });
-  setTimeout(() => {
-    console.error('Forced shutdown after timeout.');
-    process.exit(1);
-  }, 10000).unref();
-}
 
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+  // ALB & Reverse Proxy TCP Keep-Alive Configuration (Avoids 502 Bad Gateway under load)
+  const keepAliveTimeout = parseInt(process.env.SERVER_KEEP_ALIVE_TIMEOUT || "65000", 10);
+  const headersTimeout = parseInt(process.env.SERVER_HEADERS_TIMEOUT || "66000", 10);
+  server.keepAliveTimeout = keepAliveTimeout; // 65s default (must exceed ALB default 60s idle timeout)
+  server.headersTimeout = headersTimeout;     // 66s default
+
+  function gracefulShutdown(signal) {
+    console.log(`Received ${signal}, shutting down gracefully...`);
+    server.close(async () => {
+      try {
+        await prisma.$disconnect();
+        if (redis && redis.quit) {
+          await redis.quit();
+        }
+      } catch (_) {}
+      process.exit(0);
+    });
+    setTimeout(() => {
+      console.error('Forced shutdown after timeout.');
+      process.exit(1);
+    }, 10000).unref();
+  }
+
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+}
 
