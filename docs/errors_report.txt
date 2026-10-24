@@ -1,0 +1,80 @@
+================================================================================
+DREAMXEC CODEBASE - COMPLETE ERRORS, BUGS, & VULNERABILITIES ANALYSIS REPORT
+================================================================================
+
+
+
+-----------------------------------------------------------------------
+4. PRISMA SCHEMA MISMATCH DATABASE CRASH (STUDENT ANALYTICS)
+--------------------------------------------------------------------------------
+* FEATURE: Student Dashboard Campaign Analytics.
+* ERROR: The query in the controller select block requested "currentAmount" 
+  directly from Prisma, but the actual schema field in MongoDB is named "amountRaised".
+* POTENTIAL ISSUES: Loading the student analytics dashboard caused an immediate 
+  backend database validation crash because Prisma queried a non-existent field.
+* FILE LOCATION: server/src/api/user-projects/user-project.controller.js (lines 551-580)
+* RESOLUTION STATUS: Fixed.
+* HOW WE FIXED IT: Replaced the incorrect "currentAmount" field selection and 
+  formula logic inside getStudentAnalytics with "amountRaised".
+
+--------------------------------------------------------------------------------
+5. SECURITY VULNERABILITY: UNPROTECTED RAZORPAY WEBHOOK ENDPOINT
+--------------------------------------------------------------------------------
+* FEATURE: Crowdfunding Donations Payment Capturing.
+* ERROR: The webhook endpoint (/api/donations/webhook) processes payloads directly 
+  from req.body without verifying the Razorpay webhook signature header.
+* POTENTIAL ISSUES: An attacker can send spoofed HTTP POST requests with fake 
+  payment IDs to the webhook endpoint, which would mark uncaptured donations 
+  as complete and artificially increment campaign funding.
+* FILE LOCATION: server/src/modules/donations/adapters/razorpay-payment.adapter.js (parseWebhookEvent)
+* RESOLUTION STATUS: Fixed.
+* HOW WE FIXED IT: Enforced cryptographic webhook signature verification using 
+  HMAC-SHA256 with RAZORPAY_WEBHOOK_SECRET in RazorpayPaymentAdapter before 
+  processing any donation capture event.
+
+--------------------------------------------------------------------------------
+6. SECURITY VULNERABILITY: BYPASS OF ACCOUNT SUSPENSION IN AUTH GUARDS
+--------------------------------------------------------------------------------
+* FEATURE: API Security and Authorization Middleware.
+* ERROR: The protect middleware checks JWT integrity and looks up the user, 
+  but does not verify if the user's accountStatus is active.
+* POTENTIAL ISSUES: Suspended, blocked, or banned users can continue calling 
+  all protected API endpoints until their active JWT token naturally expires.
+* FILE LOCATION: server/src/middleware/auth.middleware.js (lines 82-86)
+* RESOLUTION STATUS: Fixed.
+* HOW WE FIXED IT: Added an accountStatus check in the auth protect middleware:
+  "if (currentUser.accountStatus !== 'ACTIVE') return next(new AppError('Your account has been suspended...', 403));"
+
+--------------------------------------------------------------------------------
+7. LOGIC FLAW: AUTOMATED STUDENT VERIFICATION BYPASS
+--------------------------------------------------------------------------------
+* FEATURE: Student & President Verification Verification Flow.
+* ERROR: Upon receiving payment confirmation, the controller immediately sets 
+  the user fields "studentVerified: true" and "canCreateCampaign: true" in the 
+  database, ignoring code comments warning against doing so before admin document review.
+* POTENTIAL ISSUES: Anyone can pay a tiny fee (5 INR) and instantly get student 
+  verified, bypassing administrative approval. Furthermore, if the admin subsequently 
+  rejects the request, the user's verified status is never revoked.
+* FILE LOCATION: server/src/modules/governance/controllers/student-verification.controller.js
+* RESOLUTION STATUS: Fixed.
+* HOW WE FIXED IT: Verification order initialization leaves studentVerified as 
+  false. studentVerified is set to true exclusively upon explicit administrative 
+  approval in approveStudentVerification, and revoked (set to false) upon rejection.
+
+--------------------------------------------------------------------------------
+8. DATA LEAKAGE: EXPOSURE OF SENSITIVE DATABASE FIELDS IN RESPONSES
+--------------------------------------------------------------------------------
+* FEATURE: Auth and Profile API Response Payloads.
+* ERROR: When updating profiles or logging in, the controller returns the raw 
+  Prisma update output, which includes internal columns from the database.
+* POTENTIAL ISSUES: Hashed passwords, verification tokens, and password reset 
+  tokens are returned inside the JSON response bodies to the client browser.
+* FILE LOCATION: server/src/modules/auth/auth.mapper.js and server/src/modules/users/user.mapper.js
+* RESOLUTION STATUS: Fixed.
+* HOW WE FIXED IT: Implemented dedicated DTO sanitization mappers (UserMapper.toPublicUser 
+  and sanitizeProfile) that systematically strip password, passwordHash, verificationToken, 
+  verificationTokenExpiry, resetPasswordToken, and resetPasswordExpiry across all auth 
+  and profile response serialization paths.
+
+================================================================================
+EOF

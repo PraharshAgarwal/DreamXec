@@ -1,0 +1,1812 @@
+[
+  {
+    "id": "df5d704d-4990-4fa4-b1bf-8bd2132fae6e",
+    "tenantId": "9c297f57-d379-4c80-bcc1-6e4fa389d286",
+    "name": "NIT KKr ORG_ADMIN Verification & Governance",
+    "slug": "nit-kkr-org-admin-workflow",
+    "description": "Role-based onboarding workflow for ORG_ADMIN at NIT KKr",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T06:50:52.267Z",
+    "updatedAt": "2026-08-29T06:50:52.267Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "NIT KKr",
+      "slug": "nit-kkr"
+    },
+    "stages": [
+      {
+        "id": "ee357111-fdb3-4d94-a8e6-4418eb836953",
+        "templateId": "df5d704d-4990-4fa4-b1bf-8bd2132fae6e",
+        "name": "Stage 1",
+        "description": "",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 1,
+        "config": {
+          "fields": [],
+          "requiredDocuments": [
+            {
+              "id": "doc_7008",
+              "_uid": "doc_uid_1787986207008",
+              "name": "Verification Document",
+              "accept": "application/pdf,image/*",
+              "required": true,
+              "maxSizeMB": 5,
+              "description": "Upload clear scanned copy or PDF"
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T06:50:52.267Z",
+        "updatedAt": "2026-08-29T06:50:52.267Z",
+        "deletedAt": null
+      },
+      {
+        "id": "94b2f284-c98a-4f60-94ca-93a105d1614c",
+        "templateId": "df5d704d-4990-4fa4-b1bf-8bd2132fae6e",
+        "name": "Stage 2",
+        "description": "",
+        "stageType": "APPROVAL",
+        "executionOrder": 2,
+        "config": {
+          "fields": []
+        },
+        "createdAt": "2026-08-29T06:50:52.267Z",
+        "updatedAt": "2026-08-29T06:50:52.267Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "0a2d1374-2ca9-430e-aad2-8c256a0c135a",
+    "tenantId": "9c297f57-d379-4c80-bcc1-6e4fa389d286",
+    "name": "NIT KKr STUDENT Verification & Governance",
+    "slug": "nit-kkr-student-workflow",
+    "description": "Role-based onboarding workflow for STUDENT at NIT KKr",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T06:50:54.251Z",
+    "updatedAt": "2026-08-29T06:50:54.251Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "NIT KKr",
+      "slug": "nit-kkr"
+    },
+    "stages": [
+      {
+        "id": "39a53df7-4a43-4371-a119-9f605293abe0",
+        "templateId": "0a2d1374-2ca9-430e-aad2-8c256a0c135a",
+        "name": "Stage 1",
+        "description": "",
+        "stageType": "EMAIL_VERIFICATION",
+        "executionOrder": 1,
+        "config": {
+          "fields": [],
+          "requiredDomain": "nitkkr.ac.in"
+        },
+        "createdAt": "2026-08-29T06:50:54.251Z",
+        "updatedAt": "2026-08-29T06:50:54.251Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "489e9ae5-924f-45c9-8583-4a1a87320458",
+    "tenantId": "34d318f6-a4cc-4761-9ec7-9102912ca074",
+    "name": "Dynamic ORG_ADMIN Onboarding Workflow",
+    "slug": "org-admin-onboarding",
+    "description": "Role onboarding workflow for ORG_ADMIN",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T10:14:51.833Z",
+    "updatedAt": "2026-08-29T10:14:51.833Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DX Platform Governance",
+      "slug": "dx-platform-org"
+    },
+    "stages": [
+      {
+        "id": "8c8b4f00-854c-470d-b8e8-c8e0b9a719cc",
+        "templateId": "489e9ae5-924f-45c9-8583-4a1a87320458",
+        "name": "Role Details Form",
+        "description": "Collect basic details for ORG_ADMIN",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T10:14:51.833Z",
+        "updatedAt": "2026-08-29T10:14:51.833Z",
+        "deletedAt": null
+      },
+      {
+        "id": "86c43865-2c05-4e89-bb40-38e2e79f695c",
+        "templateId": "489e9ae5-924f-45c9-8583-4a1a87320458",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T10:14:51.833Z",
+        "updatedAt": "2026-08-29T10:14:51.833Z",
+        "deletedAt": null
+      },
+      {
+        "id": "79e495f2-c842-406c-8a42-e9ef4000f611",
+        "templateId": "489e9ae5-924f-45c9-8583-4a1a87320458",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-29T10:14:51.833Z",
+        "updatedAt": "2026-08-29T10:14:51.833Z",
+        "deletedAt": null
+      },
+      {
+        "id": "8cd7158c-90bb-4675-b0c5-64213d2a38fc",
+        "templateId": "489e9ae5-924f-45c9-8583-4a1a87320458",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-29T10:14:51.833Z",
+        "updatedAt": "2026-08-29T10:14:51.833Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "6ac46672-508e-41f4-9bf1-4a0a8873b729",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "DreamX Funding & Capital Trust - Donor Grant & Contribution Verification",
+    "slug": "dreamx-funding-trust-donor-workflow",
+    "description": "Role-based workflow for DONOR at DreamX Funding & Capital Trust",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:38.286Z",
+    "updatedAt": "2026-08-29T14:10:38.286Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": [
+      {
+        "id": "5f5bdea4-16ea-4dd8-9fb0-8100499f9335",
+        "templateId": "6ac46672-508e-41f4-9bf1-4a0a8873b729",
+        "name": "Donor Profile & Intent",
+        "description": "",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "donorType",
+              "label": "Donor Entity Type",
+              "options": [
+                "Individual",
+                "Corporate Foundation",
+                "Institutional Grantor"
+              ],
+              "required": true
+            },
+            {
+              "id": "taxId",
+              "label": "Tax Identification / PAN Number",
+              "required": true
+            },
+            {
+              "id": "annualBudget",
+              "label": "Estimated Annual Grant Budget ($)",
+              "required": false
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:38.286Z",
+        "updatedAt": "2026-08-29T14:10:38.286Z",
+        "deletedAt": null
+      },
+      {
+        "id": "945a85e7-5b0e-4e5e-926d-a5d80a2da15b",
+        "templateId": "6ac46672-508e-41f4-9bf1-4a0a8873b729",
+        "name": "Grant Authorization Documents",
+        "description": "",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "taxExemptionProof",
+              "name": "Tax Exemption & Entity Registration Proof",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:38.286Z",
+        "updatedAt": "2026-08-29T14:10:38.286Z",
+        "deletedAt": null
+      },
+      {
+        "id": "f045b582-7074-4e96-a651-3625e2837974",
+        "templateId": "6ac46672-508e-41f4-9bf1-4a0a8873b729",
+        "name": "Platform Compliance & Verification",
+        "description": "",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:38.286Z",
+        "updatedAt": "2026-08-29T14:10:38.286Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "9afadbdd-1356-4736-9e62-1f47de4a258f",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "DreamX Funding & Capital Trust - Corporate Executive Onboarding",
+    "slug": "dreamx-funding-trust-corporate-admin-workflow",
+    "description": "Role-based workflow for CORPORATE_ADMIN at DreamX Funding & Capital Trust",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:39.372Z",
+    "updatedAt": "2026-08-29T14:10:39.372Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": [
+      {
+        "id": "048375f4-48d4-4372-9948-9988d263b975",
+        "templateId": "9afadbdd-1356-4736-9e62-1f47de4a258f",
+        "name": "Corporate Executive Details",
+        "description": null,
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "designation",
+              "label": "Executive Title / Designation",
+              "required": true
+            },
+            {
+              "id": "corporateEmail",
+              "label": "Official Corporate Work Email",
+              "required": true
+            },
+            {
+              "id": "department",
+              "label": "Department / CSR Division",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:39.372Z",
+        "updatedAt": "2026-08-29T14:10:39.372Z",
+        "deletedAt": null
+      },
+      {
+        "id": "9e6100eb-f4c6-43f0-8114-083021857d0a",
+        "templateId": "9afadbdd-1356-4736-9e62-1f47de4a258f",
+        "name": "Corporate Authorization Letter",
+        "description": null,
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "authLetter",
+              "name": "Board Authorization Letter or Corporate ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:39.372Z",
+        "updatedAt": "2026-08-29T14:10:39.372Z",
+        "deletedAt": null
+      },
+      {
+        "id": "1eaab7b7-0779-4ff1-8e1d-f25bd989e123",
+        "templateId": "9afadbdd-1356-4736-9e62-1f47de4a258f",
+        "name": "Executive Review & Activation",
+        "description": null,
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:39.372Z",
+        "updatedAt": "2026-08-29T14:10:39.372Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "bef4261d-3e0d-4b90-9de7-eee8c2ea001d",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "DreamX Funding & Capital Trust - Funding Mentor & Advisory Onboarding",
+    "slug": "dreamx-funding-trust-mentor-workflow",
+    "description": "Role-based workflow for MENTOR at DreamX Funding & Capital Trust",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:40.620Z",
+    "updatedAt": "2026-08-29T14:10:40.620Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": [
+      {
+        "id": "e62f26fb-916f-4cfc-89c3-a9940f908301",
+        "templateId": "bef4261d-3e0d-4b90-9de7-eee8c2ea001d",
+        "name": "Advisory Expertise & Bio",
+        "description": "",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "expertiseDomain",
+              "label": "Primary Domain of Expertise",
+              "required": true
+            },
+            {
+              "id": "linkedinUrl",
+              "label": "LinkedIn Profile URL",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:40.620Z",
+        "updatedAt": "2026-08-29T14:10:40.620Z",
+        "deletedAt": null
+      },
+      {
+        "id": "34fddd9c-f784-4e7d-82c5-0fa9fbb3345a",
+        "templateId": "bef4261d-3e0d-4b90-9de7-eee8c2ea001d",
+        "name": "Credential Upload",
+        "description": "",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "mentorCv",
+              "name": "Professional CV / Advisory Profile",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:40.620Z",
+        "updatedAt": "2026-08-29T14:10:40.620Z",
+        "deletedAt": null
+      },
+      {
+        "id": "8ad6dd41-4b65-4639-888b-a37ec8a04eec",
+        "templateId": "bef4261d-3e0d-4b90-9de7-eee8c2ea001d",
+        "name": "Advisory Approval",
+        "description": "",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:40.620Z",
+        "updatedAt": "2026-08-29T14:10:40.620Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "249a7158-e927-40e7-ab2a-d15864fb361b",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "DreamX Funding & Capital Trust - Funding Organization Administrator Onboarding",
+    "slug": "dreamx-funding-trust-org-admin-workflow",
+    "description": "Role-based workflow for ORG_ADMIN at DreamX Funding & Capital Trust",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:42.232Z",
+    "updatedAt": "2026-08-29T14:10:42.232Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": [
+      {
+        "id": "47e39867-d045-4550-a10c-8d76ffb2d8d6",
+        "templateId": "249a7158-e927-40e7-ab2a-d15864fb361b",
+        "name": "Admin Credentials",
+        "description": null,
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "adminRole",
+              "label": "Administrative Function",
+              "required": true
+            },
+            {
+              "id": "contactPhone",
+              "label": "Official Phone Number",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:42.232Z",
+        "updatedAt": "2026-08-29T14:10:42.232Z",
+        "deletedAt": null
+      },
+      {
+        "id": "59dd01db-6a27-4d02-8a23-04d6a0683f13",
+        "templateId": "249a7158-e927-40e7-ab2a-d15864fb361b",
+        "name": "Organization Registration Proof",
+        "description": null,
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "incorporationDoc",
+              "name": "Certificate of Incorporation / KYB Proof",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:42.232Z",
+        "updatedAt": "2026-08-29T14:10:42.232Z",
+        "deletedAt": null
+      },
+      {
+        "id": "cb663445-4d0a-4226-8af6-1fed2dc463c5",
+        "templateId": "249a7158-e927-40e7-ab2a-d15864fb361b",
+        "name": "Platform Verification",
+        "description": null,
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:42.232Z",
+        "updatedAt": "2026-08-29T14:10:42.232Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "40d42841-2a4a-44c4-97b6-c362b3095cea",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "National Innovation & Research Authority - Government Official Credential Verification",
+    "slug": "national-gov-authority-gov-official-workflow",
+    "description": "Role-based workflow for GOV_OFFICIAL at National Innovation & Research Authority",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:43.290Z",
+    "updatedAt": "2026-08-29T14:10:43.290Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "af4755a9-476e-405a-a952-d30d5b0a3416",
+        "templateId": "40d42841-2a4a-44c4-97b6-c362b3095cea",
+        "name": "Official Designation & Ministry Information",
+        "description": null,
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "ministryName",
+              "label": "Ministry / Department Name",
+              "required": true
+            },
+            {
+              "id": "officialTitle",
+              "label": "Official Designation / Gazette Rank",
+              "required": true
+            },
+            {
+              "id": "govEmail",
+              "label": "Official Govt Domain Email (.gov / .nic.in)",
+              "required": true
+            },
+            {
+              "id": "officeAddress",
+              "label": "Government Office Address",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:43.290Z",
+        "updatedAt": "2026-08-29T14:10:43.290Z",
+        "deletedAt": null
+      },
+      {
+        "id": "b888100f-53aa-460a-afc9-4384d212c626",
+        "templateId": "40d42841-2a4a-44c4-97b6-c362b3095cea",
+        "name": "Government Badge & Identity Proof",
+        "description": null,
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "govIdCard",
+              "name": "Official Government Service ID Card / Gazette Order",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:43.290Z",
+        "updatedAt": "2026-08-29T14:10:43.290Z",
+        "deletedAt": null
+      },
+      {
+        "id": "a019c3ff-64dd-4926-be52-ed3c979d36f1",
+        "templateId": "40d42841-2a4a-44c4-97b6-c362b3095cea",
+        "name": "Official Clearance & Governance Review",
+        "description": null,
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:43.290Z",
+        "updatedAt": "2026-08-29T14:10:43.290Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "08c48894-3990-442e-9bd4-a027ee05024f",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "National Innovation & Research Authority - Regulatory & Compliance Audit Verification",
+    "slug": "national-gov-authority-compliance-officer-workflow",
+    "description": "Role-based workflow for COMPLIANCE_OFFICER at National Innovation & Research Authority",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:44.307Z",
+    "updatedAt": "2026-08-29T14:10:44.307Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "e6042ce9-eb26-4462-aec2-1fce525eca6b",
+        "templateId": "08c48894-3990-442e-9bd4-a027ee05024f",
+        "name": "Compliance Credentials",
+        "description": null,
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "regulatoryBody",
+              "label": "Regulatory Commission / Body",
+              "required": true
+            },
+            {
+              "id": "officerCode",
+              "label": "Compliance Audit Officer Code",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:44.307Z",
+        "updatedAt": "2026-08-29T14:10:44.307Z",
+        "deletedAt": null
+      },
+      {
+        "id": "26dd59ee-6ac3-4e51-941d-83a1df725f8f",
+        "templateId": "08c48894-3990-442e-9bd4-a027ee05024f",
+        "name": "Accreditation Document Upload",
+        "description": null,
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "accreditationProof",
+              "name": "Auditor Authorization Certificate",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:44.307Z",
+        "updatedAt": "2026-08-29T14:10:44.307Z",
+        "deletedAt": null
+      },
+      {
+        "id": "fcc4d0da-6bff-42de-ac83-614bfa693689",
+        "templateId": "08c48894-3990-442e-9bd4-a027ee05024f",
+        "name": "Compliance Verification",
+        "description": null,
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:44.307Z",
+        "updatedAt": "2026-08-29T14:10:44.307Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "c7fb9edf-7140-48b4-bb48-9bb98ac2bed3",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "National Innovation & Research Authority - Government Research Grant Scholar Verification",
+    "slug": "national-gov-authority-researcher-workflow",
+    "description": "Role-based workflow for RESEARCHER at National Innovation & Research Authority",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:45.636Z",
+    "updatedAt": "2026-08-29T14:10:45.636Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "fd02dfe0-e394-445e-940c-0229ed19bb56",
+        "templateId": "c7fb9edf-7140-48b4-bb48-9bb98ac2bed3",
+        "name": "Research Grant Details",
+        "description": "",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "grantId",
+              "label": "National Research Grant Sanction ID",
+              "required": true
+            },
+            {
+              "id": "orcidId",
+              "label": "ORCID iD Number",
+              "required": true
+            },
+            {
+              "id": "fieldOfStudy",
+              "label": "Primary Field of Research",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:45.636Z",
+        "updatedAt": "2026-08-29T14:10:45.636Z",
+        "deletedAt": null
+      },
+      {
+        "id": "9c3f4b30-2245-4be2-acf4-a20e8047a4dc",
+        "templateId": "c7fb9edf-7140-48b4-bb48-9bb98ac2bed3",
+        "name": "Sanction Order Upload",
+        "description": "",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "grantSanctionLetter",
+              "name": "Official Grant Sanction Letter",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:45.636Z",
+        "updatedAt": "2026-08-29T14:10:45.636Z",
+        "deletedAt": null
+      },
+      {
+        "id": "4c61c538-08d2-4c22-8372-9e329273ea2d",
+        "templateId": "c7fb9edf-7140-48b4-bb48-9bb98ac2bed3",
+        "name": "Research Approval",
+        "description": "",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:45.636Z",
+        "updatedAt": "2026-08-29T14:10:45.636Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "2b9f9700-4eaa-4c78-a588-6d70d17afeb7",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "National Innovation & Research Authority - Authority Administrator Onboarding",
+    "slug": "national-gov-authority-org-admin-workflow",
+    "description": "Role-based workflow for ORG_ADMIN at National Innovation & Research Authority",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:10:46.714Z",
+    "updatedAt": "2026-08-29T14:10:46.714Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "12ceee11-5be3-41b7-9c1c-36d564cc8d03",
+        "templateId": "2b9f9700-4eaa-4c78-a588-6d70d17afeb7",
+        "name": "Authority Admin Profile",
+        "description": null,
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "adminTitle",
+              "label": "Administrative Officer Title",
+              "required": true
+            },
+            {
+              "id": "workEmail",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:46.714Z",
+        "updatedAt": "2026-08-29T14:10:46.714Z",
+        "deletedAt": null
+      },
+      {
+        "id": "01df51d2-f2b2-4752-8392-d60a4ad646f3",
+        "templateId": "2b9f9700-4eaa-4c78-a588-6d70d17afeb7",
+        "name": "Gazette Authorization",
+        "description": null,
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "gazetteAuth",
+              "name": "Gazette Notification / Appointment Order",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:10:46.714Z",
+        "updatedAt": "2026-08-29T14:10:46.714Z",
+        "deletedAt": null
+      },
+      {
+        "id": "a0e2f4c7-4c81-4679-8a31-0f8ee35211cb",
+        "templateId": "2b9f9700-4eaa-4c78-a588-6d70d17afeb7",
+        "name": "Platform Verification",
+        "description": null,
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "reviewRequired": true
+        },
+        "createdAt": "2026-08-29T14:10:46.714Z",
+        "updatedAt": "2026-08-29T14:10:46.714Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "0f7d94db-d93d-45d6-b08e-0afec9eaaea1",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "National Innovation & Research Authority GOV_OFFICIAL Verification & Governance",
+    "slug": "national-gov-authority-gov_official-workflow",
+    "description": "Role-based workflow for GOV_OFFICIAL at National Innovation & Research Authority",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:22:21.169Z",
+    "updatedAt": "2026-08-29T14:22:21.169Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "eca6995d-6d4a-4713-bd24-bb6f04ec350d",
+        "templateId": "0f7d94db-d93d-45d6-b08e-0afec9eaaea1",
+        "name": "Stage 1",
+        "description": "",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "o",
+              "_uid": "field_uid_1788013216892",
+              "type": "text",
+              "label": "Post",
+              "options": [],
+              "helpText": "",
+              "required": true,
+              "placeholder": "current post"
+            },
+            {
+              "id": "g",
+              "_uid": "field_uid_1788013233859",
+              "type": "number",
+              "label": "govt_id",
+              "options": [],
+              "helpText": "",
+              "required": true,
+              "placeholder": "enter govt. id"
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:22:21.169Z",
+        "updatedAt": "2026-08-29T14:22:21.169Z",
+        "deletedAt": null
+      },
+      {
+        "id": "3eac60d9-9e7f-49f6-82d9-856cfd4e5ed2",
+        "templateId": "0f7d94db-d93d-45d6-b08e-0afec9eaaea1",
+        "name": "Stage 2",
+        "description": "",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "fields": [
+            {
+              "id": "field_5945",
+              "_uid": "field_uid_1788013295945",
+              "type": "text",
+              "label": "New Field",
+              "options": [],
+              "helpText": "",
+              "required": true,
+              "placeholder": ""
+            }
+          ],
+          "requiredDocuments": [
+            {
+              "id": "g",
+              "_uid": "doc_uid_1788013305454",
+              "name": "Govt. ID",
+              "title": "Govt. ID",
+              "accept": "application/pdf,image/*",
+              "required": true,
+              "maxSizeMB": 5,
+              "description": "Upload clear scanned copy or PDF"
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:22:21.169Z",
+        "updatedAt": "2026-08-29T14:22:21.169Z",
+        "deletedAt": null
+      },
+      {
+        "id": "99bdc4a5-d46e-4ec5-9a45-ad3ba912ca09",
+        "templateId": "0f7d94db-d93d-45d6-b08e-0afec9eaaea1",
+        "name": "Stage 3",
+        "description": "",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "fields": [
+            {
+              "id": "field_8042",
+              "_uid": "field_uid_1788013328042",
+              "type": "text",
+              "label": "New Field",
+              "options": [],
+              "helpText": "",
+              "required": true,
+              "placeholder": ""
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T14:22:21.169Z",
+        "updatedAt": "2026-08-29T14:22:21.169Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "59255a4e-07fc-44da-a6eb-1e65ee67fb5d",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "National Innovation & Research Authority COMPLIANCE_OFFICER Verification & Governance",
+    "slug": "national-gov-authority-compliance_officer-workflow",
+    "description": "Role-based workflow for COMPLIANCE_OFFICER at National Innovation & Research Authority",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:22:22.529Z",
+    "updatedAt": "2026-08-29T14:22:22.529Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": []
+  },
+  {
+    "id": "8ae28b34-5e6b-46b5-93d0-76489fa7ef9d",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "National Innovation & Research Authority ORG_ADMIN Verification & Governance",
+    "slug": "national-gov-authority-org_admin-workflow",
+    "description": "Role-based workflow for ORG_ADMIN at National Innovation & Research Authority",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:22:25.765Z",
+    "updatedAt": "2026-08-29T14:22:25.765Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": []
+  },
+  {
+    "id": "75725808-6695-4240-afcc-dcc60be23b39",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "DreamX Funding & Capital Trust CORPORATE_ADMIN Verification & Governance",
+    "slug": "dreamx-funding-trust-corporate_admin-workflow",
+    "description": "Role-based workflow for CORPORATE_ADMIN at DreamX Funding & Capital Trust",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:24:05.431Z",
+    "updatedAt": "2026-08-29T14:24:05.431Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": []
+  },
+  {
+    "id": "9e6ca915-5d70-43bf-8d89-0072a11f2363",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "DreamX Funding & Capital Trust ORG_ADMIN Verification & Governance",
+    "slug": "dreamx-funding-trust-org_admin-workflow",
+    "description": "Role-based workflow for ORG_ADMIN at DreamX Funding & Capital Trust",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T14:24:09.385Z",
+    "updatedAt": "2026-08-29T14:24:09.385Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": []
+  },
+  {
+    "id": "31d10b8d-3fd0-48ec-a1a1-87581aebd174",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "Dynamic ORG ADMIN Onboarding Workflow",
+    "slug": "org-admin-onboarding-1788029752343",
+    "description": "Role onboarding workflow for ORG_ADMIN",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T18:55:52.347Z",
+    "updatedAt": "2026-08-29T18:55:52.347Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "4b1aab54-cd80-4145-ab9a-7204bd00251a",
+        "templateId": "31d10b8d-3fd0-48ec-a1a1-87581aebd174",
+        "name": "Role Details Form",
+        "description": "Collect basic details for ORG_ADMIN",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T18:55:52.347Z",
+        "updatedAt": "2026-08-29T18:55:52.347Z",
+        "deletedAt": null
+      },
+      {
+        "id": "fe149104-e1e9-44c7-995d-f77a2008df05",
+        "templateId": "31d10b8d-3fd0-48ec-a1a1-87581aebd174",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T18:55:52.347Z",
+        "updatedAt": "2026-08-29T18:55:52.347Z",
+        "deletedAt": null
+      },
+      {
+        "id": "12dbd0f2-528d-4142-a2df-eea711915457",
+        "templateId": "31d10b8d-3fd0-48ec-a1a1-87581aebd174",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-29T18:55:52.347Z",
+        "updatedAt": "2026-08-29T18:55:52.347Z",
+        "deletedAt": null
+      },
+      {
+        "id": "0ec2d774-2ab3-4398-91ee-cf68c3069de4",
+        "templateId": "31d10b8d-3fd0-48ec-a1a1-87581aebd174",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-29T18:55:52.347Z",
+        "updatedAt": "2026-08-29T18:55:52.347Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "93dc0275-82e8-43e2-b636-9ecfa2fa97ec",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "Dynamic ORG ADMIN Onboarding Workflow",
+    "slug": "org-admin-onboarding-1788030147248",
+    "description": "Role onboarding workflow for ORG_ADMIN",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T19:02:27.252Z",
+    "updatedAt": "2026-08-29T19:02:27.252Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "69c7054d-be75-442d-897d-dc5bfb449db7",
+        "templateId": "93dc0275-82e8-43e2-b636-9ecfa2fa97ec",
+        "name": "Role Details Form",
+        "description": "Collect basic details for ORG_ADMIN",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:02:27.252Z",
+        "updatedAt": "2026-08-29T19:02:27.252Z",
+        "deletedAt": null
+      },
+      {
+        "id": "c834c95a-5d9d-457f-a758-a24866ee4efe",
+        "templateId": "93dc0275-82e8-43e2-b636-9ecfa2fa97ec",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:02:27.252Z",
+        "updatedAt": "2026-08-29T19:02:27.252Z",
+        "deletedAt": null
+      },
+      {
+        "id": "b61bfa72-fd92-4fed-aabc-d39df88eb5b3",
+        "templateId": "93dc0275-82e8-43e2-b636-9ecfa2fa97ec",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-29T19:02:27.252Z",
+        "updatedAt": "2026-08-29T19:02:27.252Z",
+        "deletedAt": null
+      },
+      {
+        "id": "2c72eaf5-7731-4f2e-bad4-8c4ae8c99e17",
+        "templateId": "93dc0275-82e8-43e2-b636-9ecfa2fa97ec",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-29T19:02:27.252Z",
+        "updatedAt": "2026-08-29T19:02:27.252Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "493aeae5-cabe-4000-ac26-d161fae31e37",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "Dynamic ORG ADMIN Onboarding Workflow",
+    "slug": "org-admin-onboarding-1788030159720",
+    "description": "Role onboarding workflow for ORG_ADMIN",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T19:02:39.725Z",
+    "updatedAt": "2026-08-29T19:02:39.725Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "95e0f430-35b1-4111-8203-8de1e5effbc0",
+        "templateId": "493aeae5-cabe-4000-ac26-d161fae31e37",
+        "name": "Role Details Form",
+        "description": "Collect basic details for ORG_ADMIN",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:02:39.725Z",
+        "updatedAt": "2026-08-29T19:02:39.725Z",
+        "deletedAt": null
+      },
+      {
+        "id": "cbccabbf-77c4-47cf-ac86-384a783d3707",
+        "templateId": "493aeae5-cabe-4000-ac26-d161fae31e37",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:02:39.725Z",
+        "updatedAt": "2026-08-29T19:02:39.725Z",
+        "deletedAt": null
+      },
+      {
+        "id": "34cead22-1093-4fa5-b3ef-7ab5e47a62c3",
+        "templateId": "493aeae5-cabe-4000-ac26-d161fae31e37",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-29T19:02:39.725Z",
+        "updatedAt": "2026-08-29T19:02:39.725Z",
+        "deletedAt": null
+      },
+      {
+        "id": "5073e1e2-e586-440b-9c35-8780cc42d31d",
+        "templateId": "493aeae5-cabe-4000-ac26-d161fae31e37",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-29T19:02:39.725Z",
+        "updatedAt": "2026-08-29T19:02:39.725Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "86ed2327-cdc8-419e-9119-53af0273d07f",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "Dynamic ORG ADMIN Onboarding Workflow",
+    "slug": "org-admin-onboarding-1788030892421",
+    "description": "Role onboarding workflow for ORG_ADMIN",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T19:14:52.430Z",
+    "updatedAt": "2026-08-29T19:14:52.430Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "61bd4648-9008-4598-aebd-6fb8bbf3b218",
+        "templateId": "86ed2327-cdc8-419e-9119-53af0273d07f",
+        "name": "Role Details Form",
+        "description": "Collect basic details for ORG_ADMIN",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:14:52.430Z",
+        "updatedAt": "2026-08-29T19:14:52.430Z",
+        "deletedAt": null
+      },
+      {
+        "id": "01ffec39-8171-44cf-a010-eb0be6346e3e",
+        "templateId": "86ed2327-cdc8-419e-9119-53af0273d07f",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:14:52.430Z",
+        "updatedAt": "2026-08-29T19:14:52.430Z",
+        "deletedAt": null
+      },
+      {
+        "id": "173fe306-d7da-4137-bffe-0ad0aa074de5",
+        "templateId": "86ed2327-cdc8-419e-9119-53af0273d07f",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-29T19:14:52.430Z",
+        "updatedAt": "2026-08-29T19:14:52.430Z",
+        "deletedAt": null
+      },
+      {
+        "id": "60b302a9-5019-4e01-ba4a-db1a5413b24f",
+        "templateId": "86ed2327-cdc8-419e-9119-53af0273d07f",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-29T19:14:52.430Z",
+        "updatedAt": "2026-08-29T19:14:52.430Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "b1270bdf-d0d8-446a-8e0d-f12e7bd2f5ac",
+    "tenantId": "e0b7e091-a35c-424b-be42-f7b0902b32ca",
+    "name": "Dynamic COMPLIANCE OFFICER Onboarding Workflow",
+    "slug": "compliance-officer-onboarding-1788030902157",
+    "description": "Role onboarding workflow for COMPLIANCE_OFFICER",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-29T19:15:02.160Z",
+    "updatedAt": "2026-08-29T19:15:02.160Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "National Innovation & Research Authority",
+      "slug": "national-gov-authority"
+    },
+    "stages": [
+      {
+        "id": "3cab55ad-4d97-48b0-9035-62dc82139170",
+        "templateId": "b1270bdf-d0d8-446a-8e0d-f12e7bd2f5ac",
+        "name": "Role Details Form",
+        "description": "Collect basic details for COMPLIANCE_OFFICER",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:15:02.160Z",
+        "updatedAt": "2026-08-29T19:15:02.160Z",
+        "deletedAt": null
+      },
+      {
+        "id": "cf30e819-2dab-4772-adff-7ee3ac0d8ecc",
+        "templateId": "b1270bdf-d0d8-446a-8e0d-f12e7bd2f5ac",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-29T19:15:02.160Z",
+        "updatedAt": "2026-08-29T19:15:02.160Z",
+        "deletedAt": null
+      },
+      {
+        "id": "cd3de0b5-44dd-4d50-a581-bb0c08a409d1",
+        "templateId": "b1270bdf-d0d8-446a-8e0d-f12e7bd2f5ac",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-29T19:15:02.160Z",
+        "updatedAt": "2026-08-29T19:15:02.160Z",
+        "deletedAt": null
+      },
+      {
+        "id": "bf1f1b86-69de-4953-a201-bbc68016d4f1",
+        "templateId": "b1270bdf-d0d8-446a-8e0d-f12e7bd2f5ac",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-29T19:15:02.160Z",
+        "updatedAt": "2026-08-29T19:15:02.160Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "26d1ea72-cf9b-4c56-b2e2-fa003064180e",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "Dynamic ORG ADMIN Onboarding Workflow",
+    "slug": "org-admin-onboarding-1788099051407",
+    "description": "Role onboarding workflow for ORG_ADMIN",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-30T14:10:51.409Z",
+    "updatedAt": "2026-08-30T14:10:51.409Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": [
+      {
+        "id": "d38f525a-146b-4a80-bc93-b5a41ce779c5",
+        "templateId": "26d1ea72-cf9b-4c56-b2e2-fa003064180e",
+        "name": "Role Details Form",
+        "description": "Collect basic details for ORG_ADMIN",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-30T14:10:51.409Z",
+        "updatedAt": "2026-08-30T14:10:51.409Z",
+        "deletedAt": null
+      },
+      {
+        "id": "75536eb7-d481-48ce-9d63-7d75c18898dd",
+        "templateId": "26d1ea72-cf9b-4c56-b2e2-fa003064180e",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-30T14:10:51.409Z",
+        "updatedAt": "2026-08-30T14:10:51.409Z",
+        "deletedAt": null
+      },
+      {
+        "id": "8f84c3f1-c8b2-42bb-b0b8-bb97ba445d85",
+        "templateId": "26d1ea72-cf9b-4c56-b2e2-fa003064180e",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-30T14:10:51.409Z",
+        "updatedAt": "2026-08-30T14:10:51.409Z",
+        "deletedAt": null
+      },
+      {
+        "id": "dfa2af6e-e3e2-47e3-a743-49d61ca69341",
+        "templateId": "26d1ea72-cf9b-4c56-b2e2-fa003064180e",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-30T14:10:51.409Z",
+        "updatedAt": "2026-08-30T14:10:51.409Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "d8509873-9017-4d2a-8d0b-2476b913c908",
+    "tenantId": "7c6a393b-25f7-4898-b4b4-9149cf1b0d48",
+    "name": "Dynamic CORPORATE ADMIN Onboarding Workflow",
+    "slug": "corporate-admin-onboarding-1788099057873",
+    "description": "Role onboarding workflow for CORPORATE_ADMIN",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-08-30T14:10:57.875Z",
+    "updatedAt": "2026-08-30T14:10:57.875Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "DreamX Funding & Capital Trust",
+      "slug": "dreamx-funding-trust"
+    },
+    "stages": [
+      {
+        "id": "cc3946a1-baec-4549-910a-b670b0b77f59",
+        "templateId": "d8509873-9017-4d2a-8d0b-2476b913c908",
+        "name": "Role Details Form",
+        "description": "Collect basic details for CORPORATE_ADMIN",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-30T14:10:57.875Z",
+        "updatedAt": "2026-08-30T14:10:57.875Z",
+        "deletedAt": null
+      },
+      {
+        "id": "839605f3-b409-428d-96e2-b7d36e0f1233",
+        "templateId": "d8509873-9017-4d2a-8d0b-2476b913c908",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-08-30T14:10:57.875Z",
+        "updatedAt": "2026-08-30T14:10:57.875Z",
+        "deletedAt": null
+      },
+      {
+        "id": "37aa6bba-d2b1-4cb6-bcb1-ff6d9d80ce6e",
+        "templateId": "d8509873-9017-4d2a-8d0b-2476b913c908",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-08-30T14:10:57.875Z",
+        "updatedAt": "2026-08-30T14:10:57.875Z",
+        "deletedAt": null
+      },
+      {
+        "id": "2ffd3258-da6f-4f55-9fb7-74d50bebffc5",
+        "templateId": "d8509873-9017-4d2a-8d0b-2476b913c908",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-08-30T14:10:57.875Z",
+        "updatedAt": "2026-08-30T14:10:57.875Z",
+        "deletedAt": null
+      }
+    ]
+  },
+  {
+    "id": "66f9adb2-550b-4e54-a482-f9f426552b9a",
+    "tenantId": "7d170d07-122f-4fa3-9a6d-0b5f6e42caf3",
+    "name": "Dynamic STUDENT Onboarding Workflow",
+    "slug": "student-onboarding-1788549375705",
+    "description": "Role onboarding workflow for STUDENT",
+    "version": 1,
+    "status": "PUBLISHED",
+    "createdAt": "2026-09-04T19:16:15.707Z",
+    "updatedAt": "2026-09-04T19:16:15.707Z",
+    "deletedAt": null,
+    "organization": {
+      "name": "All-India Open Aerospace & Rocketry Collective",
+      "slug": "open-aerospace-rocketry"
+    },
+    "stages": [
+      {
+        "id": "542e44f7-b17d-4c58-9139-990b99b94482",
+        "templateId": "66f9adb2-550b-4e54-a482-f9f426552b9a",
+        "name": "Role Details Form",
+        "description": "Collect basic details for STUDENT",
+        "stageType": "FORM",
+        "executionOrder": 1,
+        "config": {
+          "fields": [
+            {
+              "id": "fullName",
+              "type": "text",
+              "label": "Full Name",
+              "required": true
+            },
+            {
+              "id": "designation",
+              "type": "text",
+              "label": "Designation / Title",
+              "required": true
+            },
+            {
+              "id": "officialEmail",
+              "type": "text",
+              "label": "Official Work Email",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-09-04T19:16:15.707Z",
+        "updatedAt": "2026-09-04T19:16:15.707Z",
+        "deletedAt": null
+      },
+      {
+        "id": "0f3f91dd-4f48-4d2d-805d-a41436d40ee0",
+        "templateId": "66f9adb2-550b-4e54-a482-f9f426552b9a",
+        "name": "Document Verification",
+        "description": "Upload verification badge or ID card",
+        "stageType": "DOCUMENT_UPLOAD",
+        "executionOrder": 2,
+        "config": {
+          "requiredDocuments": [
+            {
+              "id": "primary_id",
+              "name": "Official ID Card",
+              "required": true
+            }
+          ]
+        },
+        "createdAt": "2026-09-04T19:16:15.707Z",
+        "updatedAt": "2026-09-04T19:16:15.707Z",
+        "deletedAt": null
+      },
+      {
+        "id": "91d51a1b-84d9-4864-9482-bb55cbc02256",
+        "templateId": "66f9adb2-550b-4e54-a482-f9f426552b9a",
+        "name": "Manual Admin Review",
+        "description": "Org Admin review and approval",
+        "stageType": "MANUAL_REVIEW",
+        "executionOrder": 3,
+        "config": {
+          "requireOrgAdminApproval": true
+        },
+        "createdAt": "2026-09-04T19:16:15.707Z",
+        "updatedAt": "2026-09-04T19:16:15.707Z",
+        "deletedAt": null
+      },
+      {
+        "id": "d8dc8a23-a338-476b-9241-bec4e1ee8f23",
+        "templateId": "66f9adb2-550b-4e54-a482-f9f426552b9a",
+        "name": "Role Activation Complete",
+        "description": "Role permissions active",
+        "stageType": "COMPLETE",
+        "executionOrder": 4,
+        "config": {
+          "autoActivateAccount": true
+        },
+        "createdAt": "2026-09-04T19:16:15.707Z",
+        "updatedAt": "2026-09-04T19:16:15.707Z",
+        "deletedAt": null
+      }
+    ]
+  }
+]

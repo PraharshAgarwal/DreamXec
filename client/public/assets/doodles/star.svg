@@ -1,0 +1,20 @@
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hand-drawn star with imperfect edges -->
+  <path d="M 20,5 
+           L 23,15 
+           L 34,15 
+           L 25,22 
+           L 28,33 
+           L 20,26 
+           L 12,33 
+           L 15,22 
+           L 6,15 
+           L 17,15 
+           Z" 
+        fill="#FF7F00" 
+        stroke="#003366" 
+        stroke-width="2" 
+        stroke-linejoin="round"/>
+  <!-- Highlight mark -->
+  <circle cx="16" cy="12" r="2" fill="#FFFFFF" opacity="0.7"/>
+</svg>

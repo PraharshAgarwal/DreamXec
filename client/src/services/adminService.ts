@@ -1,0 +1,619 @@
+import apiRequest, { type ApiResponse } from './api';
+import { API_BASE_URL } from '../utils/apiConfig';
+import type { UserProject } from './userProjectService';
+import type { DonorProject } from './donorProjectService';
+import type {
+  Campaign,
+  Project,
+  User,
+  DashboardStats,
+  ProjectStatus,
+  AccountStatus,
+  PaginatedResponse
+} from "../types"
+
+export interface AllProjectsResponse {
+  userProjects: PaginatedResponse<Campaign>
+  donorProjects: PaginatedResponse<Project>;
+}
+
+
+export interface ScoringRubric {
+  problemClarity: number; // 1-10
+  feasibility: number; // 1-10
+  budgetRealism: number; // 1-10
+  milestoneVerifiability: number; // 1-10
+  teamEndorsement: number; // 1-10
+  clarityOfAsk: number; // 1-10
+  totalScore?: number; // 0-100
+  comments?: Record<string, string>;
+  generalFeedback?: string;
+}
+
+export interface VerifyProjectData {
+  status: ProjectStatus | 'APPROVED' | 'REJECTED' | 'LIVE' | 'PAUSED' | 'FROZEN' | 'REVISION_REQUIRED';
+  reason?: string;
+  scoringRubric?: ScoringRubric;
+}
+
+// get dashboard stats
+export const getDashboardStats = async (tenantId?: string): Promise<ApiResponse<DashboardStats>> => {
+  const query = tenantId ? `?tenantId=${encodeURIComponent(tenantId)}` : '';
+  return apiRequest(`/admin/stats${query}`, {
+    method: 'GET',
+  });
+};
+
+// get org tree & child orgs
+export const getOrgTree = async (tenantId?: string): Promise<ApiResponse<{ organization: any; childOrgs: any[] }>> => {
+  const query = tenantId ? `?tenantId=${encodeURIComponent(tenantId)}` : '';
+  return apiRequest(`/admin/org-tree${query}`, {
+    method: 'GET',
+  });
+};
+
+// update organization config/profile
+export const updateOrgConfig = async (
+  orgId: string,
+  payload: { name?: string; orgType?: string; allowedRoles?: string[]; lifecycleStatus?: string }
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/organization/${orgId}/config`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+};
+
+// invite/add member to org
+export const inviteOrgMember = async (payload: {
+  email: string;
+  fullName?: string;
+  role: string;
+  organizationId: string;
+  department?: string;
+  designation?: string;
+}): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/members/invite', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+};
+
+// PROJECT MANAGEMENT
+
+interface ProjectQueryParams {
+  page?: number;
+  limit?: number;
+  status?: ProjectStatus | string;
+  tenantId?: string;
+  organizationId?: string;
+  specificOrgId?: string;
+  search?: string;
+}
+
+// Get all projects (admin)
+export const getAllProjects = async (
+  params: ProjectQueryParams = {}
+): Promise<ApiResponse<AllProjectsResponse>> => {
+  const query = new URLSearchParams();
+  if (params.page) query.append('page', params.page.toString());
+  if (params.limit) query.append('limit', params.limit.toString());
+  if (params.status) query.append('status', params.status);
+  if (params.tenantId) query.append('tenantId', params.tenantId);
+  if (params.organizationId) query.append('organizationId', params.organizationId);
+  if (params.specificOrgId) query.append('specificOrgId', params.specificOrgId);
+  if (params.search) query.append('search', params.search);
+
+  return apiRequest(`/admin/projects?${query.toString()}`, {
+    method: 'GET',
+  });
+};
+
+// Verify user project
+export const verifyUserProject = async (
+  id: string,
+  data: VerifyProjectData
+): Promise<ApiResponse<{ userProject: UserProject }>> => {
+  return apiRequest(`/admin/projects/user/${id}/verify`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+};
+
+// Verify donor project
+export const verifyDonorProject = async (
+  id: string,
+  data: VerifyProjectData
+): Promise<ApiResponse<{ donorProject: DonorProject }>> => {
+  return apiRequest(`/admin/projects/donor/${id}/verify`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+};
+
+/* =========================================================
+   User & Donor Governance
+========================================================= */
+
+export interface UserQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  role?: string;
+  accountStatus?: AccountStatus | string;
+  tenantId?: string;
+  organizationId?: string;
+  specificOrgId?: string;
+}
+
+// Get all users
+export const getAllUsers = async (
+  params: UserQueryParams = {}
+): Promise<ApiResponse<{ users: User[]; total?: number; page?: number; limit?: number }>> => {
+  const query = new URLSearchParams();
+  if (params.page) query.append('page', params.page.toString());
+  if (params.limit) query.append('limit', params.limit.toString());
+  if (params.search) query.append('search', params.search);
+  if (params.role && params.role !== 'ALL') query.append('role', params.role);
+  if (params.accountStatus) query.append('accountStatus', params.accountStatus);
+  if (params.tenantId) query.append('tenantId', params.tenantId);
+  if (params.organizationId) query.append('organizationId', params.organizationId);
+  if (params.specificOrgId) query.append('specificOrgId', params.specificOrgId);
+
+  const qs = query.toString();
+  return apiRequest(`/admin/users${qs ? `?${qs}` : ''}`, {
+    method: 'GET',
+  });
+};
+
+// Get all donors
+export const getAllDonors = async (
+  params: { page?: number; limit?: number; search?: string } = {}
+): Promise<ApiResponse<{ donors: User[]; total?: number; page?: number; limit?: number }>> => {
+  const query = new URLSearchParams();
+  if (params.page) query.append('page', params.page.toString());
+  if (params.limit) query.append('limit', params.limit.toString());
+  if (params.search) query.append('search', params.search);
+
+  const qs = query.toString();
+  return apiRequest(`/admin/donors${qs ? `?${qs}` : ''}`, {
+    method: 'GET',
+  });
+};
+
+export const manageUserStatus = async (
+  userId: string,
+  status: AccountStatus
+): Promise<ApiResponse<{ user: User }>> => {
+  return apiRequest(`/admin/users/${userId}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status })
+  })
+}
+
+
+// --- CLUB MANAGEMENT ---
+
+// Add this function
+export const getAllClubs = async (): Promise<ApiResponse<{ clubs: any[] }>> => {
+  return apiRequest('/admin/clubs', {
+    method: 'GET',
+  });
+};
+
+// Add this function
+export const manageClubStatus = async (
+  clubId: string,
+  status: 'ACTIVE' | 'SUSPENDED'
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/clubs/${clubId}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
+  });
+};
+
+/* =========================================================
+   Club Verification & Management
+========================================================= */
+
+export const getClubVerifications = async (): Promise<ApiResponse<any[]>> => {
+  return apiRequest('/admin/club-verifications/verifications', {
+    method: 'GET',
+  });
+};
+
+export const approveClubVerification = async (id: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/club-verifications/verifications/${id}/approve`, {
+    method: 'POST',
+  });
+};
+
+export const rejectClubVerification = async (id: string, reason: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/club-verifications/verifications/${id}/reject`, {
+    method: 'POST',
+    body: JSON.stringify({ reason }),
+  });
+};
+
+
+/* =========================================================
+   File Uploads
+========================================================= */
+
+export const uploadClubMembers = async (file: File, clubId: string, token?: string) => {
+  const form = new FormData();
+  form.append('file', file);
+  form.append('clubId', clubId);
+
+  const res = await fetch(`${API_BASE_URL}/admin/clubs/members/upload`, {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    body: form,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error(err.message || 'Upload failed');
+  }
+  return res.json();
+};
+
+
+/* =========================================================
+   Financials
+========================================================= */
+
+export const getAdminDonations = async (page = 1, limit = 20): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/donations?page=${page}&limit=${limit}`, { method: 'GET' });
+};
+
+export const getAdminWithdrawals = async (status = 'pending'): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/financials/withdrawals?status=${status}`, {
+    method: 'GET',
+  });
+};
+
+export const processWithdrawal = async (
+  id: string,
+  status: 'approved' | 'rejected',
+  note?: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/financials/withdrawals/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status, note }),
+  });
+};
+
+
+/* =========================================================
+   Milestones
+========================================================= */
+
+export const getAllMilestones = async (status?: string): Promise<ApiResponse<any>> => {
+  const query = status ? `?status=${status}` : '';
+  return apiRequest(`/admin/milestones${query}`, {
+    method: 'GET',
+  });
+};
+
+export const getPendingMilestones = async (): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/milestones/pending', {
+    method: 'GET',
+  });
+};
+
+export const verifyMilestone = async (
+  id: string,
+  status: 'APPROVED' | 'REJECTED' | 'REVISION_REQUIRED',
+  feedback?: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/milestones/${id}/verify`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status, feedback }),
+  });
+};
+
+export const getDisbursements = async (status?: string): Promise<ApiResponse<any>> => {
+  const query = status ? `?status=${status}` : '';
+  return apiRequest(`/admin/disbursements${query}`, {
+    method: 'GET',
+  });
+};
+
+export const getPendingDisbursements = async (): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/disbursements/pending', {
+    method: 'GET',
+  });
+};
+
+export const authorizeDisbursement = async (id: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/disbursements/${id}/authorize`, {
+    method: 'POST',
+  });
+};
+
+export const rejectDisbursement = async (id: string, reason?: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/disbursements/${id}/reject`, {
+    method: 'POST',
+    body: JSON.stringify({ reason }),
+  });
+};
+
+/* =========================================================
+   Maker-Checker Refunds & Ledger Reversals (K12)
+========================================================= */
+
+export const getAllRefunds = async (): Promise<ApiResponse<{ refunds: any[] }>> => {
+  return apiRequest('/admin/refunds', {
+    method: 'GET',
+  });
+};
+
+export const requestRefund = async (
+  donationId: string,
+  reason?: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/refunds/request', {
+    method: 'POST',
+    body: JSON.stringify({ donationId, reason }),
+  });
+};
+
+export const authorizeRefund = async (id: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/refunds/${id}/authorize`, {
+    method: 'POST',
+  });
+};
+
+export const rejectRefund = async (id: string, reason?: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/refunds/${id}/reject`, {
+    method: 'POST',
+    body: JSON.stringify({ reason }),
+  });
+};
+
+
+/* =========================================================
+   Student Verifications
+========================================================= */
+
+export const getStudentVerifications = async (status?: string): Promise<ApiResponse<any>> => {
+  const query = status ? `?status=${status}` : '';
+  return apiRequest(`/admin/student-verifications${query}`, {
+    method: 'GET',
+  });
+};
+
+export const approveStudentVerification = async (id: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/student-verifications/${id}/approve`, {
+    method: 'PATCH',
+  });
+};
+
+export const rejectStudentVerification = async (id: string, reason?: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/student-verifications/${id}/reject`, {
+    method: 'PATCH',
+    body: JSON.stringify({ reason }),
+  });
+};
+
+export const revokeStudentVerification = async (id: string, reason?: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/student-verifications/${id}/revoke`, {
+    method: 'PATCH',
+    body: JSON.stringify({ reason }),
+  });
+};
+
+export const approveAllMatchedStudentVerifications = async (): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/student-verifications/approve-all-matched`, {
+    method: 'POST',
+  });
+};
+
+
+/* =========================================================
+   Audit Logs
+========================================================= */
+
+export const getAuditLogs = async (
+  page = 1,
+  limit = 20,
+  type?: string,
+  search?: string
+): Promise<ApiResponse<any>> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString()
+  });
+  if (type) params.append('type', type);
+  if (search) params.append('search', search);
+
+  return apiRequest(`/admin/audit-logs?${params.toString()}`, {
+    method: 'GET',
+  });
+};
+
+
+/* =========================================================
+   Donor Governance
+========================================================= */
+
+export const toggleDonorVerification = async (
+  id: string,
+  verified: boolean
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/donors/${id}/verify`, {
+    method: 'PATCH',
+    body: JSON.stringify({ verified }),
+  });
+};
+
+export const manageDonorStatus = async (
+  id: string,
+  status: 'ACTIVE' | 'BLOCKED' | 'SUSPENDED'
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/donors/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
+  });
+};
+
+
+/* =========================================================
+   Admin Notes & Details
+========================================================= */
+
+export const getEntityNotes = async (type: string, id: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/notes/${type}/${id}`, {
+    method: 'GET',
+  });
+};
+
+export const createEntityNote = async (type: string, id: string, content: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/notes/${type}/${id}`, {
+    method: 'POST',
+    body: JSON.stringify({ content }),
+  });
+};
+
+export const getUserFullDetails = async (id: string): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/users/${id}/details`, {
+    method: 'GET',
+  });
+};
+
+/* =========================================================
+   Applications (Admin Override)
+========================================================= */
+
+export const getAdminApplications = async (): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/applications', {
+    method: 'GET',
+  });
+};
+
+export const overrideApplicationStatus = async (
+  id: string,
+  status: 'ACCEPTED' | 'REJECTED' | 'PENDING',
+  reason?: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/applications/${id}/override`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status, reason }),
+  });
+};
+
+
+/* =========================================================
+   Advanced Campaign Details
+========================================================= */
+
+export const getProjectFullDetails = async (
+  type: 'user' | 'donor',
+  id: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/projects/${type}/${id}/details`, {
+    method: 'GET',
+  });
+};
+
+
+/* =========================================================
+   Club Referrals
+========================================================= */
+
+/**
+ * Fetch all club referrals (pending, approved, rejected)
+ */
+export const getClubReferrals = async (): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/referrals', {
+    method: 'GET',
+  });
+};
+
+/**
+ * Update the status of a club referral (Approve or Reject)
+ */
+export const updateReferralStatus = async (
+  id: string,
+  status: 'APPROVED' | 'REJECTED',
+  notes?: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/referrals/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status, notes }),
+  });
+};
+
+/* =========================================================
+   Institutional Roster & SHA-256 Matching (X3)
+========================================================= */
+
+export const uploadRosterCsv = async (
+  data: { csvText?: string; records?: any[]; institution?: string }
+): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/roster/upload', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+};
+
+export const getRosterRecords = async (): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/roster', {
+    method: 'GET',
+  });
+};
+
+/* =========================================================
+   Corporate MCA Master Directory & CIN Verification (X3)
+========================================================= */
+
+export const uploadCorporateMcaCsv = async (
+  data: { csvText?: string; records?: any[] }
+): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/corporate/mca/upload', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+};
+
+export const getCorporateMcaRecords = async (
+  search?: string
+): Promise<ApiResponse<any>> => {
+  const query = search ? `?search=${encodeURIComponent(search)}` : '';
+  return apiRequest(`/admin/corporate/mca${query}`, {
+    method: 'GET',
+  });
+};
+
+export const verifyCorporateCin = async (
+  cin: string,
+  companyName?: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest('/admin/corporate/mca/verify', {
+    method: 'POST',
+    body: JSON.stringify({ cin, companyName }),
+  });
+};
+
+/* =========================================================
+   Faculty Endorsement Moderation Queue (L14)
+========================================================= */
+
+export const getFacultyEndorsementQueue = async (
+  status = 'PENDING'
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/endorsements?status=${encodeURIComponent(status)}`, {
+    method: 'GET',
+  });
+};
+
+export const moderateFacultyEndorsement = async (
+  id: string,
+  action: 'APPROVE' | 'REJECT',
+  feedback?: string
+): Promise<ApiResponse<any>> => {
+  return apiRequest(`/admin/endorsements/${id}/verify`, {
+    method: 'PATCH',
+    body: JSON.stringify({ action, feedback }),
+  });
+};

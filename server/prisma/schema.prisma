@@ -1,0 +1,1546 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["identity", "organization", "workflow", "verification", "finance", "payments", "documents", "notifications", "audit", "search", "jobs", "campaigns", "doc_vault", "account_vault"]
+}
+
+// ============================================================================
+// 1. IDENTITY DOMAIN SCHEMA (identity.*)
+// ============================================================================
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+
+  @@schema("identity")
+}
+
+enum SessionStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+
+  @@schema("identity")
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+
+  @@schema("identity")
+}
+
+model User {
+  id              String        @id @default(uuid()) @db.Uuid
+  username        String?       @unique @db.VarChar(60)
+  email           String        @unique
+  secondaryEmail  String?       @map("secondary_email")
+  passwordHash    String?       @map("password_hash") @db.VarChar(255)
+  fullName        String        @map("full_name") @db.VarChar(255)
+  role            Role          @default(USER)
+  accountStatus   AccountStatus @default(ACTIVE) @map("account_status")
+  profileMetadata Json          @default("{}") @map("profile_metadata")
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+  speciesId                    String?                       @map("species_id") @db.Uuid
+  speciesNumber                Int?                          @map("species_number")
+  assignedSpecies              EndangeredSpecies?            @relation("UserAssignedSpecies", fields: [speciesId], references: [id], onDelete: SetNull)
+
+  // Relations
+  sessions                     Session[]
+  memberships                  Membership[]
+  donations                    Donation[]
+  proposals                    GrantProposal[]
+  documents                    Document[]
+  applicantInstances           WorkflowInstance[]            @relation("ApplicantInstances")
+  submittedStageSubmissions    StageSubmission[]             @relation("SubmittedStageSubmissions")
+  executedStageExecutions      StageExecution[]              @relation("ExecutedStageExecutions")
+  studentCampaigns             Campaign[]                    @relation("StudentCampaigns")
+  beneficiaryCampaigns         Campaign[]                    @relation("BeneficiaryCampaigns")
+  verifiedCampaigns            Campaign[]                    @relation("VerifiedCampaigns")
+  campaignEndorsements         CampaignEndorsement[]         @relation("UserCampaignEndorsements")
+  campaignMemberships          CampaignMember[]              @relation("CampaignMemberships")
+  campaignComments             CampaignComment[]             @relation("UserCampaignComments")
+  reviewedMilestoneSubmissions CampaignMilestoneSubmission[] @relation("ReviewedMilestoneSubmissions")
+  requestedMilestoneRevisions  CampaignMilestoneRevision[]   @relation("MilestoneRevisionRequestedBy")
+  reviewedMilestoneRevisions   CampaignMilestoneRevision[]   @relation("MilestoneRevisionReviewedBy")
+  docVaultItems                UserDocVault[]                @relation("UserDocVaultItems")
+  accountVaultItems            UserAccountVault[]            @relation("UserAccountVaultItems")
+  disbursementsMade            MilestoneDisbursement[]       @relation("DisbursementMaker")
+  disbursementsChecked         MilestoneDisbursement[]       @relation("DisbursementChecker")
+  utilizationsVerified         UtilizationProof[]            @relation("UtilizationVerifier")
+  ledgerAccounts               LedgerAccount[]
+  ledgerTransactions           LedgerTransaction[]
+  withdrawalRequests           WithdrawalRequest[]           @relation("UserWithdrawals")
+
+  apaarId                      String?                       @unique @map("apaar_id") @db.VarChar(20)
+  isKycVerified                Boolean                       @default(false) @map("is_kyc_verified")
+  kycVerifiedAt                DateTime?                     @map("kyc_verified_at") @db.Timestamptz
+
+  @@unique([speciesId, speciesNumber])
+  @@index([speciesId])
+  @@map("users")
+  @@schema("identity")
+}
+
+model EndangeredSpecies {
+  id              String   @id @default(uuid()) @db.Uuid
+  commonName      String   @unique @map("common_name") @db.VarChar(150)
+  scientificName  String?  @map("scientific_name") @db.VarChar(200)
+  slug            String   @unique @db.VarChar(100)
+  taxonomicGroup  String   @default("MAMMAL") @map("taxonomic_group") @db.VarChar(50)
+  category        String   @default("CRITICALLY_ENDANGERED") @db.VarChar(50)
+  estimatedCount  Int      @default(100) @map("estimated_count")
+  assignedCount   Int      @default(0) @map("assigned_count")
+  avatarUrl       String   @map("avatar_url") @db.VarChar(500)
+  thumbnailUrl    String?  @map("thumbnail_url") @db.VarChar(500)
+  habitat         String?  @db.VarChar(255)
+  region          String?  @db.VarChar(150)
+  iucnId          String?  @map("iucn_id") @db.VarChar(50)
+  description     String?  @db.Text
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @default(now()) @map("updated_at") @db.Timestamptz
+
+  users           User[]   @relation("UserAssignedSpecies")
+
+  @@index([isActive, assignedCount])
+  @@index([category])
+  @@map("endangered_species")
+  @@schema("identity")
+}
+
+model Permission {
+  id          String   @id @default(uuid()) @db.Uuid
+  key         String   @unique @db.VarChar(100)
+  name        String   @db.VarChar(150)
+  description String?  @db.Text
+  category    String   @default("GENERAL") @db.VarChar(50)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+  @@schema("identity")
+}
+
+model RolePermission {
+  id            String   @id @default(uuid()) @db.Uuid
+  role          String   @db.VarChar(50)
+  permissionKey String   @map("permission_key") @db.VarChar(100)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  permission Permission @relation(fields: [permissionKey], references: [key], onDelete: Cascade)
+
+  @@unique([role, permissionKey])
+  @@map("role_permissions")
+  @@schema("identity")
+}
+
+model Session {
+  id               String        @id @default(uuid()) @db.Uuid
+  userId           String        @map("user_id") @db.Uuid
+  accessTokenHash  String        @unique @map("access_token_hash") @db.VarChar(255)
+  refreshTokenHash String        @unique @map("refresh_token_hash") @db.VarChar(255)
+  activeTenantId   String?       @map("active_tenant_id") @db.Uuid
+  deviceInfo       Json          @default("{}") @map("device_info")
+  ipAddress        String?       @map("ip_address") @db.VarChar(45)
+  status           SessionStatus @default(ACTIVE)
+  expiresAt        DateTime      @map("expires_at") @db.Timestamptz
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  revokedAt        DateTime?     @map("revoked_at") @db.Timestamptz
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization? @relation(fields: [activeTenantId], references: [id], onDelete: SetNull)
+
+  @@map("sessions")
+  @@schema("identity")
+}
+
+// ============================================================================
+// 2. ORGANIZATION DOMAIN SCHEMA (organization.*)
+// ============================================================================
+
+enum LifecycleStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_VERIFICATION
+  VERIFICATION_REQUESTED
+  UNDER_REVIEW
+  APPROVED
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+  MERGED
+  DELETED
+
+  @@schema("organization")
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REMOVED
+
+  @@schema("organization")
+}
+
+enum OrgRole {
+  STUDENT
+  ORG_ADMIN
+  PROFESSOR
+  RESEARCHER
+  MENTOR
+  INCUBATOR_MANAGER
+  COMPLIANCE_OFFICER
+  FINANCE_OFFICER
+  GRANT_OFFICER
+  GOV_OFFICER
+  GOV_OFFICIAL
+  STUDENT_PRESIDENT
+  CORPORATE_ADMIN
+  DONOR
+  SPONSOR
+  ALUMNI
+  CSR_MANAGER
+  CORPORATE_RECRUITER
+  VOLUNTEER
+  PROGRAM_MANAGER
+  EXTERNAL_ORG_MEMBER
+
+  @@schema("organization")
+}
+
+enum OrgType {
+  COLLEGE
+  CLUB
+  RESEARCH_INSTITUTION
+  CORPORATE
+  INCUBATOR
+  NGO
+  GOVERNMENT_BODY
+
+  @@schema("organization")
+}
+
+model Organization {
+  id              String          @id @default(uuid()) @db.Uuid
+  parentId        String?         @map("parent_id") @db.Uuid
+  ancestorId      String?         @map("ancestor_id") @db.Uuid
+  depth           Int             @default(0)
+  hierarchyPath   String          @map("hierarchy_path") // ltree mapped as String
+  name            String          @db.VarChar(255)
+  slug            String          @unique @db.VarChar(100)
+  orgType         OrgType         @map("org_type")
+  allowedRoles    OrgRole[]       @default([]) @map("allowed_roles")
+  lifecycleStatus LifecycleStatus @default(DRAFT) @map("lifecycle_status")
+  metadata        Json            @default("{}")
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime        @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime?       @map("deleted_at") @db.Timestamptz
+
+  // Self relation
+  parent   Organization?  @relation("OrgHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children Organization[] @relation("OrgHierarchy")
+
+  // Relations
+  sessions            Session[]
+  memberships         Membership[]
+  workflowTemplates   WorkflowTemplate[]
+  workflowInstances   WorkflowInstance[]
+  verifications       Verification[]
+  ledgerAccounts      LedgerAccount[]
+  ledgerTransactions  LedgerTransaction[]
+  donations           Donation[]             @relation("TenantDonations")
+  receivedDonations   Donation[]             @relation("ReceivedDonations")
+  paymentIntents      PaymentIntent[]
+  documents           Document[]
+  notifications       NotificationHistory[]
+  dashboard           OrganizationDashboard?
+  grants              Grant[]
+  grantProposals      GrantProposal[]
+  tenantCampaigns     Campaign[]             @relation("TenantCampaigns")
+  departmentCampaigns Campaign[]             @relation("DepartmentCampaigns")
+  tenantWithdrawals   WithdrawalRequest[]    @relation("TenantWithdrawals")
+
+  @@index([hierarchyPath])
+  @@index([parentId])
+  @@index([ancestorId])
+  @@index([depth])
+  @@index([lifecycleStatus])
+  @@map("organizations")
+  @@schema("organization")
+}
+
+model Membership {
+  id             String           @id @default(uuid()) @db.Uuid
+  userId         String           @map("user_id") @db.Uuid
+  organizationId String           @map("organization_id") @db.Uuid
+  role           OrgRole          @default(RESEARCHER)
+  designation    String?          @db.VarChar(150)
+  department     String?          @db.VarChar(150)
+  status         MembershipStatus @default(PENDING)
+  joinedAt       DateTime?        @map("joined_at") @db.Timestamptz
+  invitedBy      String?          @map("invited_by") @db.Uuid
+  acceptedAt     DateTime?        @map("accepted_at") @db.Timestamptz
+  removedAt      DateTime?        @map("removed_at") @db.Timestamptz
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId, role])
+  @@index([organizationId, status])
+  @@index([userId, status])
+  @@map("memberships")
+  @@schema("organization")
+}
+
+// ============================================================================
+// 3. WORKFLOW ENGINE DOMAIN SCHEMA (workflow.*)
+// ============================================================================
+
+enum StageType {
+  FORM
+  SUBMISSION
+  EMAIL_VERIFICATION
+  OTP_VERIFICATION
+  DOCUMENT_UPLOAD
+  DOCUMENT_VERIFICATION
+  BACKGROUND_CHECK
+  API_VALIDATION
+  AUTOMATED_CHECK
+  MANUAL_REVIEW
+  MANUAL_APPROVAL
+  FRAUD_CHECK
+  COMPLIANCE_REVIEW
+  APPROVAL
+  REJECTION
+  PAYMENT
+  EMAIL_NOTIFICATION
+  WEBHOOK
+  SYSTEM_TASK
+  COMPLETE
+  APAAR_VERIFICATION
+  ORCID_VERIFICATION
+
+  @@schema("workflow")
+}
+
+enum ExecutionStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  SKIPPED
+
+  @@schema("workflow")
+}
+
+enum TemplateStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+
+  @@schema("workflow")
+}
+
+enum InstanceStatus {
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+
+  @@schema("workflow")
+}
+
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED
+  CHANGES_REQUESTED
+  APPROVED
+  REJECTED
+
+  @@schema("workflow")
+}
+
+model WorkflowTemplate {
+  id          String         @id @default(uuid()) @db.Uuid
+  tenantId    String         @map("tenant_id") @db.Uuid
+  name        String         @db.VarChar(255)
+  slug        String         @db.VarChar(100)
+  description String?        @db.Text
+  version     Int            @default(1)
+  status      TemplateStatus @default(DRAFT)
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime       @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?      @map("deleted_at") @db.Timestamptz
+
+  organization Organization       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  stages       WorkflowStage[]
+  instances    WorkflowInstance[]
+
+  @@unique([tenantId, slug, version])
+  @@index([tenantId, status])
+  @@map("workflow_templates")
+  @@schema("workflow")
+}
+
+model WorkflowStage {
+  id             String    @id @default(uuid()) @db.Uuid
+  templateId     String    @map("template_id") @db.Uuid
+  name           String    @db.VarChar(150)
+  description    String?   @db.Text
+  stageType      StageType @map("stage_type")
+  executionOrder Int       @map("execution_order")
+  config         Json      @default("{}")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz
+
+  template         WorkflowTemplate   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  currentInstances WorkflowInstance[] @relation("CurrentStage")
+  submissions      StageSubmission[]
+  executions       StageExecution[]
+
+  @@unique([templateId, executionOrder])
+  @@index([templateId, executionOrder])
+  @@map("workflow_stages")
+  @@schema("workflow")
+}
+
+model WorkflowInstance {
+  id             String         @id @default(uuid()) @db.Uuid
+  templateId     String         @map("template_id") @db.Uuid
+  tenantId       String         @map("tenant_id") @db.Uuid
+  applicantId    String?        @map("applicant_id") @db.Uuid
+  applicantEmail String         @map("applicant_email")
+  applicantName  String         @map("applicant_name") @db.VarChar(255)
+  orgType        String         @map("org_type") @db.VarChar(100)
+  status         InstanceStatus @default(IN_PROGRESS)
+  currentStageId String?        @map("current_stage_id") @db.Uuid
+  instanceData   Json           @default("{}") @map("instance_data")
+  version        Int            @default(1)
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime       @default(now()) @map("updated_at") @db.Timestamptz
+  completedAt    DateTime?      @map("completed_at") @db.Timestamptz
+
+  template      WorkflowTemplate  @relation(fields: [templateId], references: [id], onDelete: Restrict)
+  organization  Organization      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  applicant     User?             @relation("ApplicantInstances", fields: [applicantId], references: [id], onDelete: SetNull)
+  currentStage  WorkflowStage?    @relation("CurrentStage", fields: [currentStageId], references: [id], onDelete: SetNull)
+  submissions   StageSubmission[]
+  executions    StageExecution[]
+  verifications Verification[]
+
+  @@index([tenantId, status])
+  @@index([applicantId])
+  @@index([templateId])
+  @@index([applicantEmail, status])
+  @@index([tenantId, currentStageId])
+  @@index([tenantId, applicantEmail, status])
+  @@index([tenantId, applicantId, status])
+  @@map("workflow_instances")
+  @@schema("workflow")
+}
+
+model StageSubmission {
+  id                 String           @id @default(uuid()) @db.Uuid
+  workflowInstanceId String           @map("workflow_instance_id") @db.Uuid
+  workflowStageId    String           @map("workflow_stage_id") @db.Uuid
+  submittedById      String?          @map("submitted_by_id") @db.Uuid
+  status             SubmissionStatus @default(SUBMITTED)
+  version            Int              @default(1)
+  formData           Json             @default("{}") @map("form_data")
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime         @default(now()) @map("updated_at") @db.Timestamptz
+
+  workflowInstance WorkflowInstance @relation(fields: [workflowInstanceId], references: [id], onDelete: Cascade)
+  workflowStage    WorkflowStage    @relation(fields: [workflowStageId], references: [id], onDelete: Restrict)
+  submittedBy      User?            @relation("SubmittedStageSubmissions", fields: [submittedById], references: [id], onDelete: SetNull)
+
+  @@index([workflowInstanceId, workflowStageId])
+  @@index([workflowInstanceId, createdAt(sort: Asc)])
+  @@index([submittedById])
+  @@index([status])
+  @@map("stage_submissions")
+  @@schema("workflow")
+}
+
+model StageExecution {
+  id                 String  @id @default(uuid()) @db.Uuid
+  workflowInstanceId String  @map("workflow_instance_id") @db.Uuid
+  workflowStageId    String? @map("workflow_stage_id") @db.Uuid
+  executedById       String? @map("executed_by_id") @db.Uuid
+
+  // Immutable Audit Snapshots
+  stageName      String    @map("stage_name") @db.VarChar(150)
+  stageType      StageType @map("stage_type")
+  executionOrder Int       @map("execution_order")
+
+  executionStatus ExecutionStatus @default(PENDING) @map("execution_status")
+  attempt         Int             @default(1)
+  startedAt       DateTime        @default(now()) @map("started_at") @db.Timestamptz
+  completedAt     DateTime?       @map("completed_at") @db.Timestamptz
+  durationMs      Int?            @map("duration_ms")
+  metadata        Json            @default("{}")
+  errorMessage    String?         @map("error_message") @db.Text
+
+  workflowInstance WorkflowInstance @relation(fields: [workflowInstanceId], references: [id], onDelete: Cascade)
+  workflowStage    WorkflowStage?   @relation(fields: [workflowStageId], references: [id], onDelete: SetNull)
+  executedBy       User?            @relation("ExecutedStageExecutions", fields: [executedById], references: [id], onDelete: SetNull)
+
+  @@index([workflowInstanceId, startedAt])
+  @@index([executionStatus])
+  @@index([executedById])
+  @@map("stage_executions")
+  @@schema("workflow")
+}
+
+// ============================================================================
+// 4. VERIFICATION PIPELINE DOMAIN SCHEMA (verification.*)
+// ============================================================================
+
+enum VerificationStatus {
+  PENDING
+  IN_PROGRESS
+  VERIFIED
+  FAILED
+
+  @@schema("verification")
+}
+
+model Verification {
+  id                 String             @id @default(uuid()) @db.Uuid
+  instanceId         String?            @map("instance_id") @db.Uuid
+  tenantId           String             @map("tenant_id") @db.Uuid
+  verificationType   String             @map("verification_type") @db.VarChar(100)
+  status             VerificationStatus @default(PENDING)
+  evidenceUrl        String?            @map("evidence_url") @db.VarChar(500)
+  verificationData   Json               @default("{}") @map("verification_data")
+  assignedOrgAdminId String?            @map("assigned_org_admin_id") @db.Uuid
+  notificationSentAt DateTime?          @map("notification_sent_at") @db.Timestamptz
+  createdAt          DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime           @default(now()) @map("updated_at") @db.Timestamptz
+  completedAt        DateTime?          @map("completed_at") @db.Timestamptz
+  deletedAt          DateTime?          @map("deleted_at") @db.Timestamptz
+
+  instance     WorkflowInstance? @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  organization Organization      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("verifications")
+  @@schema("verification")
+}
+
+// ============================================================================
+// 5. FINANCE (DOUBLE-ENTRY LEDGER & WALLET) SCHEMA (finance.*)
+// ============================================================================
+
+enum LedgerScopeType {
+  SYSTEM
+  USER
+  ORGANIZATION
+
+  @@schema("finance")
+}
+
+enum LedgerOwnerType {
+  SYSTEM
+  USER
+  ORGANIZATION
+  CAMPAIGN
+
+  @@schema("finance")
+}
+
+enum LedgerAccountType {
+  ASSET
+  LIABILITY
+  REVENUE
+  EXPENSE
+
+  @@schema("finance")
+}
+
+enum LedgerEntryType {
+  DEBIT
+  CREDIT
+
+  @@schema("finance")
+}
+
+enum LedgerTransactionStatus {
+  POSTED
+  VOID
+  REVERSED
+
+  @@schema("finance")
+}
+
+model LedgerAccount {
+  id              String            @id @default(uuid()) @db.Uuid
+  scopeType       LedgerScopeType   @default(SYSTEM) @map("scope_type")
+  tenantId        String?           @map("tenant_id") @db.Uuid
+  userId          String?           @map("user_id") @db.Uuid
+  accountNumber   String?           @map("account_number") @db.VarChar(50)
+  name            String            @db.VarChar(255)
+  description     String?           @db.Text
+  accountType     LedgerAccountType @default(ASSET) @map("account_type")
+  currency        String            @default("INR") @db.VarChar(3)
+  balanceCached   Decimal           @default(0.0000) @map("balance_cached") @db.Decimal(18, 4)
+  ownerType       LedgerOwnerType?  @map("owner_type")
+  ownerId         String?           @map("owner_id") @db.Uuid
+  parentAccountId String?           @map("parent_account_id") @db.Uuid
+  metadata        Json              @default("{}")
+  isActive        Boolean           @default(true) @map("is_active")
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime?         @map("deleted_at") @db.Timestamptz
+
+  organization  Organization?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  user          User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  parentAccount LedgerAccount?  @relation("AccountHierarchy", fields: [parentAccountId], references: [id], onDelete: SetNull)
+  childAccounts LedgerAccount[] @relation("AccountHierarchy")
+  entries       LedgerEntry[]
+  campaign      Campaign?
+
+  @@unique([tenantId, name, currency])
+  @@index([scopeType, userId])
+  @@index([tenantId, accountType])
+  @@index([ownerType, ownerId])
+  @@map("ledger_accounts")
+  @@schema("finance")
+}
+
+model LedgerTransaction {
+  id              String                  @id @default(uuid()) @db.Uuid
+  scopeType       LedgerScopeType         @default(SYSTEM) @map("scope_type")
+  tenantId        String?                 @map("tenant_id") @db.Uuid
+  userId          String?                 @map("user_id") @db.Uuid
+  transactionType String                  @map("transaction_type") @db.VarChar(100)
+  referenceType   String                  @map("reference_type") @db.VarChar(100)
+  referenceId     String                  @map("reference_id") @db.Uuid
+  idempotencyKey  String?                 @unique @map("idempotency_key") @db.VarChar(255)
+  status          LedgerTransactionStatus @default(POSTED)
+  currency        String                  @default("INR") @db.VarChar(3)
+  reversalOfId    String?                 @unique @map("reversal_of_id") @db.Uuid
+  metadata        Json                    @default("{}")
+  postedAt        DateTime                @default(now()) @map("posted_at") @db.Timestamptz
+  createdAt       DateTime                @default(now()) @map("created_at") @db.Timestamptz
+
+  organization Organization?      @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  user         User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  reversalOf   LedgerTransaction? @relation("TransactionReversal", fields: [reversalOfId], references: [id], onDelete: SetNull)
+  reversedBy   LedgerTransaction? @relation("TransactionReversal")
+  entries      LedgerEntry[]
+
+  @@unique([referenceType, referenceId, transactionType])
+  @@index([tenantId, referenceType, referenceId])
+  @@index([scopeType, userId])
+  @@index([transactionType, postedAt(sort: Desc)])
+  @@map("ledger_transactions")
+  @@schema("finance")
+}
+
+model LedgerEntry {
+  id            String          @id @default(uuid()) @db.Uuid
+  transactionId String          @map("transaction_id") @db.Uuid
+  accountId     String          @map("account_id") @db.Uuid
+  amount        Decimal         @db.Decimal(18, 4)
+  entryType     LedgerEntryType @map("entry_type")
+  currency      String          @default("INR") @db.VarChar(3)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz
+
+  transaction LedgerTransaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  account     LedgerAccount     @relation(fields: [accountId], references: [id], onDelete: Restrict)
+
+  @@index([accountId, createdAt(sort: Desc)])
+  @@index([transactionId])
+  @@map("ledger_entries")
+  @@schema("finance")
+}
+
+// ============================================================================
+// 6. PAYMENTS DOMAIN SCHEMA (payments.*)
+// ============================================================================
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+  DISPUTED
+
+  @@schema("payments")
+}
+
+model Donation {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String?   @map("tenant_id") @db.Uuid
+  donorId          String?   @map("donor_id") @db.Uuid
+  recipientOrgId   String?   @map("recipient_org_id") @db.Uuid
+  campaignId       String?   @map("campaign_id") @db.Uuid
+  amount           Decimal   @db.Decimal(15, 2)
+  currency         String    @default("INR") @db.VarChar(3)
+  isAnonymous      Boolean   @default(false) @map("is_anonymous")
+  donorDisplayName String?   @map("donor_display_name") @db.VarChar(150)
+  donorMessage     String?   @map("donor_message") @db.Text
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz
+
+  organization   Organization?   @relation("TenantDonations", fields: [tenantId], references: [id], onDelete: SetNull)
+  recipient      Organization?   @relation("ReceivedDonations", fields: [recipientOrgId], references: [id], onDelete: SetNull)
+  donor          User?           @relation(fields: [donorId], references: [id], onDelete: SetNull)
+  campaign       Campaign?       @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  paymentIntents PaymentIntent[]
+
+  @@index([createdAt(sort: Desc)])
+  @@index([campaignId])
+  @@index([donorId, createdAt(sort: Desc)])
+  @@index([tenantId])
+  @@index([recipientOrgId])
+  @@map("donations")
+  @@schema("payments")
+}
+
+model PaymentIntent {
+  id             String        @id @default(uuid()) @db.Uuid
+  donationId     String        @map("donation_id") @db.Uuid
+  tenantId       String?       @map("tenant_id") @db.Uuid
+  totalAmount    Decimal       @map("total_amount") @db.Decimal(15, 2)
+  currency       String        @default("INR") @db.VarChar(3)
+  status         PaymentStatus @default(PENDING)
+  idempotencyKey String?       @unique @map("idempotency_key") @db.VarChar(255)
+  metadata       Json          @default("{}")
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+
+  donation     Donation         @relation(fields: [donationId], references: [id], onDelete: Cascade)
+  organization Organization?    @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  attempts     PaymentAttempt[]
+  refunds      Refund[]
+
+  @@index([donationId])
+  @@index([status])
+  @@map("payment_intents")
+  @@schema("payments")
+}
+
+model PaymentAttempt {
+  id                   String        @id @default(uuid()) @db.Uuid
+  paymentIntentId      String        @map("payment_intent_id") @db.Uuid
+  gateway              String        @db.VarChar(50)
+  gatewayTransactionId String?       @map("gateway_transaction_id") @db.VarChar(255)
+  gatewayPaymentId     String?       @map("gateway_payment_id") @db.VarChar(255)
+  gatewayOrderId       String?       @map("gateway_order_id") @db.VarChar(255)
+  gatewaySignature     String?       @map("gateway_signature") @db.VarChar(500)
+  status               PaymentStatus @default(PENDING)
+  errorMessage         String?       @map("error_message") @db.Text
+  rawResponse          Json?         @default("{}") @map("raw_response")
+  createdAt            DateTime      @default(now()) @map("created_at") @db.Timestamptz
+
+  intent PaymentIntent @relation(fields: [paymentIntentId], references: [id], onDelete: Cascade)
+
+  @@index([gatewayTransactionId])
+  @@index([gatewayPaymentId])
+  @@index([paymentIntentId])
+  @@map("payment_attempts")
+  @@schema("payments")
+}
+
+model Refund {
+  id              String        @id @default(uuid()) @db.Uuid
+  paymentIntentId String        @map("payment_intent_id") @db.Uuid
+  amount          Decimal       @db.Decimal(15, 2)
+  status          PaymentStatus @default(PENDING)
+  gatewayRefundId String?       @map("gateway_refund_id") @db.VarChar(255)
+  reason          String?       @db.Text
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+
+  intent PaymentIntent @relation(fields: [paymentIntentId], references: [id], onDelete: Restrict)
+
+  @@map("refunds")
+  @@schema("payments")
+}
+
+model WebhookEvent {
+  id          String    @id @default(uuid()) @db.Uuid
+  gateway     String    @db.VarChar(50)
+  payload     Json
+  status      String    @default("UNPROCESSED") @db.VarChar(50)
+  processedAt DateTime? @map("processed_at") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("webhook_events")
+  @@schema("payments")
+}
+
+// ============================================================================
+// 7. GRANTS MODULE ( finance context )
+// ============================================================================
+
+model Grant {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
+  totalBudget Decimal   @map("total_budget") @db.Decimal(15, 2)
+  currency    String    @default("USD") @db.VarChar(3)
+  status      String    @default("DRAFT") @db.VarChar(50)
+  metadata    Json      @default("{}")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+
+  organization Organization    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  proposals    GrantProposal[]
+
+  @@map("grants")
+  @@schema("finance")
+}
+
+model GrantProposal {
+  id              String    @id @default(uuid()) @db.Uuid
+  grantId         String    @map("grant_id") @db.Uuid
+  applicantOrgId  String    @map("applicant_org_id") @db.Uuid
+  submittedBy     String    @map("submitted_by") @db.Uuid
+  requestedAmount Decimal   @map("requested_amount") @db.Decimal(15, 2)
+  status          String    @default("SUBMITTED") @db.VarChar(50)
+  proposalData    Json      @default("{}") @map("proposal_data")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz
+
+  grant      Grant            @relation(fields: [grantId], references: [id], onDelete: Cascade)
+  applicant  Organization     @relation(fields: [applicantOrgId], references: [id], onDelete: Cascade)
+  user       User             @relation(fields: [submittedBy], references: [id], onDelete: Restrict)
+  milestones GrantMilestone[]
+
+  @@map("grant_proposals")
+  @@schema("finance")
+}
+
+model GrantMilestone {
+  id               String    @id @default(uuid()) @db.Uuid
+  proposalId       String    @map("proposal_id") @db.Uuid
+  title            String    @db.VarChar(255)
+  description      String?   @db.Text
+  amount           Decimal   @db.Decimal(15, 2)
+  status           String    @default("PENDING") @db.VarChar(50)
+  evidenceMetadata Json      @default("{}") @map("evidence_metadata")
+  disbursedAt      DateTime? @map("disbursed_at") @db.Timestamptz
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz
+
+  proposal GrantProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@map("grant_milestones")
+  @@schema("finance")
+}
+
+// ============================================================================
+// 8. DOCUMENTS REGISTRY SCHEMA (documents.*)
+// ============================================================================
+
+model Document {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  uploaderId       String    @map("uploader_id") @db.Uuid
+  name             String    @db.VarChar(255)
+  storageProvider  String    @default("S3") @map("storage_provider") @db.VarChar(50)
+  storageKey       String    @map("storage_key") @db.VarChar(500)
+  mimeType         String    @map("mime_type") @db.VarChar(100)
+  fileSizeBytes    BigInt    @map("file_size_bytes")
+  version          Int       @default(1)
+  parentDocumentId String?   @map("parent_document_id") @db.Uuid
+  isLatest         Boolean   @default(true) @map("is_latest")
+  ocrStatus        String    @default("PENDING") @map("ocr_status") @db.VarChar(50)
+  ocrText          String?   @map("ocr_text") @db.Text
+  virusScanStatus  String    @default("PENDING") @map("virus_scan_status") @db.VarChar(50)
+  retentionPolicy  String    @default("STANDARD") @map("retention_policy") @db.VarChar(50)
+  retentionExpiry  DateTime? @map("retention_expiry") @db.Timestamptz
+  metadata         Json      @default("{}")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  deletedAt        DateTime? @map("deleted_at") @db.Timestamptz
+
+  organization         Organization                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user                 User                          @relation(fields: [uploaderId], references: [id], onDelete: Restrict)
+  parentDocument       Document?                     @relation("DocVersions", fields: [parentDocumentId], references: [id], onDelete: SetNull)
+  versions             Document[]                    @relation("DocVersions")
+  milestoneSubmissions CampaignMilestoneSubmission[]
+
+  @@index([tenantId, storageKey])
+  @@map("documents")
+  @@schema("documents")
+}
+
+// ============================================================================
+// 9. NOTIFICATIONS SCHEMA (notifications.*)
+// ============================================================================
+
+model NotificationHistory {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  recipientId   String?  @map("recipient_id") @db.Uuid
+  channel       String   @db.VarChar(50)
+  status        String   @default("SENT") @db.VarChar(50)
+  payload       Json
+  deliveryError String?  @map("delivery_error") @db.Text
+  sentAt        DateTime @default(now()) @map("sent_at") @db.Timestamptz
+
+  organization Organization @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("notification_history")
+  @@schema("notifications")
+}
+
+// ============================================================================
+// 10. AUDITING & EVENTS SCHEMA (audit.*)
+// Note: Since these are partitioned tables, Prisma permits model mappings
+// but updates must be written to parent tables.
+// ============================================================================
+
+model DomainEvent {
+  id            String   @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  eventType     String   @map("event_type") @db.VarChar(100)
+  aggregateType String   @map("aggregate_type") @db.VarChar(100)
+  aggregateId   String   @map("aggregate_id") @db.Uuid
+  payload       Json
+  correlationId String?  @map("correlation_id") @db.Uuid
+  causationId   String?  @map("causation_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@id([id, createdAt])
+  @@map("domain_events")
+  @@schema("audit")
+}
+
+model AuditEvent {
+  id            String   @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  userId        String?  @map("user_id") @db.Uuid
+  ipAddress     String?  @map("ip_address") @db.VarChar(45)
+  userAgent     String?  @map("user_agent") @db.Text
+  action        String   @db.VarChar(100)
+  entityType    String   @map("entity_type") @db.VarChar(100)
+  entityId      String   @map("entity_id") @db.Uuid
+  oldValue      Json?    @map("old_value")
+  newValue      Json?    @map("new_value")
+  correlationId String?  @map("correlation_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@id([id, createdAt])
+  @@map("audit_events")
+  @@schema("audit")
+}
+
+model OutboxEvent {
+  id            String    @id @default(uuid()) @db.Uuid
+  aggregateType String    @map("aggregate_type") @db.VarChar(100)
+  aggregateId   String    @map("aggregate_id") @db.Uuid
+  eventType     String    @map("event_type") @db.VarChar(100)
+  payload       Json
+  correlationId String?   @map("correlation_id") @db.Uuid
+  status        String    @default("PENDING") @db.VarChar(20)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  processedAt   DateTime? @map("processed_at") @db.Timestamptz
+
+  @@index([status, createdAt(sort: Asc)])
+  @@map("outbox_events")
+  @@schema("audit")
+}
+
+model InboxEvent {
+  id          String   @id @db.Uuid
+  eventSource String   @map("event_source") @db.VarChar(255)
+  processedAt DateTime @default(now()) @map("processed_at") @db.Timestamptz
+
+  @@map("inbox_events")
+  @@schema("audit")
+}
+
+// ============================================================================
+// 11. CQRS READ-PROJECTION DASHBOARD SCHEMA (search.*)
+// ============================================================================
+
+model OrganizationDashboard {
+  organizationId String   @id @map("organization_id") @db.Uuid
+  totalDonations Decimal  @default(0.00) @map("total_donations") @db.Decimal(15, 2)
+  activeMembers  Int      @default(0) @map("active_members")
+  trustScore     Decimal  @default(50.00) @map("trust_score") @db.Decimal(5, 2)
+  riskScore      Decimal  @default(50.00) @map("risk_score") @db.Decimal(5, 2)
+  updatedAt      DateTime @default(now()) @map("updated_at") @db.Timestamptz
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_dashboards")
+  @@schema("search")
+}
+
+model DonationDashboard {
+  campaignId   String   @id @map("campaign_id") @db.Uuid
+  raisedAmount Decimal  @default(0.00) @map("raised_amount") @db.Decimal(15, 2)
+  donorCount   Int      @default(0) @map("donor_count")
+  updatedAt    DateTime @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@map("donation_dashboards")
+  @@schema("search")
+}
+
+// ============================================================================
+// 12. BACKGROUND JOBS SCHEMA (jobs.*)
+// ============================================================================
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+
+  @@schema("jobs")
+}
+
+model BackgroundJob {
+  id         String    @id @default(uuid()) @db.Uuid
+  queueName  String    @map("queue_name") @db.VarChar(150)
+  jobType    String    @map("job_type") @db.VarChar(100)
+  payload    Json
+  status     JobStatus @default(QUEUED)
+  retryCount Int       @default(0) @map("retry_count")
+  maxRetries Int       @default(3) @map("max_retries")
+  runAt      DateTime  @default(now()) @map("run_at") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+
+  executions JobExecution[]
+
+  @@index([status, runAt])
+  @@map("background_jobs")
+  @@schema("jobs")
+}
+
+model JobExecution {
+  id           String    @id @default(uuid()) @db.Uuid
+  jobId        String    @map("job_id") @db.Uuid
+  startedAt    DateTime  @default(now()) @map("started_at") @db.Timestamptz
+  completedAt  DateTime? @map("completed_at") @db.Timestamptz
+  status       JobStatus
+  errorMessage String?   @map("error_message") @db.Text
+  metadata     Json      @default("{}")
+
+  job BackgroundJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("job_executions")
+  @@schema("jobs")
+}
+
+// ============================================================================
+// 13. STUDENT CAMPAIGNS DOMAIN SCHEMA (campaigns.*)
+// ============================================================================
+
+enum CampaignStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_ENDORSEMENT //professors,mentors
+  PENDING_VERIFICATION
+  LIVE
+  PAUSED
+  FULLY_FUNDED
+  CLOSED
+  CANCELLED
+  REJECTED
+  DISBURSING
+  COMPLETED
+
+  @@schema("campaigns")
+}
+
+enum CampaignCategory {
+  TUITION_FEE
+  RESEARCH_GRANT
+  STARTUP_INNOVATION
+  EMERGENCY_AID
+  COMPETITION_TRAVEL
+  EXTRACURRICULAR
+  COMMUNITY_PROJECT
+  CLUB_PROJECT
+
+  @@schema("campaigns")
+}
+
+enum DisbursementType {
+  MILESTONE_TRANCHE
+  DIRECT_TUITION_PAYOUT
+  REIMBURSEMENT
+
+  @@schema("campaigns")
+}
+
+enum FundingModel {
+  FLEXIBLE
+  ALL_OR_NOTHING
+
+  @@schema("campaigns")
+}
+
+enum ProjectStage {
+  DISCOVERY
+  FEASIBILITY
+  PROTOTYPE
+  PILOT
+  COMMERCIALIZATION
+
+  @@schema("campaigns")
+}
+
+enum EndorsementStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@schema("campaigns")
+}
+
+enum CampaignMemberRole {
+  OWNER
+  MEMBER
+
+  @@schema("campaigns")
+}
+
+model Campaign {
+  id                String           @id @default(uuid()) @db.Uuid
+  tenantId          String           @map("tenant_id") @db.Uuid
+  studentUserId     String           @map("student_user_id") @db.Uuid
+  beneficiaryUserId String?          @map("beneficiary_user_id") @db.Uuid
+  organizationId    String?          @map("organization_id") @db.Uuid
+  title             String           @db.VarChar(255)
+  slug              String           @unique @db.VarChar(120)
+  category          CampaignCategory
+  campaignType      String           @default("INDIVIDUAL") @map("campaign_type") @db.VarChar(50)
+  stage             ProjectStage     @default(DISCOVERY)
+
+  shortDescription    String   @map("short_description") @db.VarChar(500)
+  description         String   @db.Text
+  coverImageUrl       String   @map("cover_image_url") @db.VarChar(500)
+  galleryImageUrls    String[] @default([]) @map("gallery_image_urls")
+  videoUrl            String?  @map("video_url") @db.VarChar(500)
+  presentationDeckUrl String?  @map("presentation_deck_url") @db.VarChar(500)
+
+  faqs               Json  @default("[]")
+  teamMembers        Json  @default("[]") @map("team_members")
+  beneficiaryDetails Json? @map("beneficiary_details")
+
+  targetAmount        Decimal @map("target_amount") @db.Decimal(15, 2)
+  minDonationAmount   Decimal @default(1.00) @map("min_donation_amount") @db.Decimal(15, 2)
+  currentRaisedAmount Decimal @default(0.00) @map("current_raised_amount") @db.Decimal(15, 2)
+  donorCount          Int     @default(0) @map("donor_count")
+  currency            String  @default("INR") @db.VarChar(3)
+
+  status CampaignStatus @default(DRAFT)
+
+  // Governance & Verification Audit
+  verifiedByUserId String?   @map("verified_by_user_id") @db.Uuid
+  verifiedAt       DateTime? @map("verified_at") @db.Timestamptz
+  rejectionReason  String?   @map("rejection_reason") @db.Text
+  reapprovalCount  Int       @default(0) @map("reapproval_count")
+
+  escrowAccountId String?   @unique @map("escrow_account_id") @db.Uuid
+  startDate       DateTime? @map("start_date") @db.Timestamptz
+  endDate         DateTime? @map("end_date") @db.Timestamptz
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz
+
+  // Relations
+  tenant        Organization          @relation("TenantCampaigns", fields: [tenantId], references: [id], onDelete: Restrict)
+  department    Organization?         @relation("DepartmentCampaigns", fields: [organizationId], references: [id], onDelete: SetNull)
+  student       User                  @relation("StudentCampaigns", fields: [studentUserId], references: [id], onDelete: Cascade)
+  beneficiary   User?                 @relation("BeneficiaryCampaigns", fields: [beneficiaryUserId], references: [id], onDelete: SetNull)
+  verifiedBy    User?                 @relation("VerifiedCampaigns", fields: [verifiedByUserId], references: [id], onDelete: SetNull)
+  escrowAccount LedgerAccount?        @relation(fields: [escrowAccountId], references: [id], onDelete: SetNull)
+  milestones    CampaignMilestone[]
+  endorsements  CampaignEndorsement[]
+  members       CampaignMember[]
+  comments      CampaignComment[]
+  donations     Donation[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, status, createdAt(sort: Desc)])
+  @@index([studentUserId, createdAt(sort: Desc)])
+  @@index([category, status])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("campaigns")
+  @@schema("campaigns")
+}
+
+model CampaignMilestone {
+  id            String @id @default(uuid()) @db.Uuid
+  campaignId    String @map("campaign_id") @db.Uuid
+  sequenceOrder Int    @map("sequence_order")
+
+  // Current Active State
+  currentVersion Int       @default(1) @map("current_version")
+  title          String    @db.VarChar(255)
+  description    String?   @db.Text
+  durationDays   Int       @default(30) @map("duration_days")
+  startDate      DateTime? @map("start_date") @db.Timestamptz
+  deadline       DateTime? @db.Timestamptz
+  targetAmount   Decimal   @map("target_amount") @db.Decimal(15, 2)
+  releasedAmount Decimal   @default(0.00) @map("released_amount") @db.Decimal(15, 2)
+  utilizedAmount Decimal   @default(0.00) @map("utilized_amount") @db.Decimal(15, 2)
+
+  acceptanceCriteria    Json      @default("[]") @map("acceptance_criteria")
+  requiredEvidenceTypes String[]  @default([]) @map("required_evidence_types")
+  status                String    @default("PLANNED") @db.VarChar(50) // PLANNED, ACTIVE, SUBMITTED, UNDER_VERIFICATION, REVISION_REQUIRED, APPROVED, FUNDS_RELEASED, POST_DISBURSEMENT_PENDING, COMPLETED, DELAYED, SUSPENDED, REJECTED, CANCELLED
+  disbursedAt           DateTime? @map("disbursed_at") @db.Timestamptz
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+
+  campaign               Campaign                      @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  submissions            CampaignMilestoneSubmission[]
+  revisions              CampaignMilestoneRevision[]
+  milestoneDisbursements MilestoneDisbursement[]
+
+  @@unique([campaignId, sequenceOrder])
+  @@index([campaignId])
+  @@index([status])
+  @@map("campaign_milestones")
+  @@schema("campaigns")
+}
+
+model CampaignMilestoneSubmission {
+  id                   String   @id @default(uuid()) @db.Uuid
+  milestoneId          String   @map("milestone_id") @db.Uuid
+  submissionNumber     Int      @default(1) @map("submission_number")
+  submissionAttempt    Int      @default(1) @map("submission_attempt")
+  narrative            String?  @db.Text
+  evidenceDocId        String?  @map("evidence_doc_id") @db.Uuid
+  evidenceMediaUrls    String[] @default([]) @map("evidence_media_urls")
+  evidenceDocumentUrls String[] @default([]) @map("evidence_document_urls")
+  criteriaChecklist    Json     @default("[]") @map("criteria_checklist")
+  studentNotes         String?  @map("student_notes") @db.Text
+  status               String   @default("PENDING_REVIEW") @db.VarChar(50) // PENDING_REVIEW, APPROVED, REJECTED
+
+  // Reviewer Audit
+  reviewedByUserId String?   @map("reviewed_by_user_id") @db.Uuid
+  reviewedAt       DateTime? @map("reviewed_at") @db.Timestamptz
+  rejectionReason  String?   @map("rejection_reason") @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz
+
+  milestone   CampaignMilestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  evidenceDoc Document?         @relation(fields: [evidenceDocId], references: [id], onDelete: Restrict)
+  reviewedBy  User?             @relation("ReviewedMilestoneSubmissions", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([milestoneId])
+  @@index([evidenceDocId])
+  @@index([reviewedByUserId])
+  @@map("campaign_milestone_submissions")
+  @@schema("campaigns")
+}
+
+enum DisbursementStatus {
+  PENDING_CHECKER
+  AUTHORIZED
+  PROCESSING
+  SETTLED
+  FAILED
+  REVERSED
+
+  @@schema("finance")
+}
+
+// ============================================================================
+// WITHDRAWAL REQUEST (Student Payout to Bank Account)
+// ============================================================================
+
+enum WithdrawalStatus {
+  REQUESTED     // Debit hold posted, payout about to initiate
+  PROCESSING    // Razorpay payout API called
+  SETTLED       // Razorpay confirmed delivery to bank
+  FAILED        // Payout failed (funds released back)
+  REVERSED      // Payout reversed after settlement
+  CANCELLED     // Student cancelled before payout initiated
+
+  @@schema("finance")
+}
+
+model WithdrawalRequest {
+  id                    String            @id @default(uuid()) @db.Uuid
+  userId                String            @map("user_id") @db.Uuid
+  tenantId              String?           @map("tenant_id") @db.Uuid
+  amount                Decimal           @db.Decimal(15, 2)
+  currency              String            @default("INR") @db.VarChar(3)
+  status                WithdrawalStatus  @default(REQUESTED)
+
+  // Snapshot of bank account at request time
+  vaultAccountId        String            @map("vault_account_id") @db.Uuid
+  accountHolderName     String            @map("account_holder_name") @db.VarChar(255)
+  bankAccountNumber     String            @map("bank_account_number") @db.VarChar(100)
+  ifscCode              String            @map("ifsc_code") @db.VarChar(50)
+  upiId                 String?           @map("upi_id") @db.VarChar(150)
+
+  // Razorpay Payout tracking
+  razorpayContactId     String?           @map("razorpay_contact_id") @db.VarChar(100)
+  razorpayFundAccId     String?           @map("razorpay_fund_acc_id") @db.VarChar(100)
+  razorpayPayoutId      String?           @map("razorpay_payout_id") @db.VarChar(100)
+
+  // Ledger link
+  reservationLedgerTxId String?           @map("reservation_ledger_tx_id") @db.Uuid
+  settlementLedgerTxId  String?           @map("settlement_ledger_tx_id") @db.Uuid
+  idempotencyKey        String            @unique @map("idempotency_key") @db.VarChar(255)
+  failureReason         String?           @map("failure_reason") @db.Text
+
+  // Timestamps
+  requestedAt           DateTime          @default(now()) @map("requested_at") @db.Timestamptz
+  processedAt           DateTime?         @map("processed_at") @db.Timestamptz
+  settledAt             DateTime?         @map("settled_at") @db.Timestamptz
+  failedAt              DateTime?         @map("failed_at") @db.Timestamptz
+  metadata              Json              @default("{}")
+
+  user                  User              @relation("UserWithdrawals", fields: [userId], references: [id], onDelete: Restrict)
+  organization          Organization?     @relation("TenantWithdrawals", fields: [tenantId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([status, requestedAt(sort: Desc)])
+  @@index([razorpayPayoutId])
+  @@map("withdrawal_requests")
+  @@schema("finance")
+}
+
+model MilestoneDisbursement {
+  id              String             @id @default(uuid()) @db.Uuid
+  milestoneId     String             @map("milestone_id") @db.Uuid
+  amount          Decimal            @db.Decimal(15, 2)
+  currency        String             @default("INR") @db.VarChar(3)
+  status          DisbursementStatus @default(PENDING_CHECKER)
+  makerUserId     String             @map("maker_user_id") @db.Uuid
+  checkerUserId   String?            @map("checker_user_id") @db.Uuid
+  payoutReference String?            @map("payout_reference") @db.VarChar(255)
+  ledgerTxId      String?            @map("ledger_tx_id") @db.Uuid
+  authorizedAt    DateTime?          @map("authorized_at") @db.Timestamptz
+  settledAt       DateTime?          @map("settled_at") @db.Timestamptz
+  createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz
+
+  milestone         CampaignMilestone  @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  makerUser         User               @relation("DisbursementMaker", fields: [makerUserId], references: [id], onDelete: Restrict)
+  checkerUser       User?              @relation("DisbursementChecker", fields: [checkerUserId], references: [id], onDelete: SetNull)
+  utilizationProofs UtilizationProof[]
+
+  @@index([milestoneId])
+  @@index([makerUserId])
+  @@index([checkerUserId])
+  @@map("milestone_disbursements")
+  @@schema("finance")
+}
+
+model UtilizationProof {
+  id               String    @id @default(uuid()) @db.Uuid
+  disbursementId   String    @map("disbursement_id") @db.Uuid
+  vendorName       String    @map("vendor_name") @db.VarChar(255)
+  invoiceNumber    String    @map("invoice_number") @db.VarChar(100)
+  amountClaimed    Decimal   @map("amount_claimed") @db.Decimal(15, 2)
+  receiptFileUrl   String    @map("receipt_file_url") @db.VarChar(500)
+  verified         Boolean   @default(false)
+  verifiedByUserId String?   @map("verified_by_user_id") @db.Uuid
+  verifiedAt       DateTime? @map("verified_at") @db.Timestamptz
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  disbursement   MilestoneDisbursement @relation(fields: [disbursementId], references: [id], onDelete: Cascade)
+  verifiedByUser User?                 @relation("UtilizationVerifier", fields: [verifiedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([disbursementId])
+  @@index([verifiedByUserId])
+  @@map("utilization_proofs")
+  @@schema("finance")
+}
+
+model CampaignEndorsement {
+  id             String            @id @default(uuid()) @db.Uuid
+  campaignId     String            @map("campaign_id") @db.Uuid
+  endorserUserId String            @map("endorser_user_id") @db.Uuid
+  designation    String            @db.VarChar(150)
+  status         EndorsementStatus @default(PENDING)
+  comments       String?           @db.Text
+  endorsedAt     DateTime?         @map("endorsed_at") @db.Timestamptz
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  endorser User     @relation("UserCampaignEndorsements", fields: [endorserUserId], references: [id], onDelete: Restrict)
+
+  @@unique([campaignId, endorserUserId])
+  @@index([campaignId])
+  @@index([endorserUserId])
+  @@map("campaign_endorsements")
+  @@schema("campaigns")
+}
+
+model CampaignMilestoneRevision {
+  id             String @id @default(uuid()) @db.Uuid
+  milestoneId    String @map("milestone_id") @db.Uuid
+  revisionNumber Int    @map("revision_number") // 1, 2, 3 ...
+
+  // Strongly-typed snapshot of milestone state
+  title        String  @db.VarChar(255)
+  description  String? @db.Text
+  targetAmount Decimal @map("target_amount") @db.Decimal(15, 2)
+
+  // Governance & Review
+  changeReason String @map("change_reason") @db.Text
+  status       String @default("APPROVED") @db.VarChar(50) // PENDING_APPROVAL, APPROVED, REJECTED
+
+  requestedByUserId String    @map("requested_by_user_id") @db.Uuid
+  reviewedByUserId  String?   @map("reviewed_by_user_id") @db.Uuid
+  reviewedAt        DateTime? @map("reviewed_at") @db.Timestamptz
+  rejectionReason   String?   @map("rejection_reason") @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  milestone   CampaignMilestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  requestedBy User              @relation("MilestoneRevisionRequestedBy", fields: [requestedByUserId], references: [id], onDelete: Restrict)
+  reviewedBy  User?             @relation("MilestoneRevisionReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([milestoneId, revisionNumber])
+  @@index([milestoneId])
+  @@index([requestedByUserId])
+  @@index([reviewedByUserId])
+  @@map("campaign_milestone_revisions")
+  @@schema("campaigns")
+}
+
+model CampaignMember {
+  id         String             @id @default(uuid()) @db.Uuid
+  campaignId String             @map("campaign_id") @db.Uuid
+  userId     String             @map("user_id") @db.Uuid
+  role       CampaignMemberRole @default(MEMBER)
+  title      String?            @db.VarChar(100)
+  invitedBy  String?            @map("invited_by") @db.Uuid
+  joinedAt   DateTime           @default(now()) @map("joined_at") @db.Timestamptz
+  createdAt  DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime           @default(now()) @map("updated_at") @db.Timestamptz
+
+  campaign   Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user       User               @relation("CampaignMemberships", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, userId])
+  @@index([campaignId])
+  @@index([userId])
+  @@map("campaign_members")
+  @@schema("campaigns")
+}
+
+model CampaignComment {
+  id         String            @id @default(uuid()) @db.Uuid
+  campaignId String            @map("campaign_id") @db.Uuid
+  userId     String            @map("user_id") @db.Uuid
+  parentId   String?           @map("parent_id") @db.Uuid
+  content    String            @db.Text
+  reported   Boolean           @default(false)
+  deletedAt  DateTime?         @map("deleted_at") @db.Timestamptz
+  createdAt  DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime          @default(now()) @map("updated_at") @db.Timestamptz
+
+  campaign   Campaign          @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user       User              @relation("UserCampaignComments", fields: [userId], references: [id], onDelete: Cascade)
+  parent     CampaignComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies    CampaignComment[] @relation("CommentReplies")
+
+  @@index([campaignId, createdAt(sort: Desc)])
+  @@index([parentId])
+  @@index([userId])
+  @@map("campaign_comments")
+  @@schema("campaigns")
+}
+
+// ============================================================================
+// 14. DOC VAULT DOMAIN SCHEMA (doc_vault.*)
+// ============================================================================
+
+enum VaultDocumentType {
+  GOVT_ID
+  STUDENT_ID
+  UNIVERSITY_ENDORSEMENT
+  BANK_PASSBOOK
+  INVOICE
+  PROJECT_PROPOSAL
+  ORGANIZATION_REGISTRATION
+  OTHER
+
+  @@schema("doc_vault")
+}
+
+model UserDocVault {
+  id            String            @id @default(uuid()) @db.Uuid
+  userId        String            @map("user_id") @db.Uuid
+  documentType  VaultDocumentType @default(OTHER) @map("document_type")
+  title         String            @db.VarChar(255)
+  fileName      String            @map("file_name") @db.VarChar(255)
+  fileUrl       String            @map("file_url") @db.VarChar(1000)
+  fileSizeBytes BigInt            @default(0) @map("file_size_bytes")
+  mimeType      String?           @map("mime_type") @db.VarChar(100)
+  isVerified    Boolean           @default(false) @map("is_verified")
+  metadata      Json              @default("{}")
+  createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime          @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime?         @map("deleted_at") @db.Timestamptz
+
+  user          User              @relation("UserDocVaultItems", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, documentType])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("user_doc_vault")
+  @@schema("doc_vault")
+}
+
+// ============================================================================
+// 15. ACCOUNT VAULT DOMAIN SCHEMA (account_vault.*)
+// ============================================================================
+
+enum VaultAccountType {
+  INDIVIDUAL_SAVINGS
+  INDIVIDUAL_CURRENT
+  INSTITUTIONAL_CURRENT
+  STUDENT_CLUB
+
+  @@schema("account_vault")
+}
+
+model UserAccountVault {
+  id                String           @id @default(uuid()) @db.Uuid
+  userId            String           @map("user_id") @db.Uuid
+  accountNickname   String?          @map("account_nickname") @db.VarChar(100)
+  accountHolderName String           @map("account_holder_name") @db.VarChar(255)
+  bankAccountNumber String           @map("bank_account_number") @db.VarChar(100)
+  ifscCode          String           @map("ifsc_code") @db.VarChar(50)
+  bankName          String?          @map("bank_name") @db.VarChar(255)
+  upiId             String?          @map("upi_id") @db.VarChar(150)
+  accountType       VaultAccountType @default(INDIVIDUAL_SAVINGS) @map("account_type")
+  isPrimary         Boolean          @default(false) @map("is_primary")
+  isVerified        Boolean          @default(false) @map("is_verified")
+  metadata          Json             @default("{}")
+  createdAt         DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime         @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt         DateTime?        @map("deleted_at") @db.Timestamptz
+
+  user              User             @relation("UserAccountVaultItems", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("user_account_vault")
+  @@schema("account_vault")
+}
+

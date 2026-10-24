@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DreamXec — 10-Day Intern Learning Plan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 15mm 18mm 15mm;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --orange: #FE4E1A;
+      --forest-green: #0F534A;
+      --bright-red: #F4002C;
+      --deep-purple: #4717AE;
+      --bright-yellow: #FFDD33;
+      --bright-green: #9EFC5F;
+      --pastel-pink: #FEB3FC;
+      --vibrant-blue: #18D7E8;
+      --bg-dark: #0c0c14;
+      --bg-card: #15152a;
+      --text-primary: #f0f0f5;
+      --text-secondary: #b0b0c0;
+      --text-muted: #7a7a90;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page-break { page-break-before: always; }
+
+    /* ── COVER ── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #1a0e30 50%, var(--bg-dark) 100%);
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(254,78,26,0.12) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      border-radius: 50%;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(71,23,174,0.15) 0%, transparent 70%);
+      bottom: -150px; left: -150px;
+      border-radius: 50%;
+    }
+    .cover .logo-text {
+      font-weight: 900;
+      font-size: 52px;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .cover .logo-text span:first-child { color: var(--orange); }
+    .cover .logo-text span:last-child { color: var(--forest-green); }
+    .cover h1 {
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--text-primary);
+      margin-top: 16px;
+      line-height: 1.3;
+    }
+    .cover .subtitle {
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      max-width: 600px;
+    }
+    .cover .meta {
+      margin-top: 40px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cover .meta-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px 24px;
+      text-align: center;
+      min-width: 160px;
+    }
+    .cover .meta-item .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 500; }
+    .cover .meta-item .value { font-size: 18px; font-weight: 700; color: var(--orange); margin-top: 4px; }
+
+    /* ── SECTION CONTAINERS ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-title {
+      font-weight: 800;
+      font-size: 26px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title .accent {
+      display: inline-block;
+      width: 6px;
+      height: 28px;
+      border-radius: 3px;
+    }
+    .section-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      max-width: 700px;
+    }
+
+    /* ── TABLE OF CONTENTS ── */
+    .toc {
+      padding: 60px 32px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .toc h2 { font-weight: 800; font-size: 30px; margin-bottom: 32px; }
+    .toc-list { list-style: none; }
+    .toc-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      transition: background 0.2s;
+    }
+    .toc-list li:hover { background: rgba(255,255,255,0.03); }
+    .toc-day {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--bg-dark);
+      border-radius: 6px;
+      padding: 4px 12px;
+      min-width: 70px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .toc-title { font-weight: 500; font-size: 15px; color: var(--text-primary); }
+    .toc-tag { font-size: 11px; color: var(--text-muted); margin-left: auto; font-weight: 400; }
+
+    /* ── DAY CARD ── */
+    .day-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .day-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 4px;
+    }
+    .day-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .day-badge {
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 18px;
+      letter-spacing: 0.5px;
+    }
+    .day-title {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text-primary);
+    }
+    .day-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* ── MODULE BLOCK ── */
+    .module {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .module-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--bright-yellow);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .module-title .icon { font-size: 18px; }
+
+    /* ── LISTS ── */
+    .topic-list, .task-list, .resource-list {
+      list-style: none;
+      margin: 0;
+    }
+    .topic-list li, .task-list li, .resource-list li {
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.6;
+    }
+    .topic-list li::before { content: '▸'; color: var(--orange); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .task-list li::before { content: '☐'; color: var(--bright-green); font-weight: 700; flex-shrink: 0; }
+    .resource-list li::before { content: '📌'; flex-shrink: 0; }
+
+    /* ── TESTING PROJECT CARD ── */
+    .project-card {
+      background: linear-gradient(135deg, rgba(71,23,174,0.1) 0%, rgba(254,78,26,0.06) 100%);
+      border: 1px solid rgba(71,23,174,0.2);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+    .project-card h4 {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--pastel-pink);
+      margin-bottom: 8px;
+    }
+    .project-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+    .project-card .difficulty {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-right: 8px;
+    }
+    .difficulty-easy { background: rgba(158,252,95,0.15); color: var(--bright-green); }
+    .difficulty-medium { background: rgba(255,221,51,0.15); color: var(--bright-yellow); }
+    .difficulty-hard { background: rgba(244,0,44,0.15); color: var(--bright-red); }
+
+    .acceptance-criteria {
+      margin-top: 12px;
+      padding-left: 4px;
+    }
+    .acceptance-criteria li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 3px 0;
+    }
+    .acceptance-criteria li::before { content: '✓'; color: var(--bright-green); font-weight: 700; }
+
+    /* ── TECH STACK GRID ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .tech-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .tech-item .name { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+    .tech-item .desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── INFO CALLOUT ── */
+    .callout {
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .callout-info {
+      background: rgba(24,215,232,0.08);
+      border: 1px solid rgba(24,215,232,0.2);
+      color: var(--vibrant-blue);
+    }
+    .callout-warning {
+      background: rgba(255,221,51,0.08);
+      border: 1px solid rgba(255,221,51,0.2);
+      color: var(--bright-yellow);
+    }
+    .callout-success {
+      background: rgba(158,252,95,0.08);
+      border: 1px solid rgba(158,252,95,0.2);
+      color: var(--bright-green);
+    }
+
+    .highlight { color: var(--orange); font-weight: 600; }
+    .code-inline {
+      background: rgba(255,255,255,0.06);
+      color: var(--vibrant-blue);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .summary-table th, .summary-table td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .summary-table th {
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .summary-table td { color: var(--text-secondary); }
+    .summary-table tr:hover td { color: var(--text-primary); }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    @media print {
+      body { background: #fff; color: #1a1a1a; }
+      .day-card { border: 1px solid #ddd; background: #fafafa; }
+      .module { background: #f5f5f5; border-color: #eee; }
+      .project-card { border-color: #ddd; background: #f9f5ff; }
+      .section-title, .day-title { color: #1a1a1a; }
+      .topic-list li, .task-list li, .resource-list li { color: #444; }
+      .toc-list li:hover { background: transparent; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     COVER PAGE
+     ═══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="logo-text"><span>Dream</span><span>Xec</span></div>
+  <h1>10-Day Intern Onboarding<br>& Learning Plan</h1>
+  <p class="subtitle">
+    A structured, module-based curriculum designed for interns joining the DreamXec
+    social impact platform — covering full-stack development, architecture patterns,
+    and hands-on testing projects.
+  </p>
+  <div class="meta">
+    <div class="meta-item">
+      <div class="label">Duration</div>
+      <div class="value">10 Days</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Modules</div>
+      <div class="value">12</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Mini Projects</div>
+      <div class="value">10</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Tech Stack</div>
+      <div class="value">Full-Stack</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="toc">
+  <h2>📋 Table of Contents</h2>
+  <ul class="toc-list">
+    <li>
+      <span class="toc-day" style="background:var(--orange)">DAY 1</span>
+      <span class="toc-title">Platform Overview, Tech Stack & Dev Environment Setup</span>
+      <span class="toc-tag">Foundation</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--forest-green)">DAY 2</span>
+      <span class="toc-title">Database Schema, Prisma ORM & Multi-Schema Architecture</span>
+      <span class="toc-tag">Backend Core</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--deep-purple)">DAY 3</span>
+      <span class="toc-title">Authentication, JWT, OAuth & Session Management</span>
+      <span class="toc-tag">Security</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--bright-red)">DAY 4</span>
+      <span class="toc-title">Permissions Engine — RBAC, ABAC & Multi-Tenancy</span>
+      <span class="toc-tag">Access Control</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--orange)">DAY 5</span>
+      <span class="toc-title">Frontend Architecture — React, Vite, Routing & State</span>
+      <span class="toc-tag">Frontend</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--forest-green)">DAY 6</span>
+      <span class="toc-title">Workflow Engine, Onboarding & Governance Modules</span>
+      <span class="toc-tag">Business Logic</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--deep-purple)">DAY 7</span>
+      <span class="toc-title">Campaigns, Donations, Razorpay & Ledger System</span>
+      <span class="toc-tag">Finance</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--bright-red)">DAY 8</span>
+      <span class="toc-title">API Design, Middleware Stack & Error Handling</span>
+      <span class="toc-tag">API Layer</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--orange)">DAY 9</span>
+      <span class="toc-title">Testing, CI/CD, Deployment & Monitoring</span>
+      <span class="toc-tag">DevOps</span>
+    </li>
+    <li>
+      <span class="toc-day" style="background:var(--forest-green)">DAY 10</span>
+      <span class="toc-title">Capstone Integration Project & Code Review</span>
+      <span class="toc-tag">Capstone</span>
+    </li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TECH STACK OVERVIEW
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="section-title">
+    <span class="accent" style="background:var(--orange)"></span>
+    DreamXec Technology Stack
+  </div>
+  <p class="section-desc">The platform is a full-stack monorepo with a clear client-server separation. Interns must familiarize themselves with every layer.</p>
+
+  <div class="tech-grid">
+    <div class="tech-item"><div class="name">React 18 + TypeScript</div><div class="desc">Frontend UI Framework</div></div>
+    <div class="tech-item"><div class="name">Vite 7</div><div class="desc">Build Tool & Dev Server</div></div>
+    <div class="tech-item"><div class="name">Tailwind CSS 3</div><div class="desc">Utility-First Styling</div></div>
+    <div class="tech-item"><div class="name">Framer Motion</div><div class="desc">Animations & Transitions</div></div>
+    <div class="tech-item"><div class="name">React Router v7</div><div class="desc">Client-Side Routing</div></div>
+    <div class="tech-item"><div class="name">Axios</div><div class="desc">HTTP Client</div></div>
+    <div class="tech-item"><div class="name">Node.js + Express</div><div class="desc">Backend API Server</div></div>
+    <div class="tech-item"><div class="name">PostgreSQL (Supabase)</div><div class="desc">Relational Database</div></div>
+    <div class="tech-item"><div class="name">Prisma ORM 6</div><div class="desc">Database Access Layer</div></div>
+    <div class="tech-item"><div class="name">Redis (ioredis)</div><div class="desc">Caching & Sessions</div></div>
+    <div class="tech-item"><div class="name">JWT + bcrypt</div><div class="desc">Auth & Password Hashing</div></div>
+    <div class="tech-item"><div class="name">Razorpay SDK</div><div class="desc">Payment Gateway</div></div>
+    <div class="tech-item"><div class="name">Cloudinary</div><div class="desc">Image & File Storage</div></div>
+    <div class="tech-item"><div class="name">SendGrid</div><div class="desc">Transactional Emails</div></div>
+    <div class="tech-item"><div class="name">Sentry</div><div class="desc">Error Monitoring</div></div>
+    <div class="tech-item"><div class="name">Jest / Vitest</div><div class="desc">Testing Framework</div></div>
+    <div class="tech-item"><div class="name">Zod + Joi</div><div class="desc">Schema Validation</div></div>
+    <div class="tech-item"><div class="name">Docker + Render</div><div class="desc">Deployment</div></div>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>📂 Monorepo Structure:</strong> The codebase lives in <span class="code-inline">Dreamxec/</span> with two main directories — <span class="code-inline">client/</span> (React/Vite frontend) and <span class="code-inline">server/</span> (Express/Prisma backend). The Prisma schema uses <strong>14 PostgreSQL schemas</strong> across identity, organization, workflow, verification, finance, campaigns, and more.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 1
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--orange);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--orange)">DAY 1</span>
+      <div>
+        <div class="day-title">Platform Overview, Tech Stack & Dev Environment Setup</div>
+        <div class="day-subtitle">Module 1 · Foundation · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🎯</span> Module 1A: Understanding DreamXec</div>
+      <ul class="topic-list">
+        <li>What is DreamXec? — A social impact platform connecting students, colleges, donors, NGOs, corporates, and incubators to fund & execute research-driven campaigns</li>
+        <li>Key user roles: Student, Donor, Org Admin, Mentor, Professor, Researcher, Compliance Officer, DX Platform Admin</li>
+        <li>Core product features: Campaign creation & funding, multi-org hierarchy, onboarding workflows, donation ledger, verification pipeline, vault system</li>
+        <li>Read the <span class="code-inline">ARCHITECTURE_HANDBOOK.md</span> — Sections 1-5 (Trade-offs, Caching, RLS, Zanzibar, Onboarding)</li>
+        <li>Read <span class="code-inline">SERVICE_ARCHITECTURE.md</span> — All 12 microservice descriptions</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🛠️</span> Module 1B: Development Environment Setup</div>
+      <ul class="topic-list">
+        <li>Clone the monorepo and understand the folder structure: <span class="code-inline">client/</span>, <span class="code-inline">server/</span>, <span class="code-inline">server/prisma/</span></li>
+        <li>Install Node.js (v20+), npm, Git, VS Code with recommended extensions (Prisma, ESLint, Prettier, Tailwind IntelliSense)</li>
+        <li>Set up <span class="code-inline">server/.env</span> using <span class="code-inline">.env.example</span> — configure DATABASE_URL, REDIS_URL, JWT secrets, Cloudinary, SendGrid keys</li>
+        <li>Run <span class="code-inline">npm install</span> in both <span class="code-inline">client/</span> and <span class="code-inline">server/</span></li>
+        <li>Run <span class="code-inline">npx prisma generate</span> in <span class="code-inline">server/</span> to generate the Prisma client</li>
+        <li>Start backend: <span class="code-inline">npm run dev</span> in <span class="code-inline">server/</span> (runs on port 5000 with nodemon)</li>
+        <li>Start frontend: <span class="code-inline">npm run dev</span> in <span class="code-inline">client/</span> (runs on port 5173 with Vite)</li>
+        <li>Verify API health: hit <span class="code-inline">GET /api/health</span> and confirm the frontend loads the homepage</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 1C: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>Git Fundamentals:</strong> branching, merging, pull requests, commit message conventions</li>
+        <li><strong>JavaScript/TypeScript Basics:</strong> ES6+ syntax, async/await, destructuring, modules, type annotations</li>
+        <li><strong>Node.js Event Loop:</strong> Understanding non-blocking I/O, event-driven architecture</li>
+        <li><strong>Package Managers:</strong> npm scripts, lockfiles, dependency management in a monorepo</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 1: "Hello DreamXec" Health Check</h4>
+      <p>Create a simple script that pings both the backend API health endpoint and the frontend dev server, logs their status, and prints the monorepo directory tree (client/ & server/ top-level only).</p>
+      <span class="difficulty difficulty-easy">Easy</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Script runs with <span class="code-inline">node check-health.js</span> from project root</li>
+        <li>Prints backend status: "✅ Backend running on port 5000"</li>
+        <li>Prints frontend status: "✅ Frontend running on port 5173"</li>
+        <li>Lists top-level directories and their file counts</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 2
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--forest-green);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--forest-green)">DAY 2</span>
+      <div>
+        <div class="day-title">Database Schema, Prisma ORM & Multi-Schema Architecture</div>
+        <div class="day-subtitle">Module 2 · Backend Core · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🗄️</span> Module 2A: PostgreSQL & Multi-Schema Design</div>
+      <ul class="topic-list">
+        <li>Understand DreamXec's 14 PostgreSQL schemas: <span class="code-inline">identity</span>, <span class="code-inline">organization</span>, <span class="code-inline">workflow</span>, <span class="code-inline">verification</span>, <span class="code-inline">finance</span>, <span class="code-inline">payments</span>, <span class="code-inline">documents</span>, <span class="code-inline">notifications</span>, <span class="code-inline">audit</span>, <span class="code-inline">search</span>, <span class="code-inline">jobs</span>, <span class="code-inline">campaigns</span>, <span class="code-inline">doc_vault</span>, <span class="code-inline">account_vault</span></li>
+        <li>Study key models in <span class="code-inline">server/prisma/schema.prisma</span>: User, Organization, Membership, Session, Campaign, Donation, WorkflowTemplate, WorkflowInstance, LedgerAccount</li>
+        <li>Understand enum types: Role, OrgRole, OrgType, LifecycleStatus, MembershipStatus, StageType, ExecutionStatus</li>
+        <li>Learn about UUID primary keys, composite unique constraints, and cascade delete strategies</li>
+        <li>Study the Organization hierarchy model — parentId, ancestorId, depth, hierarchyPath (ltree concept)</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🔧</span> Module 2B: Prisma ORM Deep Dive</div>
+      <ul class="topic-list">
+        <li>Prisma schema language: models, relations, enums, @@map, @map, @@schema directives</li>
+        <li>Prisma Client API: <span class="code-inline">findUnique</span>, <span class="code-inline">findMany</span>, <span class="code-inline">create</span>, <span class="code-inline">update</span>, <span class="code-inline">upsert</span>, <span class="code-inline">delete</span></li>
+        <li>Nested writes and includes: eager loading relations (e.g., User with memberships)</li>
+        <li>Prisma migrations: <span class="code-inline">npx prisma migrate dev</span>, <span class="code-inline">npx prisma migrate status</span></li>
+        <li>Prisma Studio: <span class="code-inline">npx prisma studio</span> for visual database browsing</li>
+        <li>Study how the project initializes Prisma in <span class="code-inline">server/src/config/prisma.js</span></li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 2C: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>SQL Fundamentals:</strong> SELECT, JOIN, WHERE, GROUP BY, aggregate functions</li>
+        <li><strong>PostgreSQL Specifics:</strong> JSONB columns, UUID generation, TIMESTAMPTZ, indexing strategies</li>
+        <li><strong>Schema Design:</strong> Normalization (3NF), denormalization trade-offs, foreign keys, constraints</li>
+        <li><strong>ORM Patterns:</strong> Repository pattern, data mappers, query builders vs raw SQL</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 2: Prisma Query Explorer</h4>
+      <p>Write a Node.js script using the Prisma client that: (1) counts total users, organizations, and campaigns in the database, (2) fetches a user with their memberships included, (3) lists all organization types and their counts. This teaches Prisma query patterns used throughout the codebase.</p>
+      <span class="difficulty difficulty-easy">Easy</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Script connects to the database using the existing Prisma config</li>
+        <li>Outputs a formatted summary of entity counts</li>
+        <li>Demonstrates <span class="code-inline">findUnique</span> with <span class="code-inline">include</span> for relations</li>
+        <li>Uses <span class="code-inline">groupBy</span> to aggregate organizations by type</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 3
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--deep-purple);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--deep-purple)">DAY 3</span>
+      <div>
+        <div class="day-title">Authentication, JWT, OAuth & Session Management</div>
+        <div class="day-subtitle">Module 3 · Security · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🔐</span> Module 3A: Auth Architecture in DreamXec</div>
+      <ul class="topic-list">
+        <li>Study the auth module: <span class="code-inline">server/src/modules/auth/</span> — auth.service.js, auth.validation.js, auth.mapper.js</li>
+        <li>JWT token flow: generation (login/signup → sign JWT → return token), validation (middleware extracts from Authorization header)</li>
+        <li>Password hashing with bcryptjs: hashing on registration, comparison on login</li>
+        <li>OAuth flow: Google OAuth via <span class="code-inline">passport-google-oauth20</span> → callback → JWT issuance</li>
+        <li>Email verification: token generation, SendGrid email dispatch, verification endpoint</li>
+        <li>Password reset flow: forgot password → OTP/token → reset endpoint with expiry validation</li>
+        <li>Session management: <span class="code-inline">express-session</span> with optional Redis store via <span class="code-inline">connect-redis</span></li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🔑</span> Module 3B: Auth Middleware</div>
+      <ul class="topic-list">
+        <li>Study <span class="code-inline">server/src/middleware/auth.middleware.js</span> — the JWT extraction and verification logic</li>
+        <li>How the middleware attaches <span class="code-inline">req.user</span> for downstream controllers</li>
+        <li>Token expiry handling and error responses (401 Unauthorized)</li>
+        <li>The dev token utility at <span class="code-inline">/dev/gen-token</span> for local testing</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 3C: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>JWT Deep Dive:</strong> Header, Payload, Signature, RS256 vs HS256, expiry claims</li>
+        <li><strong>OAuth 2.0 Protocol:</strong> Authorization Code flow, scopes, tokens, callback URIs</li>
+        <li><strong>Password Security:</strong> Salted hashing, bcrypt cost factor, timing attacks</li>
+        <li><strong>Session vs Token Auth:</strong> Stateful (sessions) vs stateless (JWT), cookie security, CSRF prevention</li>
+        <li><strong>Middleware Pattern:</strong> Express middleware chain, next(), error middleware</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 3: Auth Flow Tester</h4>
+      <p>Build a CLI tool (Node script) that exercises the full auth lifecycle against the running DreamXec backend: (1) register a test user, (2) login and capture the JWT, (3) call <span class="code-inline">GET /api/auth/me</span> with the token, (4) attempt an unauthenticated call and verify 401 response.</p>
+      <span class="difficulty difficulty-medium">Medium</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Uses Axios or fetch to call auth endpoints</li>
+        <li>Demonstrates the full register → login → authenticated request flow</li>
+        <li>Prints decoded JWT payload (without verifying signature client-side)</li>
+        <li>Catches and reports errors for invalid credentials or expired tokens</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 4
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--bright-red);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--bright-red)">DAY 4</span>
+      <div>
+        <div class="day-title">Permissions Engine — RBAC, ABAC & Multi-Tenancy</div>
+        <div class="day-subtitle">Module 4 · Access Control · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🛡️</span> Module 4A: Permission Architecture</div>
+      <ul class="topic-list">
+        <li>Study <span class="code-inline">server/src/permissions/matrix.js</span> — the RBAC permission matrix mapping permissions to allowed roles</li>
+        <li>Understand the dual-role system: global roles (USER, ADMIN) + org-scoped roles (STUDENT, ORG_ADMIN, DONOR, PROFESSOR, MENTOR, etc.)</li>
+        <li>ABAC (Attribute-Based Access Control): <span class="code-inline">evaluateABACRules()</span> — resource ownership checks, faculty access rules</li>
+        <li>Multi-tenancy enforcement: <span class="code-inline">canUserPerformAction()</span> — tenant-scoped permission checks with orgId context</li>
+        <li>DX Platform admin checks — <span class="code-inline">dx:</span>-prefixed permissions scoped to the DX system org slug</li>
+        <li>Study <span class="code-inline">server/src/middleware/permission.middleware.js</span> — how routes are protected</li>
+        <li>Study <span class="code-inline">server/src/permissions/permission.service.js</span> — seeding permissions from the matrix into the database</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🏢</span> Module 4B: Multi-Tenancy & Organization Hierarchy</div>
+      <ul class="topic-list">
+        <li>Org hierarchy: parentId/ancestorId/depth model in the Organization table</li>
+        <li>Membership model: how users belong to organizations with specific OrgRoles</li>
+        <li>Profile switching: active profile, identity types (USER, ORG_MEMBER, ORG_ADMIN)</li>
+        <li>Study the auth mapper: how login response includes <span class="code-inline">availableProfiles</span>, <span class="code-inline">activeProfile</span>, and computed permissions</li>
+        <li>Understand DX Admin vs Org Admin: DX admins manage the platform, Org admins manage their institution</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 4C: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>RBAC (Role-Based Access Control):</strong> Roles → Permissions mapping, role hierarchies</li>
+        <li><strong>ABAC (Attribute-Based Access Control):</strong> Subject, resource, action, and environment attributes</li>
+        <li><strong>Multi-Tenancy Patterns:</strong> Shared schema with tenant isolation (RLS), tenant-scoped queries</li>
+        <li><strong>Zanzibar ReBAC (Concept):</strong> Google's relationship-based access control model (as described in ARCHITECTURE_HANDBOOK.md)</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 4: Permission Matrix Validator</h4>
+      <p>Write a test script that: (1) imports the permission matrix, (2) for each role, lists all granted permissions, (3) verifies that <span class="code-inline">canUserPerformAction()</span> returns correct true/false for 10 test scenarios covering different role + permission + resourceContext combinations.</p>
+      <span class="difficulty difficulty-medium">Medium</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Imports and exercises the actual permission matrix module</li>
+        <li>Tests at least: STUDENT creating a project (allowed), STUDENT accessing admin (denied), ORG_ADMIN managing members (allowed), DONOR allocating grants (allowed with context)</li>
+        <li>Tests ABAC rules: resource owner vs non-owner access</li>
+        <li>Prints a clear pass/fail report for each test case</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 5
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--orange);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--orange)">DAY 5</span>
+      <div>
+        <div class="day-title">Frontend Architecture — React, Vite, Routing & State Management</div>
+        <div class="day-subtitle">Module 5 · Frontend · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">⚛️</span> Module 5A: React & Vite Project Structure</div>
+      <ul class="topic-list">
+        <li>Explore the client source: <span class="code-inline">client/src/</span> — app/, components/, context/, features/, hooks/, services/, types/, utils/</li>
+        <li>Vite configuration: <span class="code-inline">vite.config.ts</span> — path aliases, proxy settings, build optimization</li>
+        <li>Tailwind CSS setup: <span class="code-inline">tailwind.config.js</span> — custom DreamXec color palette, font families (Poppins), component plugins</li>
+        <li>Entry point flow: <span class="code-inline">index.html</span> → <span class="code-inline">main.tsx</span> → <span class="code-inline">App.tsx</span> → <span class="code-inline">providers.tsx</span> → <span class="code-inline">AppRoutes.tsx</span></li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🧭</span> Module 5B: Routing & Route Guards</div>
+      <ul class="topic-list">
+        <li>Study <span class="code-inline">AppRoutes.tsx</span> — all 30+ routes, lazy loading with <span class="code-inline">React.lazy()</span>, Suspense fallback</li>
+        <li>Route guards: <span class="code-inline">ProtectedRoute</span>, <span class="code-inline">GuestGuard</span>, <span class="code-inline">AdminGuard</span>, <span class="code-inline">OrgAdminGuard</span>, <span class="code-inline">DxAdminGuard</span>, <span class="code-inline">StudentGuard</span></li>
+        <li>Profile selector interceptor: Netflix-style profile picker for multi-org users</li>
+        <li>Path exemption list for public routes (browse, campaigns, impact, etc.)</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🔄</span> Module 5C: State Management & API Layer</div>
+      <ul class="topic-list">
+        <li>AuthContext: global user state, login/logout/signup handlers, profile switching, identity type tracking</li>
+        <li>Custom hooks: <span class="code-inline">useCurrentUser</span>, <span class="code-inline">useCampaigns</span>, <span class="code-inline">usePermissions</span>, <span class="code-inline">useDataQuery</span>, <span class="code-inline">useCloudinaryUpload</span></li>
+        <li>Service layer: <span class="code-inline">client/src/services/</span> — authService, campaignService, donationService, vaultService, etc.</li>
+        <li>Axios configuration: <span class="code-inline">api.ts</span> — base URL, interceptors, token injection, error normalization</li>
+        <li>Role mappers: <span class="code-inline">mappers.ts</span> — converting backend role strings to frontend display-friendly values</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 5D: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>React Fundamentals:</strong> JSX, components, props, state, effects, refs, context API</li>
+        <li><strong>TypeScript with React:</strong> Typing props, events, context, generics in React</li>
+        <li><strong>React Router v7:</strong> Route definitions, dynamic segments, navigation, nested routes</li>
+        <li><strong>Code Splitting:</strong> React.lazy, Suspense, dynamic imports for performance</li>
+        <li><strong>Custom Hooks:</strong> Extracting reusable logic, hook composition, hook rules</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 5: Component Explorer Page</h4>
+      <p>Create a new route <span class="code-inline">/dev/explorer</span> that renders a simple component catalog — display 5 existing UI components (e.g., LoadingAnimation, SectionHeader, Logo, RopeDivider, FloatingCTAButton) in a single page with their prop variations, demonstrating understanding of the component library.</p>
+      <span class="difficulty difficulty-medium">Medium</span>
+      <ul class="acceptance-criteria task-list">
+        <li>New route registered in AppRoutes.tsx (guard: dev-only or ProtectedRoute)</li>
+        <li>Renders at least 5 existing DreamXec components with proper imports</li>
+        <li>Each component shows a label, description, and 2+ prop variations</li>
+        <li>Page uses Tailwind classes consistent with DreamXec theme</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 6
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--forest-green);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--forest-green)">DAY 6</span>
+      <div>
+        <div class="day-title">Workflow Engine, Onboarding & Governance Modules</div>
+        <div class="day-subtitle">Module 6 · Business Logic · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">⚙️</span> Module 6A: Workflow Engine Architecture</div>
+      <ul class="topic-list">
+        <li>Understand the workflow state machine: Templates → Stages → Instances → Stage Submissions → Stage Executions</li>
+        <li>StageTypes: FORM, DOCUMENT_UPLOAD, EMAIL_VERIFICATION, OTP_VERIFICATION, MANUAL_REVIEW, API_VALIDATION, AUTOMATED_CHECK, APPROVAL, etc.</li>
+        <li>Study backend: <span class="code-inline">server/src/modules/governance/</span> — workflow routes, controllers, services</li>
+        <li>Study frontend: <span class="code-inline">client/src/components/workflow/</span> — WorkflowStepper, StageCard, DynamicForm, DocumentUploader, AutomatedCheckStage, ProgressTimeline</li>
+        <li>Workflow engine on frontend: <span class="code-inline">client/src/components/workflow/engine/</span></li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📋</span> Module 6B: Onboarding & Governance</div>
+      <ul class="topic-list">
+        <li>Organization onboarding: <span class="code-inline">OrgOnboardingPage.tsx</span> — org registration, profile setup, template selection</li>
+        <li>Student verification: <span class="code-inline">student-verification.routes.js</span> — college ID verification pipeline</li>
+        <li>Club verification: <span class="code-inline">VerifyPresident.tsx</span>, club.routes.js — club referral and admin verification system</li>
+        <li>Application lifecycle: DRAFT → SUBMITTED → PENDING_VERIFICATION → APPROVED/REJECTED</li>
+        <li>DX Admin dashboard: <span class="code-inline">DxAdminDashboard.tsx</span> — platform-level workflow management, verification tasks</li>
+        <li>Org Admin dashboard: <span class="code-inline">OrgAdminDashboard.tsx</span> — institutional management panel</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 6C: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>State Machines:</strong> Finite state machines, state transitions, guards, actions</li>
+        <li><strong>Workflow Patterns:</strong> Sequential vs parallel stages, conditional routing, human-in-the-loop</li>
+        <li><strong>Form Handling:</strong> Controlled components, dynamic form generation from JSON config</li>
+        <li><strong>File Uploads:</strong> Multer middleware, Cloudinary integration, progress tracking</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 6: Mini Workflow Simulator</h4>
+      <p>Create a standalone Node script that simulates a 3-stage workflow: (1) Form Submission → (2) Automated Check → (3) Manual Approval. The script should manage state transitions, validate that steps cannot be skipped, and log each state change — mirroring the DreamXec workflow engine's logic.</p>
+      <span class="difficulty difficulty-medium">Medium</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Implements a simple state machine with PENDING, IN_PROGRESS, COMPLETED states per stage</li>
+        <li>Validates that Stage 2 cannot start until Stage 1 is COMPLETED</li>
+        <li>Simulates an automated check (random pass/fail) and a manual approval (user prompt)</li>
+        <li>Logs a complete audit trail of all state transitions with timestamps</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 7
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--deep-purple);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--deep-purple)">DAY 7</span>
+      <div>
+        <div class="day-title">Campaigns, Donations, Razorpay & Ledger System</div>
+        <div class="day-subtitle">Module 7 · Finance · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📣</span> Module 7A: Campaign System</div>
+      <ul class="topic-list">
+        <li>Study the campaign module: <span class="code-inline">server/src/modules/campaigns/</span> — routes, controllers, services, mappers, validation</li>
+        <li>Campaign lifecycle: DRAFT → PENDING_REVIEW → ACTIVE → FUNDED → COMPLETED</li>
+        <li>Frontend components: <span class="code-inline">CreateCampaign.tsx</span>, <span class="code-inline">CampaignDetails.tsx</span>, <span class="code-inline">MyCampaigns.tsx</span>, <span class="code-inline">BrowseCampaigns.tsx</span></li>
+        <li>Campaign features: milestones, endorsements, team members, comments, funding progress</li>
+        <li>Campaign service API: <span class="code-inline">client/src/services/campaignService.ts</span></li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">💰</span> Module 7B: Donation & Payment System</div>
+      <ul class="topic-list">
+        <li>Study <span class="code-inline">server/src/modules/donations/</span> — donation.service.js, donation.repository.js, payment routes</li>
+        <li>Razorpay integration: order creation → client-side Razorpay checkout → webhook verification</li>
+        <li>Donation flow in <span class="code-inline">AppRoutes.tsx</span>: <span class="code-inline">handleDonate()</span> function with Razorpay SDK loading</li>
+        <li>Frontend: <span class="code-inline">DonateModal.tsx</span>, <span class="code-inline">DonorDashboard.tsx</span>, <span class="code-inline">DonorProjects.tsx</span></li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📒</span> Module 7C: Double-Entry Ledger</div>
+      <ul class="topic-list">
+        <li>Study <span class="code-inline">server/src/services/ledger.service.js</span> — the financial accounting engine</li>
+        <li>Double-entry principles: every transaction creates DEBIT + CREDIT entries summing to zero</li>
+        <li>Ledger accounts: donor wallets, campaign escrow, organization payouts</li>
+        <li>Disbursement service: <span class="code-inline">disbursement.service.js</span> — milestone-based fund release</li>
+        <li>Vault system: <span class="code-inline">server/src/modules/vault/</span> — secure document and account vaults</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 7D: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>Payment Gateway Integration:</strong> Order creation, client-side SDK, server-side verification, webhooks</li>
+        <li><strong>Double-Entry Accounting:</strong> Debits, credits, account types (asset, liability, equity)</li>
+        <li><strong>Idempotency in Payments:</strong> Ensuring duplicate requests don't create duplicate charges</li>
+        <li><strong>Escrow Patterns:</strong> Holding funds until milestone verification</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 7: Ledger Balance Calculator</h4>
+      <p>Build a CLI tool that connects to the database, reads ledger transactions for a given account, verifies double-entry balance integrity (debits == credits for each transaction), and computes current account balances using SUM aggregation — replicating the ledger service's logic.</p>
+      <span class="difficulty difficulty-hard">Hard</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Reads from the LedgerTransaction and LedgerAccount tables via Prisma</li>
+        <li>For each transaction pair, validates that debit + credit = 0</li>
+        <li>Computes running balance for a specified account</li>
+        <li>Outputs a formatted ledger report with transaction history</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 8
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--bright-red);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--bright-red)">DAY 8</span>
+      <div>
+        <div class="day-title">API Design, Middleware Stack & Error Handling</div>
+        <div class="day-subtitle">Module 8 · API Layer · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🌐</span> Module 8A: Express API Architecture</div>
+      <ul class="topic-list">
+        <li>Study <span class="code-inline">server/server-app.js</span> — the full Express app setup: CORS, sessions, middleware chain, route mounting</li>
+        <li>RESTful API conventions: resource-based URLs, HTTP verbs, status codes (200, 201, 400, 401, 403, 404, 500)</li>
+        <li>Route organization: 20+ API route groups (/api/auth, /api/campaigns, /api/donations, /api/workflows, etc.)</li>
+        <li>Study <span class="code-inline">server/API_ENDPOINTS.md</span> — complete API documentation</li>
+        <li>Hexagonal architecture pattern: adapters → ports → services → repositories (visible in auth, campaigns, donations modules)</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🔗</span> Module 8B: Middleware Deep Dive</div>
+      <ul class="topic-list">
+        <li><span class="code-inline">auth.middleware.js</span> — JWT verification, user attachment</li>
+        <li><span class="code-inline">permission.middleware.js</span> — role-based route protection</li>
+        <li><span class="code-inline">validate.middleware.js</span> — Zod/Joi request body validation</li>
+        <li><span class="code-inline">error.middleware.js</span> — global error handler with AppError class, Sentry integration</li>
+        <li><span class="code-inline">cache.middleware.js</span> — Redis response caching</li>
+        <li><span class="code-inline">organization.middleware.js</span> — tenant context extraction</li>
+        <li><span class="code-inline">upload.middleware.js</span> — Multer file upload handling</li>
+        <li><span class="code-inline">requestId.middleware.js</span> — correlation ID for request tracing</li>
+        <li><span class="code-inline">commentRateLimit.middleware.js</span> — rate limiting with express-rate-limit</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 8C: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>RESTful API Design:</strong> Resource naming, pagination, filtering, sorting, error response format</li>
+        <li><strong>Express Middleware Pattern:</strong> Request lifecycle, middleware ordering, error propagation</li>
+        <li><strong>Input Validation:</strong> Zod schemas, Joi validators, sanitization, error messages</li>
+        <li><strong>Error Handling:</strong> Operational vs programming errors, custom error classes, centralized handler</li>
+        <li><strong>CORS Configuration:</strong> Origin whitelisting, credential support, preflight requests</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 8: API Endpoint Smoke Tester</h4>
+      <p>Write a comprehensive API smoke test script that hits at least 15 API endpoints (mix of public and authenticated) and reports their status. Should test: GET /api/health, GET /api/campaigns, POST /api/auth/login (with test credentials), GET /api/auth/me, and verify correct HTTP status codes and response shapes.</p>
+      <span class="difficulty difficulty-medium">Medium</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Tests at least 15 endpoints across 5 different modules</li>
+        <li>Tests both authenticated and unauthenticated scenarios</li>
+        <li>Validates response status codes (200, 401, 404 as expected)</li>
+        <li>Produces a summary table: Endpoint | Method | Expected | Actual | Pass/Fail</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 9
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--orange);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--orange)">DAY 9</span>
+      <div>
+        <div class="day-title">Testing, CI/CD, Deployment & Monitoring</div>
+        <div class="day-subtitle">Module 9 · DevOps · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🧪</span> Module 9A: Testing Framework & Existing Tests</div>
+      <ul class="topic-list">
+        <li>Study the test setup: <span class="code-inline">server/tests/setup.js</span> — Jest configuration, test helpers, mock utilities</li>
+        <li>Explore 18 integration test files in <span class="code-inline">server/tests/integration/</span>: auth, donations, clubs, governance, campaigns, middleware, etc.</li>
+        <li>Run the full test suite: <span class="code-inline">npm test</span> from monorepo root</li>
+        <li>Run with coverage: <span class="code-inline">npm run test:coverage</span></li>
+        <li>Study test patterns: mocking Prisma, supertest HTTP testing, test isolation</li>
+        <li>E2E spec tests: <span class="code-inline">campaign-lifecycle-e2e.spec.js</span>, <span class="code-inline">finance-governance.spec.js</span></li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🚀</span> Module 9B: Deployment & Infrastructure</div>
+      <ul class="topic-list">
+        <li>Study <span class="code-inline">render.yaml</span> — Render IaC blueprint for backend (Docker) and frontend (static site)</li>
+        <li>Docker: <span class="code-inline">server/Dockerfile</span> — Node.js containerization</li>
+        <li>Environment variables: JWT secrets, database URLs, third-party API keys</li>
+        <li>Frontend deployment: Vite build → static files, SPA rewrite rules, <span class="code-inline">vercel.json</span>, <span class="code-inline">netlify.toml</span></li>
+        <li>GitHub workflows: <span class="code-inline">.github/workflows/</span> — CI pipeline for linting, testing, building</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📊</span> Module 9C: Monitoring & Observability</div>
+      <ul class="topic-list">
+        <li>Sentry integration: <span class="code-inline">server/instrument.js</span> — error tracking and performance monitoring</li>
+        <li>Logging: Winston logger with daily rotating files</li>
+        <li>Request IDs: correlation tracking via <span class="code-inline">requestId.middleware.js</span></li>
+        <li>PostHog analytics: <span class="code-inline">@posthog/react</span> in the client for user behavior tracking</li>
+        <li>Redis monitoring: health check endpoints, OTP key cleanup on boot</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📚</span> Module 9D: Topics to Learn</div>
+      <ul class="topic-list">
+        <li><strong>Unit vs Integration Testing:</strong> Testing pyramids, test isolation, mocking strategies</li>
+        <li><strong>Jest Framework:</strong> describe/it/expect, beforeAll/afterAll, mocking modules, async testing</li>
+        <li><strong>Supertest:</strong> HTTP assertion library for Express integration testing</li>
+        <li><strong>Docker Basics:</strong> Dockerfile, images, containers, docker-compose</li>
+        <li><strong>CI/CD Concepts:</strong> GitHub Actions, automated testing pipelines, deployment triggers</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Testing Project 9: Write 3 New Integration Tests</h4>
+      <p>Following the patterns in the existing test suite, write 3 new integration test files: (1) Test the species endpoints (GET species, assign species to user), (2) Test the vault endpoints (create doc vault item), (3) Test the newsletter subscription endpoint. Each should use the project's test setup and helpers.</p>
+      <span class="difficulty difficulty-hard">Hard</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Tests follow existing patterns in <span class="code-inline">tests/integration/</span></li>
+        <li>Use the project's <span class="code-inline">setup.js</span> helper and mock configurations</li>
+        <li>Each test file has at least 3 test cases (happy path + error cases)</li>
+        <li>All tests pass when run with <span class="code-inline">npx jest tests/integration/[filename]</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DAY 10
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="day-card" style="border-top: 4px solid var(--forest-green);">
+    <div class="day-header">
+      <span class="day-badge" style="background:var(--forest-green)">DAY 10</span>
+      <div>
+        <div class="day-title">Capstone Integration Project & Code Review</div>
+        <div class="day-subtitle">Module 10 · Capstone · ~8 hours</div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>⚡ Capstone Day:</strong> This is the final day where interns apply everything they've learned in a full-stack mini-feature that touches backend, frontend, database, middleware, and testing.
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🏗️</span> Module 10A: Capstone Project — "Campaign Bookmark Feature"</div>
+      <ul class="topic-list">
+        <li><strong>Backend:</strong> Add a new <span class="code-inline">CampaignBookmark</span> model to Prisma schema (userId, campaignId, createdAt)</li>
+        <li><strong>Backend:</strong> Create new API routes: POST /api/campaigns/:id/bookmark, DELETE /api/campaigns/:id/bookmark, GET /api/campaigns/bookmarked</li>
+        <li><strong>Backend:</strong> Add auth middleware protection, Zod validation, proper error handling</li>
+        <li><strong>Frontend:</strong> Add a bookmark icon button to <span class="code-inline">CampaignDetails.tsx</span> (toggle on/off)</li>
+        <li><strong>Frontend:</strong> Create a "My Bookmarks" section in the StudentDashboard</li>
+        <li><strong>Frontend:</strong> Create a <span class="code-inline">bookmarkService.ts</span> in the services directory</li>
+        <li><strong>Testing:</strong> Write integration tests for the bookmark endpoints</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">🔍</span> Module 10B: Code Review & Presentation</div>
+      <ul class="topic-list">
+        <li>Create a pull request with all capstone changes</li>
+        <li>Write a clear PR description explaining the feature, approach, and trade-offs</li>
+        <li>Present the feature to the team: demo the UI, explain the API, walk through the code</li>
+        <li>Receive and incorporate code review feedback</li>
+      </ul>
+    </div>
+
+    <div class="module">
+      <div class="module-title"><span class="icon">📝</span> Module 10C: Reflection & Knowledge Documentation</div>
+      <ul class="topic-list">
+        <li>Write a 1-page summary of key learnings and architectural insights</li>
+        <li>Document any setup issues, gotchas, or undocumented patterns discovered</li>
+        <li>Propose one improvement idea for the codebase (performance, UX, code quality)</li>
+        <li>Set goals for the next phase of their internship contribution</li>
+      </ul>
+    </div>
+
+    <div class="project-card">
+      <h4>🧪 Capstone Project: Full-Stack "Campaign Bookmark" Feature</h4>
+      <p>Build a complete bookmark feature from scratch — touching every layer of the stack. This is the ultimate test of intern readiness, demonstrating they can independently ship a feature in the DreamXec codebase.</p>
+      <span class="difficulty difficulty-hard">Hard</span>
+      <ul class="acceptance-criteria task-list">
+        <li>Prisma schema updated with CampaignBookmark model and migration generated</li>
+        <li>3 API endpoints created with proper auth, validation, and error handling</li>
+        <li>Frontend bookmark toggle works on campaign detail page</li>
+        <li>Bookmarked campaigns appear in a new dashboard section</li>
+        <li>At least 4 integration tests pass (create, delete, list, unauthorized)</li>
+        <li>Code follows existing DreamXec patterns (mapper, service, controller, route)</li>
+        <li>PR created with clear description and no lint errors</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SUMMARY TABLE
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="section-title">
+    <span class="accent" style="background:var(--deep-purple)"></span>
+    10-Day Summary Overview
+  </div>
+  <p class="section-desc">Quick reference for managers tracking intern progress through each day of the program.</p>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Focus Area</th>
+        <th>Key Files to Study</th>
+        <th>Testing Project</th>
+        <th>Difficulty</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--orange);font-weight:700;">1</td>
+        <td>Platform Overview & Setup</td>
+        <td>ARCHITECTURE_HANDBOOK.md, package.json</td>
+        <td>Health Check Script</td>
+        <td><span class="difficulty difficulty-easy">Easy</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--forest-green);font-weight:700;">2</td>
+        <td>Database & Prisma ORM</td>
+        <td>schema.prisma, prisma.js</td>
+        <td>Prisma Query Explorer</td>
+        <td><span class="difficulty difficulty-easy">Easy</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--deep-purple);font-weight:700;">3</td>
+        <td>Auth, JWT & OAuth</td>
+        <td>auth.service.js, auth.middleware.js</td>
+        <td>Auth Flow Tester</td>
+        <td><span class="difficulty difficulty-medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--bright-red);font-weight:700;">4</td>
+        <td>Permissions & Multi-Tenancy</td>
+        <td>matrix.js, permission.middleware.js</td>
+        <td>Permission Matrix Validator</td>
+        <td><span class="difficulty difficulty-medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--orange);font-weight:700;">5</td>
+        <td>React, Routing & State</td>
+        <td>AppRoutes.tsx, AuthContext.tsx</td>
+        <td>Component Explorer Page</td>
+        <td><span class="difficulty difficulty-medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--forest-green);font-weight:700;">6</td>
+        <td>Workflow & Onboarding</td>
+        <td>workflow/, governance/</td>
+        <td>Mini Workflow Simulator</td>
+        <td><span class="difficulty difficulty-medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--deep-purple);font-weight:700;">7</td>
+        <td>Campaigns, Donations & Ledger</td>
+        <td>campaigns/, ledger.service.js</td>
+        <td>Ledger Balance Calculator</td>
+        <td><span class="difficulty difficulty-hard">Hard</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--bright-red);font-weight:700;">8</td>
+        <td>API Design & Middleware</td>
+        <td>server-app.js, middleware/</td>
+        <td>API Smoke Tester</td>
+        <td><span class="difficulty difficulty-medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--orange);font-weight:700;">9</td>
+        <td>Testing, CI/CD & Deployment</td>
+        <td>tests/, render.yaml, Dockerfile</td>
+        <td>Write 3 Integration Tests</td>
+        <td><span class="difficulty difficulty-hard">Hard</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--forest-green);font-weight:700;">10</td>
+        <td>Capstone & Code Review</td>
+        <td>Full Stack</td>
+        <td>Campaign Bookmark Feature</td>
+        <td><span class="difficulty difficulty-hard">Hard</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-success">
+    <strong>✅ Completion Criteria:</strong> An intern is considered onboarded when they have (1) completed all 10 testing projects, (2) successfully submitted the capstone PR, (3) passed their code review, and (4) can independently navigate the codebase to locate relevant files for any given feature.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     RECOMMENDED RESOURCES
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<div class="container">
+  <div class="section-title">
+    <span class="accent" style="background:var(--vibrant-blue)"></span>
+    Recommended Learning Resources
+  </div>
+  <p class="section-desc">External references and documentation for self-study alongside the DreamXec codebase.</p>
+
+  <div class="module">
+    <div class="module-title"><span class="icon">📖</span> Internal Documentation (Must Read)</div>
+    <ul class="resource-list">
+      <li><span class="code-inline">ARCHITECTURE_HANDBOOK.md</span> — 800+ line system design document with 500+ edge cases</li>
+      <li><span class="code-inline">SERVICE_ARCHITECTURE.md</span> — Low-level design for all 12 services</li>
+      <li><span class="code-inline">ARCHITECTURE_DIAGRAMS.md</span> — Visual system diagrams</li>
+      <li><span class="code-inline">DATABASE_SCHEMA.sql</span> — Raw SQL schema reference</li>
+      <li><span class="code-inline">server/API_ENDPOINTS.md</span> — Complete API documentation</li>
+      <li><span class="code-inline">client/src/services/README.md</span> — Frontend service layer documentation</li>
+    </ul>
+  </div>
+
+  <div class="module">
+    <div class="module-title"><span class="icon">🌐</span> External Resources</div>
+    <ul class="resource-list">
+      <li><strong>React:</strong> react.dev — Official React documentation and tutorials</li>
+      <li><strong>TypeScript:</strong> typescriptlang.org/docs — TypeScript handbook</li>
+      <li><strong>Prisma:</strong> prisma.io/docs — Prisma ORM guides, schema reference, migration docs</li>
+      <li><strong>Express:</strong> expressjs.com — Official Express.js guide and API reference</li>
+      <li><strong>PostgreSQL:</strong> postgresql.org/docs — Official PostgreSQL documentation</li>
+      <li><strong>Tailwind CSS:</strong> tailwindcss.com/docs — Utility class reference</li>
+      <li><strong>JWT:</strong> jwt.io — JSON Web Token debugger and introduction</li>
+      <li><strong>Redis:</strong> redis.io/docs — Redis data structures and commands</li>
+      <li><strong>Jest:</strong> jestjs.io/docs — Jest testing framework documentation</li>
+      <li><strong>Razorpay:</strong> razorpay.com/docs — Payment integration guide</li>
+      <li><strong>Docker:</strong> docs.docker.com/get-started — Docker fundamentals</li>
+      <li><strong>Google Zanzibar Paper:</strong> "Zanzibar: Google's Consistent, Global Authorization System" — for understanding the ReBAC concepts in the architecture</li>
+    </ul>
+  </div>
+
+  <div class="module">
+    <div class="module-title"><span class="icon">🎓</span> Daily Schedule Template</div>
+    <ul class="topic-list">
+      <li><strong>9:00 – 10:30 AM:</strong> Study session — Read codebase files and documentation for the day's module</li>
+      <li><strong>10:30 – 11:00 AM:</strong> Stand-up check-in with mentor — discuss concepts, ask questions</li>
+      <li><strong>11:00 AM – 1:00 PM:</strong> Hands-on coding — work on the day's testing project</li>
+      <li><strong>1:00 – 2:00 PM:</strong> Lunch break</li>
+      <li><strong>2:00 – 4:00 PM:</strong> Deep dive — explore external learning resources, experiment with concepts</li>
+      <li><strong>4:00 – 5:30 PM:</strong> Complete & polish testing project, write notes</li>
+      <li><strong>5:30 – 6:00 PM:</strong> Daily summary — commit project work, update progress tracker</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════ -->
+<div class="footer">
+  <p><strong style="color:var(--orange)">Dream</strong><strong style="color:var(--forest-green)">Xec</strong> — Intern Onboarding Learning Plan</p>
+  <p style="margin-top:6px;">Generated on September 2026 · Prepared for new team members joining the DreamXec social impact platform</p>
+  <p style="margin-top:6px; color: var(--text-muted);">This document covers the complete DreamXec monorepo codebase — React/TypeScript frontend, Express/Node.js backend, PostgreSQL with Prisma ORM, Redis caching, Razorpay payments, and Render/Docker deployment.</p>
+</div>
+
+</body>
+</html>

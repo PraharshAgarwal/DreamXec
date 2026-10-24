@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <!-- Outer D shape with lightbulb cutout -->
+  <path 
+    fill="currentColor" 
+    fill-rule="evenodd" 
+    clip-rule="evenodd" 
+    d="M 80 36 
+       C 78.5 36 77 37.5 77 39 
+       L 77 108 
+       C 80 108 85 107.5 89 105.5
+       C 95 103 98 97 101.5 91
+       C 108 81 119.5 74 133 74
+       C 158.4 74 179 94.6 179 120
+       C 179 145.4 158.4 166 133 166
+       C 119.5 166 108 159 101.5 149
+       C 98 143 95 137 89 134.5
+       C 85 132.5 80 132 77 132
+       L 77 201 
+       C 77 202.5 78.5 204 80 204 
+       L 125 204 
+       C 176 204 207 167 207 120 
+       C 207 73 176 36 125 36 
+       Z"
+  />
+
+  <!-- Bulb Screw Thread Ridges on Left (tilted) -->
+  <!-- Ridge 3 (Inner / Rightmost) -->
+  <rect x="65" y="99" width="6" height="42" rx="3" transform="rotate(-6 68 120)" fill="currentColor" />
+  <!-- Ridge 2 (Middle) -->
+  <rect x="54" y="104" width="6" height="32" rx="3" transform="rotate(-6 57 120)" fill="currentColor" />
+  <!-- Ridge 1 (Outer / Leftmost) -->
+  <rect x="43" y="109" width="6" height="22" rx="3" transform="rotate(-6 46 120)" fill="currentColor" />
+
+  <!-- Filament: Interwoven X inside the bulb -->
+  <g transform="translate(133, 120)" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Diagonal Loop 1 (Top-Left to Bottom-Right) -->
+    <path d="M -13 -13 C -20 -7, -20 7, -13 13 C -7 19, 7 19, 13 13 C 19 7, 19 -7, 13 -13 C 7 -19, -7 -19, -13 -13 Z" stroke-dasharray="80" stroke-dashoffset="0" />
+    <!-- Diagonal Loop 2 (Bottom-Left to Top-Right) -->
+    <path d="M -13 13 C -19 7, -19 -7, -13 -13 C -7 -19, 7 -19, 13 -13 C 19 -7, 19 7, 13 13 C 7 19, -7 19, -13 13 Z" />
+  </g>
+</svg>

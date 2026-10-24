@@ -1,0 +1,10 @@
+dist
+build
+node_modules
+uploads
+coverage
+.prisma
+client/dist
+client/node_modules
+server/node_modules
+server/uploads

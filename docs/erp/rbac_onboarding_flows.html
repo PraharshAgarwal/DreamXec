@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DreamXec - Detailed RBAC Onboarding Flows</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#003366',
+              orange: '#FF7F00',
+              green: '#0B9C2C',
+              cream: '#FFF7ED',
+              slate: '#475569'
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .neo-border {
+      border: 3px solid #003366;
+    }
+    .neo-shadow-orange {
+      box-shadow: 5px 5px 0px #FF7F00;
+    }
+    .neo-shadow-green {
+      box-shadow: 5px 5px 0px #0B9C2C;
+    }
+    .neo-shadow-navy {
+      box-shadow: 5px 5px 0px #003366;
+    }
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-navy min-h-screen py-12 px-4 sm:px-8 font-sans">
+
+  <div class="max-w-6xl mx-auto space-y-12">
+    
+    <!-- Hero / Header -->
+    <div class="bg-white p-6 sm:p-8 neo-border neo-shadow-orange">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="px-2 py-0.5 bg-brand-orange text-white text-[10px] font-black uppercase neo-border">RBAC Engine Spec</span>
+        <span class="text-xs font-bold text-brand-navy/60">DreamXec Phase-2</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight mb-2">Role Onboarding & Verification Guide</h1>
+      <p class="text-sm sm:text-base text-brand-navy/80 leading-relaxed max-w-4xl">
+        This document outlines the step-by-step workflow, verification logic, database transitions, and role privileges for every user role within the DreamXec multi-tenant Research ERP ecosystem.
+      </p>
+    </div>
+
+    <!-- Roles Grid -->
+    <div class="space-y-8">
+
+      <!-- 1. Student Researcher -->
+      <div class="bg-white p-6 neo-border neo-shadow-navy">
+        <div class="flex items-center justify-between border-b-2 border-brand-navy pb-3 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 bg-brand-orange text-white text-xs font-black uppercase neo-border">Role: RESEARCHER</span>
+            <h2 class="text-xl font-black uppercase tracking-tight">1. Student Researcher Onboarding</h2>
+          </div>
+          <span class="text-xs font-mono font-bold bg-brand-cream px-2 py-0.5 neo-border">UserOrg.role = RESEARCHER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 1</span>
+              <h4 class="font-black uppercase text-sm mb-2">Signup & Domain</h4>
+              <p class="text-xs text-brand-navy/80">User registers and enters academic email (.edu). System validates email domain matches whitelisted university pattern.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              User.emailVerified = true<br>
+              User.accountStatus = ACTIVE
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 2</span>
+              <h4 class="font-black uppercase text-sm mb-2">Academic Profile</h4>
+              <p class="text-xs text-brand-navy/80">Selects university, department, and uploads active Student ID card/Enrollment scan. Set profile fields.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              StudentVerification = PENDING<br>
+              User.studentVerified = false
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 3</span>
+              <h4 class="font-black uppercase text-sm mb-2">Admin Approval</h4>
+              <p class="text-xs text-brand-navy/80">University Registrar Admin reviews uploaded ID/Document in approval queue. Verification confirmed.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              StudentVerification = APPROVED<br>
+              User.studentVerified = true
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 4</span>
+              <h4 class="font-black uppercase text-sm mb-2">Scope Unlocked</h4>
+              <p class="text-xs text-brand-navy/80">Links student to University. Unlocks public dashboards, shared lab infrastructure access, and project team messaging.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              UserOrg.role = RESEARCHER<br>
+              UserOrg.verified = true
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Professor / PI -->
+      <div class="bg-white p-6 neo-border neo-shadow-navy">
+        <div class="flex items-center justify-between border-b-2 border-brand-navy pb-3 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 bg-brand-green text-white text-xs font-black uppercase neo-border">Role: PROFESSOR</span>
+            <h2 class="text-xl font-black uppercase tracking-tight">2. Professor / PI Onboarding</h2>
+          </div>
+          <span class="text-xs font-mono font-bold bg-brand-cream px-2 py-0.5 neo-border">UserOrg.role = PROFESSOR</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-green uppercase">Step 1</span>
+              <h4 class="font-black uppercase text-sm mb-2">Faculty Input</h4>
+              <p class="text-xs text-brand-navy/80">Register with official research email, selected department, and ORCID iD for publication mapping.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-green block">DB Updates:</span>
+              User.emailVerified = true<br>
+              User.orcid = orcid_id
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-green uppercase">Step 2</span>
+              <h4 class="font-black uppercase text-sm mb-2">Accreditation Upload</h4>
+              <p class="text-xs text-brand-navy/80">Upload scan of official employment contract or faculty appointment letter. Linked to University Admin approval log.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-green block">DB Updates:</span>
+              UserOrg.verified = false<br>
+              UserOrg.role = PROFESSOR
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-green uppercase">Step 3</span>
+              <h4 class="font-black uppercase text-sm mb-2">Registrar Audit</h4>
+              <p class="text-xs text-brand-navy/80">University Registrar manually audits employment scan and matches ORCID index records.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-green block">DB Updates:</span>
+              AuditLog.status = AUDITED<br>
+              AuditLog.action = FACULTY_VERIFY
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-green uppercase">Step 4</span>
+              <h4 class="font-black uppercase text-sm mb-2">Active PI Scope</h4>
+              <p class="text-xs text-brand-navy/80">Approved. Unlocks project stage-gate oversight, signing off on lab notebooks, and grant Principal Investigator roles.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-green block">DB Updates:</span>
+              UserOrg.verified = true<br>
+              User.role = USER (Global)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Incubator Manager -->
+      <div class="bg-white p-6 neo-border neo-shadow-navy">
+        <div class="flex items-center justify-between border-b-2 border-brand-navy pb-3 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 bg-brand-navy text-white text-xs font-black uppercase neo-border">Role: INCUBATOR_MANAGER</span>
+            <h2 class="text-xl font-black uppercase tracking-tight">3. Incubator Manager Onboarding</h2>
+          </div>
+          <span class="text-xs font-mono font-bold bg-brand-cream px-2 py-0.5 neo-border">UserOrg.role = INCUBATOR_MANAGER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-navy uppercase">Step 1</span>
+              <h4 class="font-black uppercase text-sm mb-2">Admin Invitation</h4>
+              <p class="text-xs text-brand-navy/80">Invited directly via secure email token sent by the university or corporate tenant's Admin.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-navy block">DB Updates:</span>
+              User.accountStatus = ACTIVE<br>
+              InviteToken.used = true
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-navy uppercase">Step 2</span>
+              <h4 class="font-black uppercase text-sm mb-2">Incubator Setup</h4>
+              <p class="text-xs text-brand-navy/80">Accepts token invitation and links profile to the parent organization's incubation division.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-navy block">DB Updates:</span>
+              UserOrg.role = INCUBATOR_MANAGER<br>
+              UserOrg.verified = true
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-navy uppercase">Step 3</span>
+              <h4 class="font-black uppercase text-sm mb-2">Idea Board Active</h4>
+              <p class="text-xs text-brand-navy/80">Verification complete. Unlocks idea pipeline evaluations (Novelty/Feasibility scoring), mentoring logs, and commercialization stats.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-navy block">DB Updates:</span>
+              UserOrg.verified = true<br>
+              UserOrg.permissions = [SCORE_IDEAS]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Donor / Corporate Sponsor -->
+      <div class="bg-white p-6 neo-border neo-shadow-navy">
+        <div class="flex items-center justify-between border-b-2 border-brand-navy pb-3 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 bg-brand-orange text-white text-xs font-black uppercase neo-border">Role: DONOR</span>
+            <h2 class="text-xl font-black uppercase tracking-tight">4. Donor & Sponsor Onboarding</h2>
+          </div>
+          <span class="text-xs font-mono font-bold bg-brand-cream px-2 py-0.5 neo-border">User.role = DONOR</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 1</span>
+              <h4 class="font-black uppercase text-sm mb-2">Biz Profile Setup</h4>
+              <p class="text-xs text-brand-navy/80">Corporate user registers using official corporate email domain (e.g. @google.com, @stripe.com).</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              User.role = DONOR<br>
+              User.emailVerified = true
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 2</span>
+              <h4 class="font-black uppercase text-sm mb-2">Legal Registry</h4>
+              <p class="text-xs text-brand-navy/80">Inputs Company GSTIN/EIN registry numbers, corporate tax documents, and address details. Status set to review.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              Donor.verified = false<br>
+              Donor.gstin = tax_number
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 3</span>
+              <h4 class="font-black uppercase text-sm mb-2">Platform Audit</h4>
+              <p class="text-xs text-brand-navy/80">Platform Super-Admin verifies corporate standing against public registry databases manually.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              Donor.accountStatus = ACTIVE<br>
+              AuditLog.action = DONOR_VERIFY
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-orange uppercase">Step 4</span>
+              <h4 class="font-black uppercase text-sm mb-2">Grant Posting Active</h4>
+              <p class="text-xs text-brand-navy/80">Corporate identity confirmed. Unlocks grant directory creations, proposal reviews, and milestone payout gates.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-orange block">DB Updates:</span>
+              Donor.verified = true<br>
+              Donor.permissions = [POST_GRANT]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Compliance Officer -->
+      <div class="bg-white p-6 neo-border neo-shadow-navy">
+        <div class="flex items-center justify-between border-b-2 border-brand-navy pb-3 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 bg-brand-green text-white text-xs font-black uppercase neo-border">Role: COMPLIANCE_OFFICER</span>
+            <h2 class="text-xl font-black uppercase tracking-tight">5. Compliance Officer Onboarding</h2>
+          </div>
+          <span class="text-xs font-mono font-bold bg-brand-cream px-2 py-0.5 neo-border">UserOrg.role = COMPLIANCE_OFFICER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-green uppercase">Step 1</span>
+              <h4 class="font-black uppercase text-sm mb-2">Direct Invite Only</h4>
+              <p class="text-xs text-brand-navy/80">No self-registration. Created exclusively via a security token sent by the university or platform admin.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-green block">DB Updates:</span>
+              User.accountStatus = ACTIVE<br>
+              InviteToken.used = true
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-green uppercase">Step 2</span>
+              <h4 class="font-black uppercase text-sm mb-2">Board Accreditation</h4>
+              <p class="text-xs text-brand-navy/80">Officer inputs compliance committee details and signs off on compliance board rules.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-green block">UserOrg.role = COMPLIANCE_OFFICER<br>
+              UserOrg.verified = false
+            </div>
+          </div>
+
+          <div class="bg-brand-cream p-4 neo-border flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-brand-green uppercase">Step 3</span>
+              <h4 class="font-black uppercase text-sm mb-2">IRB Board Active</h4>
+              <p class="text-xs text-brand-navy/80">Verified. Action logs recorded in system AuditLog. Unlocks IRB protocol submissions, approvals, and risk reviews.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-brand-navy/10 text-[9.5px] font-mono">
+              <span class="font-bold text-brand-green block">DB Updates:</span>
+              UserOrg.verified = true<br>
+              AuditLog.action = IRB_OFFICER_ACTIVATE
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

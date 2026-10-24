@@ -1,0 +1,328 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - '**'          # Trigger on push to every branch
+    tags-ignore:
+      - '**'          # Ignore tag pushes
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Deployment Target Override (auto: AWS for main, Render for others)'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - aws
+          - render
+
+permissions:
+  id-token: write   # Required for requesting JWT via GitHub OIDC for AWS
+  contents: read    # Required for checking out repository code
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION || vars.AWS_REGION || 'ap-south-1' }}
+  AWS_ECR_REPOSITORY: ${{ vars.AWS_ECR_REPOSITORY || secrets.AWS_ECR_REPOSITORY || 'dreamxec-backend' }}
+  APP_PORT: ${{ vars.PORT || '5000' }}
+
+jobs:
+  # -------------------------------------------------------------
+  # STAGE 1: VALIDATION & DEPLOYMENT ROUTING
+  # -------------------------------------------------------------
+  validate-and-route:
+    name: Validate Code & Route Deployment
+    runs-on: ubuntu-latest
+    outputs:
+      target: ${{ steps.route.outputs.target }}
+      branch: ${{ steps.route.outputs.branch }}
+    env:
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
+      DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Root Dependencies
+        run: npm ci || npm install
+
+      - name: Install Server Dependencies & Generate Prisma Client
+        run: |
+          cd server
+          npm ci || npm install
+          npx prisma generate
+
+      - name: Validate Prisma Database Schema
+        run: npm run migrate:validate
+
+      - name: Run Test Suite
+        run: npm test
+
+      - name: Determine Deployment Target
+        id: route
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          OVERRIDE="${{ github.event.inputs.target || 'auto' }}"
+
+          echo "📌 Git Branch: $BRANCH"
+          echo "⚙️ Deployment Override Input: $OVERRIDE"
+
+          if [ "$OVERRIDE" = "render" ]; then
+            TARGET="render"
+            REASON="Manual dispatch override set to 'render'"
+          elif [ "$OVERRIDE" = "aws" ]; then
+            TARGET="aws"
+            REASON="Manual dispatch override set to 'aws'"
+          else
+            if [ "$BRANCH" = "main" ]; then
+              TARGET="aws"
+              REASON="Branch is 'main' -> Deploy to AWS"
+            else
+              TARGET="render"
+              REASON="Branch is '$BRANCH' (non-main) -> Deploy to Render"
+            fi
+          fi
+
+          echo "🚀 Selected Target: $TARGET ($REASON)"
+          echo "target=$TARGET" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+  # -------------------------------------------------------------
+  # STAGE 2A: RENDER DEPLOYMENT (Branches other than 'main')
+  # -------------------------------------------------------------
+  deploy-to-render:
+    name: Deploy to Render (Non-Main Branches)
+    needs: validate-and-route
+    if: needs.validate-and-route.outputs.target == 'render'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy (Backend & Frontend)
+        env:
+          RENDER_BACKEND_DEPLOY_HOOK: ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}
+          RENDER_FRONTEND_DEPLOY_HOOK: ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}
+          BRANCH: ${{ needs.validate-and-route.outputs.branch }}
+        run: |
+          echo "🚀 Triggering Render deployment for branch: $BRANCH"
+
+          trigger_render_service() {
+            local HOOK_URL="$1"
+            local SERVICE_NAME="$2"
+
+            if [ -z "$HOOK_URL" ]; then
+              echo "ℹ️ $SERVICE_NAME deploy hook secret is not set, skipping trigger."
+              return 0
+            fi
+
+            echo "🚀 Triggering Render $SERVICE_NAME deploy (ref: $BRANCH)..."
+
+            # Determine query parameter delimiter
+            local DELIM="?"
+            if [[ "$HOOK_URL" == *"?"* ]]; then
+              DELIM="&"
+            fi
+
+            local HTTP_CODE
+            HTTP_CODE=$(curl -s -o /tmp/render_resp.txt -w "%{http_code}" -X POST "${HOOK_URL}${DELIM}ref=${BRANCH}")
+
+            if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+              echo "✅ Render $SERVICE_NAME deploy hook triggered successfully for ref '$BRANCH' (HTTP $HTTP_CODE)."
+              cat /tmp/render_resp.txt || true
+              echo ""
+            else
+              echo "⚠️ Deploy with ref '$BRANCH' returned HTTP $HTTP_CODE: $(cat /tmp/render_resp.txt 2>/dev/null || echo '')"
+              echo "🔄 Falling back to base deploy hook without ref parameter..."
+              curl -f -s -S -X POST "$HOOK_URL"
+              echo "✅ Render $SERVICE_NAME base deploy hook triggered successfully."
+            fi
+          }
+
+          trigger_render_service "$RENDER_BACKEND_DEPLOY_HOOK" "Backend"
+          trigger_render_service "$RENDER_FRONTEND_DEPLOY_HOOK" "Frontend"
+
+  # -------------------------------------------------------------
+  # STAGE 2B: AWS BUILD & PUSH TO ECR (Branch 'main')
+  # -------------------------------------------------------------
+  build-and-push-ecr:
+    name: Build & Push Docker Image to ECR (AWS)
+    needs: validate-and-route
+    if: needs.validate-and-route.outputs.target == 'aws'
+    runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.build-image.outputs.tag }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Build Frontend React SPA
+        run: |
+          cd client
+          npm ci || npm install
+          npm run build
+          cd ..
+          mkdir -p server/public
+          cp -r client/dist/* server/public/
+
+      - name: Inspect GitHub OIDC Token Claims & Role ARN
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const idToken = await core.getIDToken('sts.amazonaws.com');
+              const parts = idToken.split('.');
+              const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+              core.info(`🔑 OIDC iss: ${payload.iss}`);
+              core.info(`🔑 OIDC aud: ${payload.aud}`);
+              core.info(`🔑 OIDC sub: ${payload.sub}`);
+              core.info(`🔑 OIDC repository: ${payload.repository}`);
+              core.info(`🔑 OIDC ref: ${payload.ref}`);
+            } catch (err) {
+              core.warning(`Failed to get ID token: ${err.message}`);
+            }
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: GitHubActions-DreamXec-Deploy
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push Docker image
+        id: build-image
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ env.AWS_ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          echo "Building Docker image for backend API..."
+          docker build \
+            -t $REGISTRY/$REPOSITORY:$IMAGE_TAG \
+            -t $REGISTRY/$REPOSITORY:latest \
+            ./server
+
+          echo "Pushing images to Amazon ECR ($REGISTRY/$REPOSITORY)..."
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:latest
+
+          echo "tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "✅ Image successfully pushed to ECR with tags: $IMAGE_TAG, latest"
+
+  # -------------------------------------------------------------
+  # STAGE 2C: AWS EC2 ZERO-DOWNTIME BLUE/GREEN DEPLOY (Branch 'main')
+  # -------------------------------------------------------------
+  deploy-to-ec2:
+    name: Deploy Container to EC2 via AWS SSM (AWS)
+    needs: [validate-and-route, build-and-push-ecr]
+    if: needs.validate-and-route.outputs.target == 'aws'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: GitHubActions-DreamXec-SSM
+
+      - name: Execute Deployment on EC2 via SSM
+        env:
+          IMAGE_TAG: ${{ needs.build-and-push-ecr.outputs.image-tag }}
+          TARGET_REGION: ${{ env.AWS_REGION }}
+          ECR_REPO: ${{ env.AWS_ECR_REPOSITORY }}
+          PORT: ${{ env.APP_PORT }}
+        run: |
+          # Sanitize all inputs to strip any accidental trailing newlines or whitespace
+          INSTANCE_ID=$(echo "${{ secrets.AWS_EC2_INSTANCE_ID }}" | tr -d '\r\n ' )
+          ACCOUNT_ID=$(echo "${{ secrets.AWS_ACCOUNT_ID }}" | tr -d '\r\n ' )
+
+          ECR_REGISTRY="${ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com"
+          IMAGE_NAME="${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
+
+          echo "🚀 Sending deployment command to EC2 instance: $INSTANCE_ID in $TARGET_REGION..."
+
+          # Construct clean JSON parameters for AWS-RunShellScript using jq
+          SSM_PARAMS=$(jq -n \
+            --arg ecr "$ECR_REGISTRY" \
+            --arg img "$IMAGE_NAME" \
+            --arg reg "$TARGET_REGION" \
+            '{
+              commands: [
+                "aws ecr get-login-password --region \($reg) | docker login --username AWS --password-stdin \($ecr)",
+                "docker pull \($img)",
+                "if docker ps --format \"{{.Names}}\" | grep -w -q \"dreamxec-backend-green\"; then CURRENT_CONTAINER=\"dreamxec-backend-green\"; NEW_CONTAINER=\"dreamxec-backend-blue\"; NEW_PORT=5000; else CURRENT_CONTAINER=\"dreamxec-backend-blue\"; NEW_CONTAINER=\"dreamxec-backend-green\"; NEW_PORT=5001; fi",
+                "if docker ps --format \"{{.Names}}\" | grep -w -q \"^dreamxec-backend$\"; then CURRENT_CONTAINER=\"dreamxec-backend\"; NEW_CONTAINER=\"dreamxec-backend-green\"; NEW_PORT=5001; fi",
+                "docker rm -f $NEW_CONTAINER 2>/dev/null || true",
+                "docker run -d --name $NEW_CONTAINER --restart unless-stopped -p 127.0.0.1:$NEW_PORT:5000 --env-file /opt/dreamxec/.env \($img)",
+                "HEALTHY=false; for i in $(seq 1 45); do if curl -f -s http://127.0.0.1:$NEW_PORT/health/live >/dev/null 2>&1; then HEALTHY=true; break; fi; sleep 1; done",
+                "if [ \"$HEALTHY\" != \"true\" ]; then echo \"❌ New container failed health check!\"; docker logs --tail 50 $NEW_CONTAINER; docker rm -f $NEW_CONTAINER; exit 1; fi",
+                "sudo mkdir -p /etc/nginx/conf.d",
+                "echo \"upstream dreamxec_upstream { server 127.0.0.1:$NEW_PORT; }\" | sudo tee /etc/nginx/conf.d/dreamxec-upstream.conf",
+                "sudo sed -i \"s|proxy_pass http://127.0.0.1:5000;|proxy_pass http://dreamxec_upstream;|\" /etc/nginx/sites-available/dreamxec 2>/dev/null || true",
+                "if sudo nginx -t 2>/dev/null; then sudo nginx -s reload; echo \"🔄 Nginx reloaded to port $NEW_PORT\"; fi",
+                "sleep 5",
+                "if [ \"$CURRENT_CONTAINER\" != \"$NEW_CONTAINER\" ]; then docker stop $CURRENT_CONTAINER 2>/dev/null || true; docker rm $CURRENT_CONTAINER 2>/dev/null || true; fi",
+                "docker image prune -af --filter until=72h >/dev/null 2>&1 || true",
+                "echo \"🎉 Zero-Downtime Blue/Green Deployment successful!\""
+              ]
+            }')
+
+          # Send command to EC2 via AWS Systems Manager
+          COMMAND_ID=$(aws ssm send-command \
+            --region "${TARGET_REGION}" \
+            --instance-ids "${INSTANCE_ID}" \
+            --document-name "AWS-RunShellScript" \
+            --parameters "$SSM_PARAMS" \
+            --comment "DreamXec CD Deploy: $IMAGE_TAG" \
+            --output text \
+            --query "Command.CommandId")
+
+          echo "SSM Command dispatched. Command ID: $COMMAND_ID"
+          echo "Polling execution status..."
+
+          # Poll until command reaches a terminal state
+          STATUS="Pending"
+          while [ "$STATUS" = "Pending" ] || [ "$STATUS" = "InProgress" ] || [ "$STATUS" = "Delayed" ]; do
+            sleep 6
+            STATUS=$(aws ssm get-command-invocation \
+              --region "${AWS_REGION}" \
+              --command-id "$COMMAND_ID" \
+              --instance-id "$INSTANCE_ID" \
+              --query "Status" \
+              --output text 2>/dev/null || echo "Pending")
+            echo "Current status: $STATUS"
+          done
+
+          # Fetch execution details & logs
+          OUTPUT_JSON=$(aws ssm get-command-invocation \
+            --region "${AWS_REGION}" \
+            --command-id "$COMMAND_ID" \
+            --instance-id "$INSTANCE_ID" \
+            --query "{Status:Status,StandardOutputContent:StandardOutputContent,StandardErrorContent:StandardErrorContent}" \
+            --output json)
+
+          echo "=== SSM EXECUTION LOGS ==="
+          echo "$OUTPUT_JSON" | jq -r '.StandardOutputContent // empty'
+          echo "=== SSM ERROR LOGS (if any) ==="
+          echo "$OUTPUT_JSON" | jq -r '.StandardErrorContent // empty'
+
+          if [ "$STATUS" != "Success" ]; then
+            echo "❌ Deployment command failed on EC2 with status: $STATUS"
+            exit 1
+          fi
+
+          echo "✅ Production deployment completed successfully on EC2!"

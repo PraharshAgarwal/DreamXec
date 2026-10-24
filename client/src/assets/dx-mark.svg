@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- D Body with Bulb Cutout (Single Compound Path for maximum SVG compatibility) -->
+  <path
+    fill="currentColor"
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M 64 36
+       L 112 36
+       C 152 36 172 65 172 100
+       C 172 135 152 164 112 164
+       L 64 164
+       L 64 112
+       C 69 112, 75 111, 80 113.5
+       C 84 115.5, 87 119.5, 89 123
+       C 94 130, 101.5 133, 110 133
+       C 128.2 133, 143 118.2, 143 100
+       C 143 81.8, 128.2 67, 110 67
+       C 101.5 67, 94 70, 89 77
+       C 87 80.5, 84 84.5, 80 86.5
+       C 75 89, 69 88, 64 88
+       Z"
+  />
+
+  <!-- 3 Screw Thread Ridges on the Bulb Base -->
+  <g fill="currentColor">
+    <!-- Inner / Rightmost Ridge -->
+    <rect x="54.5" y="85" width="4.5" height="30" rx="2.25" transform="rotate(-6 56.75 100)" />
+    <!-- Middle Ridge -->
+    <rect x="46" y="88.5" width="4.5" height="23" rx="2.25" transform="rotate(-6 48.25 100)" />
+    <!-- Outer / Leftmost Ridge -->
+    <rect x="37.5" y="92" width="4.5" height="16" rx="2.25" transform="rotate(-6 39.75 100)" />
+  </g>
+
+  <!-- Filament: Interwoven X Loop inside the Bulb -->
+  <g transform="translate(110, 100)" fill="currentColor">
+    <!-- Continuous interwoven ribbon X with rounded loop ends -->
+    <!-- Diagonal Ribbon 1 (Top-Left to Bottom-Right) -->
+    <path
+      d="M -11 -8.5
+         C -15 -13.5, -12 -17, -7 -17
+         C -3 -17, 0 -13.5, 4 -8.5
+         L 9 -2.5
+         C 13 2.5, 17 7, 17 11
+         C 17 15.5, 13 18, 9 18
+         C 5 18, 1.5 14.5, -2.5 9
+         L -7 3
+         C -8.5 1, -9.8 -0.8, -11 -2.5
+         L -11 -8.5 Z"
+      opacity="0.95"
+    />
+  </g>
+</svg>

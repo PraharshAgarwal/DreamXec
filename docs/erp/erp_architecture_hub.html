@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DreamXec Phase-2 - Research ERP Architecture Hub</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#003366',
+              orange: '#FF7F00',
+              green: '#0B9C2C',
+              cream: '#FFF7ED',
+              lightBlue: '#E0F2FE'
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Neo-brutalist / High-contrast styling matching DreamXec aesthetics */
+    .neo-border {
+      border: 3px solid #003366;
+    }
+    .neo-shadow {
+      box-shadow: 6px 6px 0px #FF7F00;
+    }
+    .neo-shadow-green {
+      box-shadow: 6px 6px 0px #0B9C2C;
+    }
+    .neo-shadow-navy {
+      box-shadow: 6px 6px 0px #003366;
+    }
+    .active-tab {
+      background-color: #003366 !important;
+      color: #ffffff !important;
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0px #FF7F00;
+    }
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-navy min-h-screen pb-16">
+
+  <!-- Header / Navigation Banner -->
+  <header class="w-full bg-white neo-border border-t-0 sticky top-0 z-50 px-4 py-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <span class="inline-flex items-center justify-center w-8 h-8 text-white font-black text-lg bg-brand-orange neo-border">★</span>
+      <h1 class="text-xl sm:text-2xl font-black uppercase tracking-tight">DreamXec <span class="text-brand-orange">Phase-2</span></h1>
+    </div>
+    
+    <nav class="flex flex-wrap gap-2 justify-center">
+      <button onclick="switchTab('tab-overview')" id="btn-tab-overview" class="px-3.5 py-1.5 text-xs font-black uppercase tracking-wider bg-white neo-border transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] active-tab">
+        1. Overview
+      </button>
+      <button onclick="switchTab('tab-architecture')" id="btn-tab-architecture" class="px-3.5 py-1.5 text-xs font-black uppercase tracking-wider bg-white neo-border transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]">
+        2. Database Schema
+      </button>
+      <button onclick="switchTab('tab-onboarding')" id="btn-tab-onboarding" class="px-3.5 py-1.5 text-xs font-black uppercase tracking-wider bg-white neo-border transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]">
+        3. Onboarding & RBAC
+      </button>
+      <button onclick="switchTab('tab-verification')" id="btn-tab-verification" class="px-3.5 py-1.5 text-xs font-black uppercase tracking-wider bg-white neo-border transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]">
+        4. Project Gates
+      </button>
+      <button onclick="switchTab('tab-ui-mockups')" id="btn-tab-ui-mockups" class="px-3.5 py-1.5 text-xs font-black uppercase tracking-wider bg-white neo-border transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]">
+        5. UI Page Mockups
+      </button>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-8 mt-8">
+
+    <!-- ========================================================
+         SECTION 1: OVERVIEW & PLATFORM MODULES
+         ======================================================== -->
+    <section id="tab-overview" class="tab-content block space-y-8 animate-fade-in">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow">
+        <span class="inline-block px-3 py-1 bg-brand-orange text-white text-xs font-black uppercase tracking-widest neo-border mb-4">Architecture overview</span>
+        <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight mb-4 text-brand-navy">Research ERP Operating System</h2>
+        <p class="text-base sm:text-lg leading-relaxed max-w-4xl text-brand-navy/80">
+          Welcome to the DreamXec Phase-2 Architecture Hub. This interactive center outlines how the platform shifts from a student project crowdfunding mechanism into a **Multi-Tenant Research ERP**. DreamXec connects Universities, Corporations, Labs, Incubators, and Mentors in an ecosystem that drives innovation, ensures ethical IRB compliance, manages IP, and releases funds systematically as milestones are completed.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Module card 1 -->
+        <div class="bg-white p-5 neo-border border-brand-navy flex flex-col justify-between hover:translate-x-[-3px] hover:translate-y-[-3px] transition-all">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
+              <span class="text-[10px] font-black uppercase tracking-wider text-brand-navy/60">Module 1 & 2</span>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-2">Identity & Multi-Org</h3>
+            <p class="text-sm text-brand-navy/80">Unified auth with sub-profiles. Connects users to Universities and Corporate tenants via scoped memberships.</p>
+          </div>
+          <span class="text-[10px] font-black text-brand-orange uppercase mt-4">Security & Access &rarr;</span>
+        </div>
+
+        <!-- Module card 2 -->
+        <div class="bg-white p-5 neo-border border-brand-navy flex flex-col justify-between hover:translate-x-[-3px] hover:translate-y-[-3px] transition-all">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-green"></span>
+              <span class="text-[10px] font-black uppercase tracking-wider text-brand-navy/60">Module 3 & 4</span>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-2">Ideas & Projects</h3>
+            <p class="text-sm text-brand-navy/80">Pipeline transforming validated Ideas into full Projects. Implements stage-gate progression (Discovery to Commercialization).</p>
+          </div>
+          <span class="text-[10px] font-black text-brand-green uppercase mt-4">Innovation Pipeline &rarr;</span>
+        </div>
+
+        <!-- Module card 3 -->
+        <div class="bg-white p-5 neo-border border-brand-navy flex flex-col justify-between hover:translate-x-[-3px] hover:translate-y-[-3px] transition-all">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-navy"></span>
+              <span class="text-[10px] font-black uppercase tracking-wider text-brand-navy/60">Module 5</span>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-2">Labs & Infrastructure</h3>
+            <p class="text-sm text-brand-navy/80">Inventories high-end equipment, monitors physical lab capacity, and handles bookings and conflicts.</p>
+          </div>
+          <span class="text-[10px] font-black text-brand-navy uppercase mt-4">Equipment Booking &rarr;</span>
+        </div>
+
+        <!-- Module card 4 -->
+        <div class="bg-white p-5 neo-border border-brand-navy flex flex-col justify-between hover:translate-x-[-3px] hover:translate-y-[-3px] transition-all">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
+              <span class="text-[10px] font-black uppercase tracking-wider text-brand-navy/60">Module 6 & 8</span>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-2">Grants & Patents</h3>
+            <p class="text-sm text-brand-navy/80">Milestone-based fund allocations. Cryptographic hashing of notebooks for invention disclosure.</p>
+          </div>
+          <span class="text-[10px] font-black text-brand-orange uppercase mt-4">Funding & IP Assets &rarr;</span>
+        </div>
+
+        <!-- Module card 5 -->
+        <div class="bg-white p-5 neo-border border-brand-navy flex flex-col justify-between hover:translate-x-[-3px] hover:translate-y-[-3px] transition-all">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-green"></span>
+              <span class="text-[10px] font-black uppercase tracking-wider text-brand-navy/60">Module 9</span>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-2">Compliance & IRB</h3>
+            <p class="text-sm text-brand-navy/80">Gated workflows requiring compliance officers to approve ethical protocols (IRB) before project activation.</p>
+          </div>
+          <span class="text-[10px] font-black text-brand-green uppercase mt-4">IRB Approval Gate &rarr;</span>
+        </div>
+
+        <!-- Module card 6 -->
+        <div class="bg-white p-5 neo-border border-brand-navy flex flex-col justify-between hover:translate-x-[-3px] hover:translate-y-[-3px] transition-all">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-navy"></span>
+              <span class="text-[10px] font-black uppercase tracking-wider text-brand-navy/60">Module 10</span>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-2">Collab & Messaging</h3>
+            <p class="text-sm text-brand-navy/80">Project channels, direct threads, and mentor portfolios. Gamified badges and leaderboards.</p>
+          </div>
+          <span class="text-[10px] font-black text-brand-navy uppercase mt-4">Collaboration &rarr;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 2: DATABASE & RELATIONSHIPS
+         ======================================================== -->
+    <section id="tab-architecture" class="tab-content hidden space-y-8 animate-fade-in">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow-green">
+        <span class="inline-block px-3 py-1 bg-brand-green text-white text-xs font-black uppercase tracking-widest neo-border mb-4">MongoDB & Prisma Schema</span>
+        <h2 class="text-3xl font-black uppercase tracking-tight mb-4">Relational Entity Mapping</h2>
+        <p class="text-sm sm:text-base leading-relaxed text-brand-navy/80 mb-6">
+          To maintain scalable operations under Mongo's structure, models with bounded sizes are embedded directly, whereas dynamic collections (like Notebooks, Bookings, and Tasks) are referenced to avoid hitting the 16MB document size ceiling.
+        </p>
+
+        <!-- Relational Flow Diagram -->
+        <div class="neo-border bg-brand-cream p-4 flex flex-col md:flex-row justify-around gap-6 items-stretch font-semibold">
+          <!-- Column 1 -->
+          <div class="flex-1 bg-white p-4 neo-border border-brand-navy rounded-sm flex flex-col justify-between">
+            <h4 class="font-black text-brand-orange uppercase text-sm border-b-2 border-brand-navy pb-2 mb-2">1. Identity layer</h4>
+            <div class="space-y-1.5 text-xs font-mono">
+              <div class="bg-brand-cream p-1 neo-border">User</div>
+              <div class="bg-brand-cream p-1 neo-border">UserOrganization</div>
+              <div class="bg-brand-cream p-1 neo-border">Organization</div>
+              <div class="bg-brand-cream p-1 neo-border">Department / Lab</div>
+            </div>
+            <p class="text-[10px] text-brand-navy/60 mt-3">Scopes roles per institution.</p>
+          </div>
+          
+          <!-- Column 2 -->
+          <div class="flex-1 bg-white p-4 neo-border border-brand-navy rounded-sm flex flex-col justify-between">
+            <h4 class="font-black text-brand-green uppercase text-sm border-b-2 border-brand-navy pb-2 mb-2">2. Innovation Layer</h4>
+            <div class="space-y-1.5 text-xs font-mono">
+              <div class="bg-brand-cream p-1 neo-border">Idea & Review</div>
+              <div class="bg-brand-cream p-1 neo-border">Project & Member</div>
+              <div class="bg-brand-cream p-1 neo-border">Task & Dependency</div>
+              <div class="bg-brand-cream p-1 neo-border">StageGateReview</div>
+            </div>
+            <p class="text-[10px] text-brand-navy/60 mt-3">Manages Stage progression.</p>
+          </div>
+
+          <!-- Column 3 -->
+          <div class="flex-1 bg-white p-4 neo-border border-brand-navy rounded-sm flex flex-col justify-between">
+            <h4 class="font-black text-brand-navy uppercase text-sm border-b-2 border-brand-navy pb-2 mb-2">3. Assets & Audits</h4>
+            <div class="space-y-1.5 text-xs font-mono">
+              <div class="bg-brand-cream p-1 neo-border">Equipment & Booking</div>
+              <div class="bg-brand-cream p-1 neo-border">Grant & Allocation</div>
+              <div class="bg-brand-cream p-1 neo-border">LabNotebookEntry (hash)</div>
+              <div class="bg-brand-cream p-1 neo-border">Patent & Royalty</div>
+            </div>
+            <p class="text-[10px] text-brand-navy/60 mt-3">Tracks lab bookings, compliance & IP.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MongoDB Indexes detail box -->
+      <div class="bg-white p-6 neo-border border-brand-navy">
+        <h3 class="text-xl font-black uppercase mb-4 text-brand-navy">Database Optimization & Indexing Layout</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div class="space-y-3">
+            <h4 class="font-bold text-brand-orange uppercase">Compounded Indexing for Tenant Query Routing</h4>
+            <p class="text-brand-navy/80">Every dashboard query searches by organization first. We define index partitions globally:</p>
+            <pre class="bg-brand-cream p-3 neo-border font-mono text-xs text-brand-navy">@@index([organizationId, status])
+@@index([labId, status])
+@@index([projectId, createdAt])</pre>
+          </div>
+
+          <div class="space-y-3">
+            <h4 class="font-bold text-brand-green uppercase">Tenant Partitioning via Sharding Key</h4>
+            <p class="text-brand-navy/80">
+              For high-throughput multi-org scales, MongoDB shards the database using <code class="font-mono text-xs bg-brand-cream px-1 py-0.5 border">organizationId</code> as the shard key. This directs specific university/corporate traffic to its respective shard.
+            </p>
+            <h4 class="font-bold text-brand-navy uppercase">IP Immutability hashing</h4>
+            <p class="text-brand-navy/80">
+              Lab notebooks are logged with a SHA-256 <code class="font-mono text-xs bg-brand-cream px-1 py-0.5 border">hashSignature</code> (combining author, notes, and timestamp) providing cryptographic validation for licensing audits.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 3: ONBOARDING & RBAC
+         ======================================================== -->
+    <section id="tab-onboarding" class="tab-content hidden space-y-8 animate-fade-in">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow-navy">
+        <span class="inline-block px-3 py-1 bg-brand-navy text-white text-xs font-black uppercase tracking-widest neo-border mb-4">RBAC & Onboarding flows</span>
+        <h2 class="text-3xl font-black uppercase tracking-tight mb-4">Role Onboarding & Verification Steps</h2>
+        <p class="text-sm sm:text-base leading-relaxed text-brand-navy/80 mb-6">
+          Detailed step-by-step onboarding verification guides, database transitions, and access gates for each role:
+        </p>
+
+        <!-- Dynamic accordions/cards for each role -->
+        <div class="space-y-6">
+
+          <!-- 1. Student Researcher -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <span class="inline-block px-2.5 py-0.5 bg-brand-orange text-white text-[10px] font-black uppercase neo-border mb-2">Role ID: RESEARCHER</span>
+            <h3 class="text-xl font-black uppercase mb-3">1. Student Researcher Onboarding Flow</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 1: Profile & Domain</h4>
+                <p class="text-brand-navy/80">User registers and inputs academic email. System validates email domain matches a whitelisted academic domain (e.g. <code>.edu</code>, <code>.res.in</code>).</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: User.emailVerified = true</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 2: ID Upload</h4>
+                <p class="text-brand-navy/80">Student uploads active Student ID, enrollment registry scan, and selects department. Status changes to pending registry review.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: StudentVerification = PENDING</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 3: Admin Approval</h4>
+                <p class="text-brand-navy/80">University Registrar Admin reviews credentials in admin queue and approves student academic standing.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: User.studentVerified = true</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 4: Scoped Active</h4>
+                <p class="text-brand-navy/80">UserOrganization record created linking student to university. Unlocks ideation, team messaging, and shared lab tools.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.role = RESEARCHER</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Professor / PI -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <span class="inline-block px-2.5 py-0.5 bg-brand-green text-white text-[10px] font-black uppercase neo-border mb-2">Role ID: PROFESSOR</span>
+            <h3 class="text-xl font-black uppercase mb-3">2. Professor / Principal Investigator (PI) Onboarding Flow</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-green uppercase mb-1">Step 1: Faculty Input</h4>
+                <p class="text-brand-navy/80">Faculty signs up with research email, department name, and their official ORCID iD registry number for publication audits.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: User.emailVerified = true</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-green uppercase mb-1">Step 2: ID & Contract Scan</h4>
+                <p class="text-brand-navy/80">Uploads scan of official employment contract or faculty rank card. Transfer to University Admin review log.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.verified = false</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-green uppercase mb-1">Step 3: Registrar Check</h4>
+                <p class="text-brand-navy/80">University Registrar manually audits employment scan and matches ORCID index record.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: AuditLog.status = AUDITED</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-green uppercase mb-1">Step 4: Active PI Status</h4>
+                <p class="text-brand-navy/80">Approves and scopes user role as PROFESSOR inside the university tenant. Unlocks stage-gate, notebook signing, and grant PI panels.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.role = PROFESSOR</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Incubator Manager -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <span class="inline-block px-2.5 py-0.5 bg-brand-navy text-white text-[10px] font-black uppercase neo-border mb-2">Role ID: INCUBATOR_MANAGER</span>
+            <h3 class="text-xl font-black uppercase mb-3">3. Incubator Manager Onboarding Flow</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-navy uppercase mb-1">Step 1: Admin Invitation</h4>
+                <p class="text-brand-navy/80">Invited directly via secure email token sent by the university or corporate tenant's Admin.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: User.accountStatus = ACTIVE</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-navy uppercase mb-1">Step 2: Incubator Setup</h4>
+                <p class="text-brand-navy/80">Accepts token invitation and links profile to the parent organization's incubation division.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.role = INCUBATOR_MANAGER</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-navy uppercase mb-1">Step 3: Idea Board Active</h4>
+                <p class="text-brand-navy/80">Verification complete. Unlocks idea pipeline evaluations (Novelty/Feasibility scoring), mentoring logs, and commercialization stats.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.verified = true</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Donor / Corporate Sponsor -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <span class="inline-block px-2.5 py-0.5 bg-brand-orange text-white text-[10px] font-black uppercase neo-border mb-2">Role ID: DONOR</span>
+            <h3 class="text-xl font-black uppercase mb-3">4. Donor & Corporate Sponsor Onboarding Flow</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 1: Biz Profile Setup</h4>
+                <p class="text-brand-navy/80">Corporate user registers using official corporate email domain (e.g. <code>@google.com</code>, <code>@stripe.com</code>).</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: User.role = DONOR</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 2: Legal Registry</h4>
+                <p class="text-brand-navy/80">Inputs Company GSTIN/EIN registry numbers, corporate tax documents, and address details. Status set to review.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: Donor.verified = false</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 3: Platform Audit</h4>
+                <p class="text-brand-navy/80">Platform Super-Admin verifies corporate standing against public registry databases manually.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: Donor.accountStatus = ACTIVE</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-orange uppercase mb-1">Step 4: Grant Posting Active</h4>
+                <p class="text-brand-navy/80">Corporate identity confirmed. Unlocks grant directory creations, proposal reviews, and milestone payout gates.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: Donor.verified = true</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Compliance Officer -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <span class="inline-block px-2.5 py-0.5 bg-brand-green text-white text-[10px] font-black uppercase neo-border mb-2">Role ID: COMPLIANCE_OFFICER</span>
+            <h3 class="text-xl font-black uppercase mb-3">5. Compliance Officer Onboarding Flow</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-green uppercase mb-1">Step 1: Direct Invite Only</h4>
+                <p class="text-brand-navy/80">No self-registration. Created exclusively via a security token sent by the university or platform admin.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: User.accountStatus = ACTIVE</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-green uppercase mb-1">Step 2: Board Accreditation</h4>
+                <p class="text-brand-navy/80">Officer inputs compliance committee details and signs off on compliance board rules.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.role = COMPLIANCE_OFFICER</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-green uppercase mb-1">Step 3: IRB Board Active</h4>
+                <p class="text-brand-navy/80">Verified. Action logs recorded in system AuditLog. Unlocks IRB protocol submissions, approvals, and risk reviews.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.verified = true</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Organization Admin -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <span class="inline-block px-2.5 py-0.5 bg-brand-navy text-white text-[10px] font-black uppercase neo-border mb-2">Role ID: ORG_ADMIN</span>
+            <h3 class="text-xl font-black uppercase mb-3">6. Organization Admin Onboarding Flow</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-navy uppercase mb-1">Step 1: Institution Setup</h4>
+                <p class="text-brand-navy/80">Admin registers organization on platform (GSTIN, legal license, domain verification). Status set to under review.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: Organization.verified = false</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-navy uppercase mb-1">Step 2: Platform Clearance</h4>
+                <p class="text-brand-navy/80">Super-Admin audits legitimacy. Once approved, the organization goes active and the Admin user gets full control.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: Organization.verified = true</div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h4 class="font-bold text-brand-navy uppercase mb-1">Step 3: Tenant Control Active</h4>
+                <p class="text-brand-navy/80">Unlocks capability to invite/verify faculty, approve compliance officers, configure departments, and manage lab sharing.</p>
+                <div class="mt-2 text-[10px] font-mono bg-brand-cream p-1 border">DB: UserOrg.role = ORG_ADMIN</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 4: PROJECT VERIFICATION GATES
+         ======================================================== -->
+    <section id="tab-verification" class="tab-content hidden space-y-8 animate-fade-in">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow">
+        <span class="inline-block px-3 py-1 bg-brand-orange text-white text-xs font-black uppercase tracking-widest neo-border mb-4">Stage-Gate Approvals</span>
+        <h2 class="text-3xl font-black uppercase tracking-tight mb-4">Pre-Verification Gate System</h2>
+        <p class="text-sm sm:text-base leading-relaxed text-brand-navy/80 mb-6">
+          Before a research project goes live for public matching, funding releases, or university equipment booking, it must clear the following **4 mandatory checkpoints**:
+        </p>
+
+        <!-- Checkpoints Timeline -->
+        <div class="space-y-6">
+          
+          <!-- Gate 1 -->
+          <div class="flex gap-4 items-start bg-brand-cream p-4 neo-border border-brand-navy">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center bg-brand-orange text-white font-black neo-border text-sm flex-shrink-0">1</span>
+            <div>
+              <h4 class="font-black uppercase text-sm">Gate 1: Academic Validation (Idea Review)</h4>
+              <p class="text-xs text-brand-navy/80 mt-1">
+                Student ideas must be scored and approved by a department Professor or Incubator Manager. Ideas are evaluated based on **Novelty**, **Feasibility**, and **Impact**. Once approved, they convert to a project in the <em>Discovery</em> stage.
+              </p>
+            </div>
+          </div>
+
+          <!-- Gate 2 -->
+          <div class="flex gap-4 items-start bg-brand-cream p-4 neo-border border-brand-navy">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center bg-brand-green text-white font-black neo-border text-sm flex-shrink-0">2</span>
+            <div>
+              <h4 class="font-black uppercase text-sm">Gate 2: Compliance Validation (IRB Protocol Approval)</h4>
+              <p class="text-xs text-brand-navy/80 mt-1">
+                Projects involving human/animal subjects, hazardous chemicals, or restricted datasets submit an IRB protocol. A Compliance Officer must approve the protocol, locking the ethical framework of the project.
+              </p>
+            </div>
+          </div>
+
+          <!-- Gate 3 -->
+          <div class="flex gap-4 items-start bg-brand-cream p-4 neo-border border-brand-navy">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center bg-brand-navy text-white font-black neo-border text-sm flex-shrink-0">3</span>
+            <div>
+              <h4 class="font-black uppercase text-sm">Gate 3: Resource Clearance (Lab & Equipment check)</h4>
+              <p class="text-xs text-brand-navy/80 mt-1">
+                The Principal Investigator (PI) verifies scheduling parameters and hourly booking costs for shared infrastructure resources. This prevents conflict booking of major lab hardware.
+              </p>
+            </div>
+          </div>
+
+          <!-- Gate 4 -->
+          <div class="flex gap-4 items-start bg-brand-cream p-4 neo-border border-brand-navy">
+            <span class="w-8 h-8 rounded-full flex items-center justify-center bg-brand-orange text-white font-black neo-border text-sm flex-shrink-0">4</span>
+            <div>
+              <h4 class="font-black uppercase text-sm">Gate 4: Budget & Financial Clearance (Grant Matching)</h4>
+              <p class="text-xs text-brand-navy/80 mt-1">
+                The Project's milestones are mapped directly to a funding agency's grant rules. Corporate sponsors allocate funds to specific stage outcomes (e.g. 30% budget released upon Prototype sign-off).
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 5: UI PAGE MOCKUPS
+         ======================================================== -->
+    <section id="tab-ui-mockups" class="tab-content hidden space-y-8 animate-fade-in">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow-green">
+        <span class="inline-block px-3 py-1 bg-brand-green text-white text-xs font-black uppercase tracking-widest neo-border mb-4">UI & Wireframe Specs</span>
+        <h2 class="text-3xl font-black uppercase tracking-tight mb-4">Dashboard Layout wireframes</h2>
+        <p class="text-sm sm:text-base leading-relaxed text-brand-navy/80 mb-6">
+          Layout blueprints representing the interface pages designed for each Phase-2 Role:
+        </p>
+
+        <div class="space-y-8">
+          
+          <!-- Student dashboard -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <h4 class="font-black text-brand-orange uppercase text-sm border-b-2 border-brand-navy pb-1 mb-3 flex items-center justify-between">
+              <span>View: Student Researcher Dashboard</span>
+              <span class="text-[10px] bg-white px-2 py-0.5 neo-border">WIREFRAME</span>
+            </h4>
+            
+            <div class="space-y-4 text-xs font-mono">
+              <div class="grid grid-cols-3 gap-2 text-center font-bold">
+                <div class="bg-white p-2 neo-border">My Active Ideas (3)</div>
+                <div class="bg-white p-2 neo-border">Booked Equipment Slots (2)</div>
+                <div class="bg-white p-2 neo-border">Grant Applications (1)</div>
+              </div>
+              <div class="bg-white p-4 neo-border">
+                <h5 class="font-black uppercase mb-2">My Research Project: "Smart Ag-IoT" (Prototype Stage)</h5>
+                <div class="h-2 w-full bg-brand-cream neo-border mb-3 overflow-hidden">
+                  <div class="h-full bg-brand-orange" style="width: 60%"></div>
+                </div>
+                <div class="flex justify-between text-[10px]">
+                  <span>Milestone 2: Sensor Calibration</span>
+                  <span class="font-black text-brand-orange">60% Completed</span>
+                </div>
+              </div>
+              <div class="bg-white p-3 neo-border">
+                <h5 class="font-black uppercase text-xs mb-2">Action Items</h5>
+                <p>&rarr; Submit IRB Compliance Protocol form (Filing pending for Milestone 3)</p>
+                <p>&rarr; Book spectrum analyzer in Electrical Lab (Available Friday, 2PM)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professor dashboard -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <h4 class="font-black text-brand-green uppercase text-sm border-b-2 border-brand-navy pb-1 mb-3 flex items-center justify-between">
+              <span>View: Professor / PI Portfolio Panel</span>
+              <span class="text-[10px] bg-white px-2 py-0.5 neo-border">WIREFRAME</span>
+            </h4>
+            
+            <div class="space-y-4 text-xs font-mono">
+              <div class="bg-white p-3 neo-border flex justify-between items-center">
+                <div>
+                  <h5 class="font-black uppercase">Project Oversight: Bio-Reactor IoT</h5>
+                  <p class="text-[10px] text-brand-navy/60">Researcher: Siddharth Jain</p>
+                </div>
+                <button class="bg-brand-green text-white font-bold px-3 py-1 neo-border">Sign-off Notebook</button>
+              </div>
+              
+              <div class="bg-white p-3 neo-border">
+                <h5 class="font-black uppercase mb-2 text-xs">Milestone Approvals Pending</h5>
+                <table class="w-full text-[11px] border-collapse">
+                  <thead>
+                    <tr class="border-b border-brand-navy/30 text-left">
+                      <th class="py-1">Project</th>
+                      <th class="py-1">Milestone Description</th>
+                      <th class="py-1">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="py-1">Ag-IoT System</td>
+                      <td class="py-1">Design schema layout check-off</td>
+                      <td class="py-1">
+                        <button class="text-brand-green font-bold">[Approve]</button>
+                        <button class="text-brand-orange font-bold ml-2">[Reject]</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compliance dashboard -->
+          <div class="bg-brand-cream p-5 neo-border border-brand-navy">
+            <h4 class="font-black text-brand-navy uppercase text-sm border-b-2 border-brand-navy pb-1 mb-3 flex items-center justify-between">
+              <span>View: Compliance IRB Review Console</span>
+              <span class="text-[10px] bg-white px-2 py-0.5 neo-border">WIREFRAME</span>
+            </h4>
+            
+            <div class="space-y-4 text-xs font-mono">
+              <div class="bg-white p-3 neo-border">
+                <h5 class="font-black uppercase mb-2 text-xs">Pending Ethics Submissions (IRB Protocols)</h5>
+                <div class="border-t border-brand-navy/20 pt-2 space-y-2">
+                  <div class="flex justify-between items-center text-[10.5px]">
+                    <span>Project: Campus Health Diagnostics | Protocol: Human saliva samples</span>
+                    <button class="bg-brand-orange text-white font-bold px-2 py-0.5 neo-border">Review Case</button>
+                  </div>
+                  <div class="flex justify-between items-center text-[10.5px]">
+                    <span>Project: AI resume ATS parser | Protocol: Student metadata encryption</span>
+                    <button class="bg-brand-orange text-white font-bold px-2 py-0.5 neo-border">Review Case</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Tab switching logic
+    function switchTab(tabId) {
+      // Hide all contents
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+        content.classList.remove('block');
+      });
+      
+      // Remove active-tab class from all buttons
+      document.querySelectorAll('nav button').forEach(button => {
+        button.classList.remove('active-tab');
+      });
+
+      // Show target content
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById(tabId).classList.add('block');
+
+      // Set active-tab class on trigger button
+      document.getElementById('btn-' + tabId).classList.add('active-tab');
+    }
+  </script>
+</body>
+</html>

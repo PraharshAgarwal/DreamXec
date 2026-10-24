@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DreamXec Platform — Complete Visual Showcase & Page Screenshots</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-orange: #FE4E1A;
+      --forest-green: #0F534A;
+      --bright-red: #F4002C;
+      --deep-purple: #4717AE;
+      --bright-yellow: #FFDD33;
+      --bright-green: #9EFC5F;
+      --pastel-pink: #FEB3FC;
+      --vibrant-blue: #18D7E8;
+      --cream-bg: #FCFBF7;
+      --card-border: #121316;
+      --text-dark: #121316;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--cream-bg);
+      color: var(--text-dark);
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+
+    /* Header */
+    header {
+      background: #FFFFFF;
+      border-bottom: 4px solid var(--card-border);
+      padding: 24px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .header-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-badge {
+      background-color: var(--primary-orange);
+      color: white;
+      font-weight: 900;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 3px solid var(--card-border);
+      box-shadow: 3px 3px 0 var(--card-border);
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--card-border);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: #64748B;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: white;
+      border: 2px solid var(--card-border);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 2px 2px 0 var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-pill.orange { background: #FFF3EC; color: var(--primary-orange); border-color: var(--primary-orange); }
+    .stat-pill.green { background: #EAF8F4; color: var(--forest-green); border-color: var(--forest-green); }
+    .stat-pill.purple { background: #F2ECFE; color: var(--deep-purple); border-color: var(--deep-purple); }
+
+    /* Controls Bar */
+    .controls-container {
+      max-width: 1440px;
+      margin: 24px auto;
+      padding: 0 32px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: inherit;
+      background: white;
+      border: 2px solid var(--card-border);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 var(--card-border);
+      transition: all 0.15s ease;
+      color: var(--card-border);
+    }
+
+    .filter-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--card-border);
+      background: #F8FAFC;
+    }
+
+    .filter-btn.active {
+      background: var(--forest-green);
+      color: white;
+      border-color: var(--card-border);
+      box-shadow: 3px 3px 0 var(--card-border);
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 320px;
+    }
+
+    .search-box input {
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 16px;
+      border: 2px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 2px 2px 0 var(--card-border);
+      outline: none;
+      background: white;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary-orange);
+      box-shadow: 3px 3px 0 var(--primary-orange);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .category-section {
+      margin-bottom: 48px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid #E2E8F0;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--card-border);
+      text-transform: uppercase;
+      letter-spacing: -0.3px;
+    }
+
+    .section-count {
+      background: var(--bright-yellow);
+      color: var(--card-border);
+      font-weight: 900;
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 2px solid var(--card-border);
+    }
+
+    /* Grid */
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .pages-grid {
+        grid-template-columns: 1fr;
+      }
+      .controls-container, main, header {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+
+    /* Page Card */
+    .page-card {
+      background: white;
+      border: 3px solid var(--card-border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 5px 5px 0 var(--card-border);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-col;
+      flex-direction: column;
+    }
+
+    .page-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 7px 7px 0 var(--primary-orange);
+      border-color: var(--primary-orange);
+    }
+
+    .thumbnail-wrapper {
+      position: relative;
+      background: #F1F5F9;
+      height: 250px;
+      overflow: hidden;
+      border-bottom: 3px solid var(--card-border);
+      cursor: pointer;
+    }
+
+    .thumbnail-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.3s ease;
+    }
+
+    .thumbnail-wrapper:hover .thumbnail-img {
+      transform: scale(1.03);
+    }
+
+    .overlay-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(18, 19, 22, 0.88);
+      backdrop-filter: blur(4px);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .zoom-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: var(--bright-yellow);
+      color: var(--card-border);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 2px solid var(--card-border);
+      box-shadow: 2px 2px 0 var(--card-border);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.2s ease;
+    }
+
+    .thumbnail-wrapper:hover .zoom-hint {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .card-route {
+      font-family: monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--deep-purple);
+      background: #F3EEFE;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(71, 23, 174, 0.2);
+    }
+
+    .card-auth {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-none, .auth-guest {
+      background: #EAF8F4;
+      color: var(--forest-green);
+      border: 1px solid rgba(15, 83, 74, 0.3);
+    }
+
+    .auth-student {
+      background: #FFF3EC;
+      color: var(--primary-orange);
+      border: 1px solid rgba(254, 78, 26, 0.3);
+    }
+
+    .auth-admin {
+      background: #F2ECFE;
+      color: var(--deep-purple);
+      border: 1px solid rgba(71, 23, 174, 0.3);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--card-border);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 12.5px;
+      color: #475569;
+      margin-bottom: 16px;
+      flex: 1;
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid #E2E8F0;
+    }
+
+    .file-size {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+    }
+
+    .action-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-action {
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 2px solid var(--card-border);
+      box-shadow: 2px 2px 0 var(--card-border);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: var(--card-border);
+      background: white;
+    }
+
+    .btn-action:hover {
+      background: var(--bright-yellow);
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--card-border);
+    }
+
+    .btn-action.primary {
+      background: var(--forest-green);
+      color: white;
+      border-color: var(--card-border);
+    }
+
+    .btn-action.primary:hover {
+      background: #146D61;
+    }
+
+    /* Lightbox Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 19, 22, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border: 4px solid var(--card-border);
+      border-radius: 16px;
+      width: 95vw;
+      max-width: 1400px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 12px 12px 0 var(--primary-orange);
+      position: relative;
+    }
+
+    .modal-header {
+      background: white;
+      border-bottom: 3px solid var(--card-border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header-info h3 {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--card-border);
+    }
+
+    .modal-header-info p {
+      font-size: 12px;
+      color: #64748B;
+      font-family: monospace;
+      margin-top: 2px;
+    }
+
+    .modal-close-btn {
+      background: var(--bright-red);
+      color: white;
+      border: 2px solid var(--card-border);
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 2px 2px 0 var(--card-border);
+    }
+
+    .modal-close-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--card-border);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      background: #1E293B;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .modal-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .modal-footer {
+      background: white;
+      border-top: 3px solid var(--card-border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-nav-btns {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="brand-badge">DreamXec</div>
+        <div>
+          <h1 class="brand-title">Full Platform Page Showcase</h1>
+          <p class="brand-subtitle">Visual UI Catalog • Dual-Custody Escrow & Student Innovation Platform</p>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-pill green">
+          <span>📸</span>
+          <span>25 Pages Captured</span>
+        </div>
+        <div class="stat-pill orange">
+          <span>📐</span>
+          <span>1440 × 900 (2× Retina)</span>
+        </div>
+        <div class="stat-pill purple">
+          <span>🎨</span>
+          <span>Brand System V2</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTROLS -->
+  <div class="controls-container">
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterCategory('all', this)">All Pages (25)</button>
+      
+        <button class="filter-btn" onclick="filterCategory('Public Pages', this)">Public Pages (5)</button>
+      
+        <button class="filter-btn" onclick="filterCategory('Authentication', this)">Authentication (6)</button>
+      
+        <button class="filter-btn" onclick="filterCategory('Student Portal', this)">Student Portal (8)</button>
+      
+        <button class="filter-btn" onclick="filterCategory('DX Admin Governance', this)">DX Admin Governance (6)</button>
+      
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Search page name or route..." oninput="handleSearch()" />
+    </div>
+  </div>
+
+  <!-- MAIN GALLERY -->
+  <main id="galleryContainer">
+    
+      <section class="category-section" data-category="Public Pages">
+        <div class="section-header">
+          <h2 class="section-title">Public Pages</h2>
+          <span class="section-count">5 screens</span>
+        </div>
+
+        <div class="pages-grid">
+          
+            <div class="page-card" data-category="Public Pages" data-name="homepage / landing page" data-route="/">
+              <div class="thumbnail-wrapper" onclick="openModal('01_homepage')">
+                <img class="thumbnail-img" src="./screenshots/01_homepage.png" alt="Homepage / Landing Page" loading="lazy" />
+                <div class="overlay-badge">NONE</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/</span>
+                  <span class="card-auth auth-none">none</span>
+                </div>
+                <h3 class="card-title">Homepage / Landing Page</h3>
+                <p class="card-desc">DreamXec hero landing experience featuring discovery carousel, real-time stats, theme showcase, and brand mission.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 4370.1 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('01_homepage')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/01_homepage.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Public Pages" data-name="browse & discover campaigns" data-route="/browse">
+              <div class="thumbnail-wrapper" onclick="openModal('02_browse_campaigns')">
+                <img class="thumbnail-img" src="./screenshots/02_browse_campaigns.png" alt="Browse & Discover Campaigns" loading="lazy" />
+                <div class="overlay-badge">NONE</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/browse</span>
+                  <span class="card-auth auth-none">none</span>
+                </div>
+                <h3 class="card-title">Browse & Discover Campaigns</h3>
+                <p class="card-desc">Public campaign catalog with category filtering, search tags, milestone progress cards, and funding goal indicators.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 1631.5 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('02_browse_campaigns')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/02_browse_campaigns.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Public Pages" data-name="campaign details & funding view" data-route="/campaign/c7813814-3a22-439f-9982-700f471245eb">
+              <div class="thumbnail-wrapper" onclick="openModal('03_campaign_details')">
+                <img class="thumbnail-img" src="./screenshots/03_campaign_details.png" alt="Campaign Details & Funding View" loading="lazy" />
+                <div class="overlay-badge">NONE</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/campaign/c7813814-3a22-439f-9982-700f471245eb</span>
+                  <span class="card-auth auth-none">none</span>
+                </div>
+                <h3 class="card-title">Campaign Details & Funding View</h3>
+                <p class="card-desc">Deep dive into student innovation campaigns: story, roadmap, verified milestones, dual-custody escrow, and backer tiers.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 327.3 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('03_campaign_details')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/03_campaign_details.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Public Pages" data-name="public impact dashboard" data-route="/impact">
+              <div class="thumbnail-wrapper" onclick="openModal('04_public_impact')">
+                <img class="thumbnail-img" src="./screenshots/04_public_impact.png" alt="Public Impact Dashboard" loading="lazy" />
+                <div class="overlay-badge">NONE</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/impact</span>
+                  <span class="card-auth auth-none">none</span>
+                </div>
+                <h3 class="card-title">Public Impact Dashboard</h3>
+                <p class="card-desc">High-level transparent analytics displaying total research funding, student club engagement, and innovation milestones reached.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 587.3 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('04_public_impact')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/04_public_impact.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Public Pages" data-name="refer a club portal" data-route="/refer-club">
+              <div class="thumbnail-wrapper" onclick="openModal('05_refer_club')">
+                <img class="thumbnail-img" src="./screenshots/05_refer_club.png" alt="Refer a Club Portal" loading="lazy" />
+                <div class="overlay-badge">NONE</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/refer-club</span>
+                  <span class="card-auth auth-none">none</span>
+                </div>
+                <h3 class="card-title">Refer a Club Portal</h3>
+                <p class="card-desc">Institutional club referral page inviting collegiate leads to register academic clubs and access grant funding.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 1238.7 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('05_refer_club')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/05_refer_club.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </section>
+    
+      <section class="category-section" data-category="Authentication">
+        <div class="section-header">
+          <h2 class="section-title">Authentication</h2>
+          <span class="section-count">6 screens</span>
+        </div>
+
+        <div class="pages-grid">
+          
+            <div class="page-card" data-category="Authentication" data-name="authentication / sign in" data-route="/auth">
+              <div class="thumbnail-wrapper" onclick="openModal('06_auth_login')">
+                <img class="thumbnail-img" src="./screenshots/06_auth_login.png" alt="Authentication / Sign In" loading="lazy" />
+                <div class="overlay-badge">GUEST</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/auth</span>
+                  <span class="card-auth auth-guest">guest</span>
+                </div>
+                <h3 class="card-title">Authentication / Sign In</h3>
+                <p class="card-desc">Secure multi-provider login portal supporting Email, Passwordless, and Google OAuth credentials.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 1242.0 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('06_auth_login')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/06_auth_login.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Authentication" data-name="institutional registration" data-route="/register">
+              <div class="thumbnail-wrapper" onclick="openModal('07_auth_register')">
+                <img class="thumbnail-img" src="./screenshots/07_auth_register.png" alt="Institutional Registration" loading="lazy" />
+                <div class="overlay-badge">GUEST</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/register</span>
+                  <span class="card-auth auth-guest">guest</span>
+                </div>
+                <h3 class="card-title">Institutional Registration</h3>
+                <p class="card-desc">Multi-role onboarding wizard for Student Researchers, Club Presidents, Academic Mentors, and Impact Donors.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 1250.5 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('07_auth_register')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/07_auth_register.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Authentication" data-name="organization / club onboarding" data-route="/org-onboarding">
+              <div class="thumbnail-wrapper" onclick="openModal('08_org_onboarding')">
+                <img class="thumbnail-img" src="./screenshots/08_org_onboarding.png" alt="Organization / Club Onboarding" loading="lazy" />
+                <div class="overlay-badge">GUEST</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/org-onboarding</span>
+                  <span class="card-auth auth-guest">guest</span>
+                </div>
+                <h3 class="card-title">Organization / Club Onboarding</h3>
+                <p class="card-desc">Institutional setup workflow for configuring college clubs, verification docs, and multi-custody admin teams.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 341.4 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('08_org_onboarding')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/08_org_onboarding.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Authentication" data-name="verification email sent screen" data-route="/check-email">
+              <div class="thumbnail-wrapper" onclick="openModal('09_check_email')">
+                <img class="thumbnail-img" src="./screenshots/09_check_email.png" alt="Verification Email Sent Screen" loading="lazy" />
+                <div class="overlay-badge">GUEST</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/check-email</span>
+                  <span class="card-auth auth-guest">guest</span>
+                </div>
+                <h3 class="card-title">Verification Email Sent Screen</h3>
+                <p class="card-desc">Instructional confirmation screen prompting users to check their institutional inbox for verification links.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 460.9 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('09_check_email')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/09_check_email.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Authentication" data-name="reset password form" data-route="/reset-password">
+              <div class="thumbnail-wrapper" onclick="openModal('10_reset_password')">
+                <img class="thumbnail-img" src="./screenshots/10_reset_password.png" alt="Reset Password Form" loading="lazy" />
+                <div class="overlay-badge">GUEST</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/reset-password</span>
+                  <span class="card-auth auth-guest">guest</span>
+                </div>
+                <h3 class="card-title">Reset Password Form</h3>
+                <p class="card-desc">Secure password recovery interface with real-time strength validation and credential update.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 376.3 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('10_reset_password')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/10_reset_password.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Authentication" data-name="netflix-style profile selector" data-route="/select-profile">
+              <div class="thumbnail-wrapper" onclick="openModal('11_profile_selector')">
+                <img class="thumbnail-img" src="./screenshots/11_profile_selector.png" alt="Netflix-Style Profile Selector" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/select-profile</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Netflix-Style Profile Selector</h3>
+                <p class="card-desc">Persona switcher allowing multi-role users to switch between Student, Club President, Mentor, or DX Admin contexts.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 633.9 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('11_profile_selector')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/11_profile_selector.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </section>
+    
+      <section class="category-section" data-category="Student Portal">
+        <div class="section-header">
+          <h2 class="section-title">Student Portal</h2>
+          <span class="section-count">8 screens</span>
+        </div>
+
+        <div class="pages-grid">
+          
+            <div class="page-card" data-category="Student Portal" data-name="student portal dashboard" data-route="/dashboard">
+              <div class="thumbnail-wrapper" onclick="openModal('12_student_dashboard')">
+                <img class="thumbnail-img" src="./screenshots/12_student_dashboard.png" alt="Student Portal Dashboard" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/dashboard</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Student Portal Dashboard</h3>
+                <p class="card-desc">Primary workspace for student researchers: active campaigns, milestone tracking, fund release requests, and verification status.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 623.2 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('12_student_dashboard')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/12_student_dashboard.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Student Portal" data-name="create campaign studio" data-route="/create">
+              <div class="thumbnail-wrapper" onclick="openModal('13_create_campaign')">
+                <img class="thumbnail-img" src="./screenshots/13_create_campaign.png" alt="Create Campaign Studio" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/create</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Create Campaign Studio</h3>
+                <p class="card-desc">Comprehensive campaign authoring studio: project pitch, rich text description, budget breakdown, and milestone scheduling.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 543.1 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('13_create_campaign')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/13_create_campaign.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Student Portal" data-name="campaign portfolio & management" data-route="/my-campaigns">
+              <div class="thumbnail-wrapper" onclick="openModal('14_my_campaigns')">
+                <img class="thumbnail-img" src="./screenshots/14_my_campaigns.png" alt="Campaign Portfolio & Management" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/my-campaigns</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Campaign Portfolio & Management</h3>
+                <p class="card-desc">Centralized campaign portfolio manager to monitor backer engagement, review pledge analytics, and manage updates.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 1238.8 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('14_my_campaigns')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/14_my_campaigns.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Student Portal" data-name="user identity profile" data-route="/profile">
+              <div class="thumbnail-wrapper" onclick="openModal('15_user_profile')">
+                <img class="thumbnail-img" src="./screenshots/15_user_profile.png" alt="User Identity Profile" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/profile</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">User Identity Profile</h3>
+                <p class="card-desc">Personal profile showcasing endangered species avatar, verified badges, academic credentials, and club affiliations.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 494.3 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('15_user_profile')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/15_user_profile.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Student Portal" data-name="endangered species identity view" data-route="/species-profile">
+              <div class="thumbnail-wrapper" onclick="openModal('16_species_profile')">
+                <img class="thumbnail-img" src="./screenshots/16_species_profile.png" alt="Endangered Species Identity View" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/species-profile</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Endangered Species Identity View</h3>
+                <p class="card-desc">Gamified digital identity card displaying assigned endangered species mascot, rarity tier, and conservation awareness details.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 534.9 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('16_species_profile')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/16_species_profile.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Student Portal" data-name="dual-custody secure vault" data-route="/vault">
+              <div class="thumbnail-wrapper" onclick="openModal('17_secure_vault')">
+                <img class="thumbnail-img" src="./screenshots/17_secure_vault.png" alt="Dual-Custody Secure Vault" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/vault</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Dual-Custody Secure Vault</h3>
+                <p class="card-desc">Cryptographically protected escrow vault for disbursement authorizations, multi-sig signoffs, and audit trails.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 644.5 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('17_secure_vault')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/17_secure_vault.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Student Portal" data-name="account & security settings" data-route="/settings">
+              <div class="thumbnail-wrapper" onclick="openModal('18_settings')">
+                <img class="thumbnail-img" src="./screenshots/18_settings.png" alt="Account & Security Settings" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/settings</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Account & Security Settings</h3>
+                <p class="card-desc">User settings panel: institutional profile details, notification preferences, and two-factor security controls.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 418.7 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('18_settings')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/18_settings.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="Student Portal" data-name="mentor advisory dashboard" data-route="/mentor/dashboard">
+              <div class="thumbnail-wrapper" onclick="openModal('19_mentor_dashboard')">
+                <img class="thumbnail-img" src="./screenshots/19_mentor_dashboard.png" alt="Mentor Advisory Dashboard" loading="lazy" />
+                <div class="overlay-badge">STUDENT</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/mentor/dashboard</span>
+                  <span class="card-auth auth-student">student</span>
+                </div>
+                <h3 class="card-title">Mentor Advisory Dashboard</h3>
+                <p class="card-desc">Academic advisor and mentor control room for inspecting student research progress, evaluating milestones, and mentoring.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 482.9 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('19_mentor_dashboard')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/19_mentor_dashboard.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </section>
+    
+      <section class="category-section" data-category="DX Admin Governance">
+        <div class="section-header">
+          <h2 class="section-title">DX Admin Governance</h2>
+          <span class="section-count">6 screens</span>
+        </div>
+
+        <div class="pages-grid">
+          
+            <div class="page-card" data-category="DX Admin Governance" data-name="dx admin platform overview" data-route="/dx-admin/platform-overview">
+              <div class="thumbnail-wrapper" onclick="openModal('20_dx_admin_overview')">
+                <img class="thumbnail-img" src="./screenshots/20_dx_admin_overview.png" alt="DX Admin Platform Overview" loading="lazy" />
+                <div class="overlay-badge">ADMIN</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/dx-admin/platform-overview</span>
+                  <span class="card-auth auth-admin">admin</span>
+                </div>
+                <h3 class="card-title">DX Admin Platform Overview</h3>
+                <p class="card-desc">Root platform health overview: global stats, active student campaigns, compliance health score, and fast action triggers.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 535.7 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('20_dx_admin_overview')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/20_dx_admin_overview.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="DX Admin Governance" data-name="dx admin org & club governance" data-route="/dx-admin/org-control">
+              <div class="thumbnail-wrapper" onclick="openModal('21_dx_admin_org_control')">
+                <img class="thumbnail-img" src="./screenshots/21_dx_admin_org_control.png" alt="DX Admin Org & Club Governance" loading="lazy" />
+                <div class="overlay-badge">ADMIN</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/dx-admin/org-control</span>
+                  <span class="card-auth auth-admin">admin</span>
+                </div>
+                <h3 class="card-title">DX Admin Org & Club Governance</h3>
+                <p class="card-desc">Governance console for managing registered colleges, approving student clubs, and configuring multi-sig quotas.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 451.4 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('21_dx_admin_org_control')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/21_dx_admin_org_control.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="DX Admin Governance" data-name="dx admin verification queue" data-route="/dx-admin/users-approvals">
+              <div class="thumbnail-wrapper" onclick="openModal('22_dx_admin_users_approvals')">
+                <img class="thumbnail-img" src="./screenshots/22_dx_admin_users_approvals.png" alt="DX Admin Verification Queue" loading="lazy" />
+                <div class="overlay-badge">ADMIN</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/dx-admin/users-approvals</span>
+                  <span class="card-auth auth-admin">admin</span>
+                </div>
+                <h3 class="card-title">DX Admin Verification Queue</h3>
+                <p class="card-desc">Institutional verification queue for validating student IDs, faculty authorizations, and club president credentials.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 432.7 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('22_dx_admin_users_approvals')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/22_dx_admin_users_approvals.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="DX Admin Governance" data-name="dx admin campaign approvals" data-route="/dx-admin/campaigns-approvals">
+              <div class="thumbnail-wrapper" onclick="openModal('23_dx_admin_campaigns_approvals')">
+                <img class="thumbnail-img" src="./screenshots/23_dx_admin_campaigns_approvals.png" alt="DX Admin Campaign Approvals" loading="lazy" />
+                <div class="overlay-badge">ADMIN</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/dx-admin/campaigns-approvals</span>
+                  <span class="card-auth auth-admin">admin</span>
+                </div>
+                <h3 class="card-title">DX Admin Campaign Approvals</h3>
+                <p class="card-desc">Super-admin moderation desk to review new campaign pitches, verify ethical compliance, and authorize public publishing.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 449.9 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('23_dx_admin_campaigns_approvals')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/23_dx_admin_campaigns_approvals.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="DX Admin Governance" data-name="dx admin global ledger" data-route="/dx-admin/ledger">
+              <div class="thumbnail-wrapper" onclick="openModal('24_dx_admin_global_ledger')">
+                <img class="thumbnail-img" src="./screenshots/24_dx_admin_global_ledger.png" alt="DX Admin Global Ledger" loading="lazy" />
+                <div class="overlay-badge">ADMIN</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/dx-admin/ledger</span>
+                  <span class="card-auth auth-admin">admin</span>
+                </div>
+                <h3 class="card-title">DX Admin Global Ledger</h3>
+                <p class="card-desc">Comprehensive financial escrow audit ledger tracking every donation transaction, fee reconciliation, and disbursement.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 574.7 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('24_dx_admin_global_ledger')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/24_dx_admin_global_ledger.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="page-card" data-category="DX Admin Governance" data-name="dx admin system security & audit logs" data-route="/dx-admin/audit-logs">
+              <div class="thumbnail-wrapper" onclick="openModal('25_dx_admin_audit_logs')">
+                <img class="thumbnail-img" src="./screenshots/25_dx_admin_audit_logs.png" alt="DX Admin System Security & Audit Logs" loading="lazy" />
+                <div class="overlay-badge">ADMIN</div>
+                <div class="zoom-hint">🔍 Click to Zoom</div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="card-route">/dx-admin/audit-logs</span>
+                  <span class="card-auth auth-admin">admin</span>
+                </div>
+                <h3 class="card-title">DX Admin System Security & Audit Logs</h3>
+                <p class="card-desc">Immutable system event log documenting admin actions, access changes, authorization signoffs, and security alerts.</p>
+
+                <div class="card-footer">
+                  <span class="file-size">📦 570.2 KB</span>
+                  <div class="action-links">
+                    <button class="btn-action" onclick="openModal('25_dx_admin_audit_logs')">Preview</button>
+                    <a class="btn-action primary" href="./screenshots/25_dx_admin_audit_logs.png" target="_blank" download>Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </section>
+    
+  </main>
+
+  <!-- LIGHTBOX MODAL -->
+  <div id="modalBackdrop" class="modal-backdrop" onclick="handleBackdropClick(event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <h3 id="modalTitle">Page Title</h3>
+          <p id="modalRoute">/route</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <img id="modalImg" src="" alt="Full Page Preview" />
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-nav-btns">
+          <button class="btn-action" onclick="navigateModal(-1)">← Previous</button>
+          <button class="btn-action" onclick="navigateModal(1)">Next →</button>
+        </div>
+        <a id="modalDownloadBtn" class="btn-action primary" href="" target="_blank" download>Download Full Screenshot</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PAGES_DATA = [{"id":"01_homepage","name":"Homepage / Landing Page","route":"/","category":"Public Pages","auth":"none","description":"DreamXec hero landing experience featuring discovery carousel, real-time stats, theme showcase, and brand mission.","filename":"01_homepage.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/01_homepage.png","fileSizeKB":"4370.1 KB","capturedAt":"2026-08-30T20:48:45.434Z"},{"id":"02_browse_campaigns","name":"Browse & Discover Campaigns","route":"/browse","category":"Public Pages","auth":"none","description":"Public campaign catalog with category filtering, search tags, milestone progress cards, and funding goal indicators.","filename":"02_browse_campaigns.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/02_browse_campaigns.png","fileSizeKB":"1631.5 KB","capturedAt":"2026-08-30T20:48:53.398Z"},{"id":"03_campaign_details","name":"Campaign Details & Funding View","route":"/campaign/c7813814-3a22-439f-9982-700f471245eb","category":"Public Pages","auth":"none","description":"Deep dive into student innovation campaigns: story, roadmap, verified milestones, dual-custody escrow, and backer tiers.","filename":"03_campaign_details.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/03_campaign_details.png","fileSizeKB":"327.3 KB","capturedAt":"2026-08-30T20:48:59.302Z"},{"id":"04_public_impact","name":"Public Impact Dashboard","route":"/impact","category":"Public Pages","auth":"none","description":"High-level transparent analytics displaying total research funding, student club engagement, and innovation milestones reached.","filename":"04_public_impact.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/04_public_impact.png","fileSizeKB":"587.3 KB","capturedAt":"2026-08-30T20:49:06.852Z"},{"id":"05_refer_club","name":"Refer a Club Portal","route":"/refer-club","category":"Public Pages","auth":"none","description":"Institutional club referral page inviting collegiate leads to register academic clubs and access grant funding.","filename":"05_refer_club.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/05_refer_club.png","fileSizeKB":"1238.7 KB","capturedAt":"2026-08-30T20:49:14.800Z"},{"id":"06_auth_login","name":"Authentication / Sign In","route":"/auth","category":"Authentication","auth":"guest","description":"Secure multi-provider login portal supporting Email, Passwordless, and Google OAuth credentials.","filename":"06_auth_login.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/06_auth_login.png","fileSizeKB":"1242.0 KB","capturedAt":"2026-08-30T20:49:21.852Z"},{"id":"07_auth_register","name":"Institutional Registration","route":"/register","category":"Authentication","auth":"guest","description":"Multi-role onboarding wizard for Student Researchers, Club Presidents, Academic Mentors, and Impact Donors.","filename":"07_auth_register.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/07_auth_register.png","fileSizeKB":"1250.5 KB","capturedAt":"2026-08-30T20:49:28.593Z"},{"id":"08_org_onboarding","name":"Organization / Club Onboarding","route":"/org-onboarding","category":"Authentication","auth":"guest","description":"Institutional setup workflow for configuring college clubs, verification docs, and multi-custody admin teams.","filename":"08_org_onboarding.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/08_org_onboarding.png","fileSizeKB":"341.4 KB","capturedAt":"2026-08-30T20:49:34.039Z"},{"id":"09_check_email","name":"Verification Email Sent Screen","route":"/check-email","category":"Authentication","auth":"guest","description":"Instructional confirmation screen prompting users to check their institutional inbox for verification links.","filename":"09_check_email.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/09_check_email.png","fileSizeKB":"460.9 KB","capturedAt":"2026-08-30T20:49:39.889Z"},{"id":"10_reset_password","name":"Reset Password Form","route":"/reset-password","category":"Authentication","auth":"guest","description":"Secure password recovery interface with real-time strength validation and credential update.","filename":"10_reset_password.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/10_reset_password.png","fileSizeKB":"376.3 KB","capturedAt":"2026-08-30T20:49:45.266Z"},{"id":"11_profile_selector","name":"Netflix-Style Profile Selector","route":"/select-profile","category":"Authentication","auth":"student","description":"Persona switcher allowing multi-role users to switch between Student, Club President, Mentor, or DX Admin contexts.","filename":"11_profile_selector.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/11_profile_selector.png","fileSizeKB":"633.9 KB","capturedAt":"2026-08-30T20:49:50.472Z"},{"id":"12_student_dashboard","name":"Student Portal Dashboard","route":"/dashboard","category":"Student Portal","auth":"student","description":"Primary workspace for student researchers: active campaigns, milestone tracking, fund release requests, and verification status.","filename":"12_student_dashboard.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/12_student_dashboard.png","fileSizeKB":"623.2 KB","capturedAt":"2026-08-30T20:49:55.603Z"},{"id":"13_create_campaign","name":"Create Campaign Studio","route":"/create","category":"Student Portal","auth":"student","description":"Comprehensive campaign authoring studio: project pitch, rich text description, budget breakdown, and milestone scheduling.","filename":"13_create_campaign.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/13_create_campaign.png","fileSizeKB":"543.1 KB","capturedAt":"2026-08-30T20:50:00.910Z"},{"id":"14_my_campaigns","name":"Campaign Portfolio & Management","route":"/my-campaigns","category":"Student Portal","auth":"student","description":"Centralized campaign portfolio manager to monitor backer engagement, review pledge analytics, and manage updates.","filename":"14_my_campaigns.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/14_my_campaigns.png","fileSizeKB":"1238.8 KB","capturedAt":"2026-08-30T20:50:08.095Z"},{"id":"15_user_profile","name":"User Identity Profile","route":"/profile","category":"Student Portal","auth":"student","description":"Personal profile showcasing endangered species avatar, verified badges, academic credentials, and club affiliations.","filename":"15_user_profile.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/15_user_profile.png","fileSizeKB":"494.3 KB","capturedAt":"2026-08-30T20:50:14.698Z"},{"id":"16_species_profile","name":"Endangered Species Identity View","route":"/species-profile","category":"Student Portal","auth":"student","description":"Gamified digital identity card displaying assigned endangered species mascot, rarity tier, and conservation awareness details.","filename":"16_species_profile.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/16_species_profile.png","fileSizeKB":"534.9 KB","capturedAt":"2026-08-30T20:50:21.068Z"},{"id":"17_secure_vault","name":"Dual-Custody Secure Vault","route":"/vault","category":"Student Portal","auth":"student","description":"Cryptographically protected escrow vault for disbursement authorizations, multi-sig signoffs, and audit trails.","filename":"17_secure_vault.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/17_secure_vault.png","fileSizeKB":"644.5 KB","capturedAt":"2026-08-30T20:50:27.564Z"},{"id":"18_settings","name":"Account & Security Settings","route":"/settings","category":"Student Portal","auth":"student","description":"User settings panel: institutional profile details, notification preferences, and two-factor security controls.","filename":"18_settings.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/18_settings.png","fileSizeKB":"418.7 KB","capturedAt":"2026-08-30T20:50:33.245Z"},{"id":"19_mentor_dashboard","name":"Mentor Advisory Dashboard","route":"/mentor/dashboard","category":"Student Portal","auth":"student","description":"Academic advisor and mentor control room for inspecting student research progress, evaluating milestones, and mentoring.","filename":"19_mentor_dashboard.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/19_mentor_dashboard.png","fileSizeKB":"482.9 KB","capturedAt":"2026-08-30T20:50:38.939Z"},{"id":"20_dx_admin_overview","name":"DX Admin Platform Overview","route":"/dx-admin/platform-overview","category":"DX Admin Governance","auth":"admin","description":"Root platform health overview: global stats, active student campaigns, compliance health score, and fast action triggers.","filename":"20_dx_admin_overview.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/20_dx_admin_overview.png","fileSizeKB":"535.7 KB","capturedAt":"2026-08-30T20:50:44.366Z"},{"id":"21_dx_admin_org_control","name":"DX Admin Org & Club Governance","route":"/dx-admin/org-control","category":"DX Admin Governance","auth":"admin","description":"Governance console for managing registered colleges, approving student clubs, and configuring multi-sig quotas.","filename":"21_dx_admin_org_control.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/21_dx_admin_org_control.png","fileSizeKB":"451.4 KB","capturedAt":"2026-08-30T20:50:49.927Z"},{"id":"22_dx_admin_users_approvals","name":"DX Admin Verification Queue","route":"/dx-admin/users-approvals","category":"DX Admin Governance","auth":"admin","description":"Institutional verification queue for validating student IDs, faculty authorizations, and club president credentials.","filename":"22_dx_admin_users_approvals.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/22_dx_admin_users_approvals.png","fileSizeKB":"432.7 KB","capturedAt":"2026-08-30T20:50:55.272Z"},{"id":"23_dx_admin_campaigns_approvals","name":"DX Admin Campaign Approvals","route":"/dx-admin/campaigns-approvals","category":"DX Admin Governance","auth":"admin","description":"Super-admin moderation desk to review new campaign pitches, verify ethical compliance, and authorize public publishing.","filename":"23_dx_admin_campaigns_approvals.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/23_dx_admin_campaigns_approvals.png","fileSizeKB":"449.9 KB","capturedAt":"2026-08-30T20:51:01.138Z"},{"id":"24_dx_admin_global_ledger","name":"DX Admin Global Ledger","route":"/dx-admin/ledger","category":"DX Admin Governance","auth":"admin","description":"Comprehensive financial escrow audit ledger tracking every donation transaction, fee reconciliation, and disbursement.","filename":"24_dx_admin_global_ledger.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/24_dx_admin_global_ledger.png","fileSizeKB":"574.7 KB","capturedAt":"2026-08-30T20:51:06.827Z"},{"id":"25_dx_admin_audit_logs","name":"DX Admin System Security & Audit Logs","route":"/dx-admin/audit-logs","category":"DX Admin Governance","auth":"admin","description":"Immutable system event log documenting admin actions, access changes, authorization signoffs, and security alerts.","filename":"25_dx_admin_audit_logs.png","filePath":"/home/dino/Documents/Coding/Freelance/dx-v2.0/screenshots/25_dx_admin_audit_logs.png","fileSizeKB":"570.2 KB","capturedAt":"2026-08-30T20:51:12.766Z"}];
+    let currentModalIndex = 0;
+
+    function filterCategory(category, btnElement) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      const sections = document.querySelectorAll('.category-section');
+      sections.forEach(sec => {
+        if (category === 'all' || sec.getAttribute('data-category') === category) {
+          sec.style.display = 'block';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+    }
+
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.page-card');
+
+      cards.forEach(card => {
+        const name = card.getAttribute('data-name');
+        const route = card.getAttribute('data-route');
+        if (!query || name.includes(query) || route.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Hide empty sections
+      document.querySelectorAll('.category-section').forEach(sec => {
+        const visibleCards = sec.querySelectorAll('.page-card[style*="display: flex"], .page-card:not([style*="display: none"])');
+        if (query && visibleCards.length === 0) {
+          sec.style.display = 'none';
+        } else if (!query) {
+          sec.style.display = 'block';
+        }
+      });
+    }
+
+    function openModal(pageId) {
+      const idx = PAGES_DATA.findIndex(p => p.id === pageId);
+      if (idx === -1) return;
+      currentModalIndex = idx;
+      updateModalContent();
+      document.getElementById('modalBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalBackdrop').classList.remove('open');
+      document.body.style.overflow = 'auto';
+    }
+
+    function handleBackdropClick(e) {
+      if (e.target.id === 'modalBackdrop') {
+        closeModal();
+      }
+    }
+
+    function navigateModal(direction) {
+      currentModalIndex += direction;
+      if (currentModalIndex < 0) currentModalIndex = PAGES_DATA.length - 1;
+      if (currentModalIndex >= PAGES_DATA.length) currentModalIndex = 0;
+      updateModalContent();
+    }
+
+    function updateModalContent() {
+      const page = PAGES_DATA[currentModalIndex];
+      document.getElementById('modalTitle').textContent = page.name + ' (' + page.category + ')';
+      document.getElementById('modalRoute').textContent = page.route + ' • ' + page.description;
+      document.getElementById('modalImg').src = './screenshots/' + page.filename;
+      document.getElementById('modalDownloadBtn').href = './screenshots/' + page.filename;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (!document.getElementById('modalBackdrop').classList.contains('open')) return;
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') navigateModal(-1);
+      if (e.key === 'ArrowRight') navigateModal(1);
+    });
+  </script>
+</body>
+</html>

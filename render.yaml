@@ -1,0 +1,143 @@
+# Render Infrastructure as Code (Blueprint) for DreamXec Monorepo
+services:
+  # -------------------------------------------------------------
+  # 1. BACKEND DOCKER WEB SERVICE (Express + Supabase DB)
+  # -------------------------------------------------------------
+  - type: web
+    name: dreamxec-backend
+    env: docker
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    region: singapore # Change to preferred region (e.g. oregon, frankfurt, singapore)
+    plan: free # or starter
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+
+      # Database Connections (Supabase)
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+
+      # Redis & Cache
+      - key: REDIS_URL
+        sync: false
+      - key: CLEAN_REDIS_ON_BOOT
+        value: "false"
+
+      # Client Binding — use explicit https:// URL for CORS and OAuth redirects
+      - key: CLIENT_URL
+        value: "https://dreamxec-frontend.onrender.com"
+
+      # Secrets & JWT Configuration
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: "7d"
+      - key: JWT_PASSWORD_RESET_SECRET
+        generateValue: true
+      - key: JWT_PASSWORD_RESET_EXPIRES_IN
+        value: "10m"
+      - key: JWT_VERIFICATION_SECRET
+        generateValue: true
+      - key: JWT_VERIFICATION_EXPIRES_IN
+        value: "10m"
+
+      # SendGrid Email Integration
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: SENDGRID_FROM_EMAIL
+        sync: false
+
+      # OAuth Integrations
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: LINKEDIN_CLIENT_ID
+        sync: false
+      - key: LINKEDIN_CLIENT_SECRET
+        sync: false
+      - key: LINKEDIN_CALLBACK_URL
+        sync: false
+
+      # Payment Gateways (Multi-Domain Razorpay)
+      - key: DOMAIN_1
+        value: "dreamxec.com"
+      - key: RAZORPAY_KEY_ID_1
+        sync: false
+      - key: RAZORPAY_KEY_SECRET_1
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET_1
+        sync: false
+      - key: DOMAIN_2
+        value: "dreamxec.org"
+      - key: RAZORPAY_KEY_ID_2
+        sync: false
+      - key: RAZORPAY_KEY_SECRET_2
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET_2
+        sync: false
+      - key: RAZORPAY_SIMULATION
+        value: "false"
+
+      # Legacy / Fallback Razorpay Credentials
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+
+      # AWS S3 Storage & CloudFront CDN (Alternative to Cloudinary)
+      - key: AWS_REGION
+        value: "ap-south-1"
+      - key: AWS_BUCKET_NAME
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: CLOUDFRONT_URL
+        sync: false
+
+      # Cloudinary Storage Fallback
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+      # WhatsApp & Sentry
+      - key: EVOLUTION_INSTANCE_NAME
+        sync: false
+      - key: EVOLUTION_API_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
+
+  # -------------------------------------------------------------
+  # 2. FRONTEND VITE REACT SPA (Static Site)
+  # -------------------------------------------------------------
+  - type: web
+    name: dreamxec-frontend
+    env: static
+    buildCommand: "cd client && npm install && npm run build"
+    staticPublishPath: "./client/dist"
+    routes:
+      # SPA rewrite rule for React Router client-side routing
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"
+    envVars:
+      - key: VITE_API_URL
+        value: "https://dreamxec-backend.onrender.com/api"

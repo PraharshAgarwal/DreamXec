@@ -1,0 +1,29 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Rough edge mask for diagonal bands -->
+    <mask id="roughEdgeMask">
+      <rect width="200" height="200" fill="white"/>
+      <!-- Hand-drawn wavy edge path -->
+      <path d="M 0,100 
+               C 5,98 10,102 15,100 
+               C 20,98 25,102 30,100 
+               C 35,98 40,102 45,100 
+               C 50,98 55,102 60,100 
+               C 65,98 70,102 75,100 
+               C 80,98 85,102 90,100 
+               C 95,98 100,102 105,100 
+               C 110,98 115,102 120,100 
+               C 125,98 130,102 135,100 
+               C 140,98 145,102 150,100 
+               C 155,98 160,102 165,100 
+               C 170,98 175,102 180,100 
+               C 185,98 190,102 195,100 
+               C 198,98 200,100 200,100 
+               L 200,200 L 0,200 Z" 
+            fill="black"/>
+    </mask>
+  </defs>
+  
+  <!-- Apply mask (for demo, showing transparent bottom half with rough edge) -->
+  <rect width="200" height="200" fill="white" mask="url(#roughEdgeMask)"/>
+</svg>

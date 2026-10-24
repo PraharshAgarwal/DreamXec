@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dreamxec - Database Schema Documentation Hub</title>
+  
+  <!-- Premium Font styling -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Mermaid.js for Relationship Diagram -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      theme: 'dark',
+      startOnLoad: true,
+      securityLevel: 'loose',
+      flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'cardinal' }
+    });
+  </script>
+
+  <style>
+    :root {
+      --bg-base: #0b0f19;
+      --bg-surface: #141c2f;
+      --bg-surface-hover: #1e2943;
+      --border-color: #24324f;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --primary: #4f46e5;
+      --primary-glow: rgba(79, 70, 229, 0.4);
+      --accent-blue: #0ea5e9;
+      --accent-teal: #14b8a6;
+      --accent-purple: #a855f7;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-green: #22c55e;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #141c2f 0%, #0b0f19 100%);
+      border-bottom: 1px solid var(--border-color);
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #fff;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #fff 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 2px;
+    }
+
+    .meta-badge {
+      background: rgba(79, 70, 229, 0.15);
+      border: 1px solid var(--primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-teal);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-teal);
+      animation: beat 2s infinite;
+    }
+
+    @keyframes beat {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .main-container {
+      display: flex;
+      flex: 1;
+      position: relative;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 320px;
+      border-right: 1px solid var(--border-color);
+      background: #0f1524;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 91px);
+      position: sticky;
+      top: 91px;
+      overflow-y: auto;
+    }
+
+    .sidebar-search {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(79, 70, 229, 0.2);
+    }
+
+    .nav-section {
+      padding: 16px 0;
+    }
+
+    .nav-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      padding: 0 24px 10px 24px;
+    }
+
+    .nav-list {
+      list-style: none;
+    }
+
+    .nav-item {
+      padding: 8px 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover {
+      background-color: var(--bg-surface-hover);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(79, 70, 229, 0.15) 0%, transparent 100%);
+      color: #fff;
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .badge-count {
+      background-color: var(--bg-base);
+      border: 1px solid var(--border-color);
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      color: var(--text-muted);
+    }
+
+    .nav-item.active .badge-count {
+      border-color: var(--primary);
+      color: #818cf8;
+    }
+
+    /* Content Area Styles */
+    .content-area {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .model-pane {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+
+    .model-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title-banner {
+      background: linear-gradient(135deg, #14203e 0%, #171d2b 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 30px 40px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .title-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .model-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .model-tag {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .tag-auth { background: rgba(14, 165, 233, 0.15); color: #0ea5e9; border: 1px solid rgba(14, 165, 233, 0.3); }
+    .tag-tenant { background: rgba(20, 184, 166, 0.15); color: #14b8a6; border: 1px solid rgba(20, 184, 166, 0.3); }
+    .tag-resources { background: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .tag-projects { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag-grants { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .tag-system { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+
+    .model-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      max-width: 900px;
+    }
+
+    .scenario-box {
+      background: rgba(15, 21, 36, 0.6);
+      border-left: 4px solid var(--accent-blue);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin-top: 15px;
+    }
+
+    .scenario-box h5 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .scenario-box p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Section Headers */
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 40px 0 20px 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Field list tables */
+    .table-container {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1a243e;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: var(--bg-surface-hover);
+    }
+
+    .field-name {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .type-badge {
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #818cf8;
+      display: inline-block;
+    }
+
+    .attr-badge {
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 2px 6px;
+      display: inline-block;
+      margin-right: 4px;
+      margin-top: 4px;
+    }
+
+    .attr-id { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .attr-unique { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .attr-relation { background: rgba(79, 70, 229, 0.15); color: #a5b4fc; border: 1px solid rgba(79, 70, 229, 0.3); }
+    .attr-optional { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+
+    .example-value {
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      color: var(--accent-teal);
+    }
+
+    /* Info panels and connection summaries */
+    .relation-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .relation-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .relation-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .card-type {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent-amber);
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .card-meta {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+      font-size: 12px;
+      font-family: 'Fira Code', monospace;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* JSON code layout */
+    .json-wrapper {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .json-header {
+      background: #101625;
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .copy-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 12px;
+      transition: color 0.2s;
+    }
+
+    .copy-btn:hover {
+      color: #fff;
+    }
+
+    pre {
+      padding: 24px;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .string { color: #a855f7; }
+    .number { color: #f59e0b; }
+    .boolean { color: #10b981; }
+    .null { color: #ef4444; }
+    .key { color: #38bdf8; }
+
+    /* Map Page specific styling */
+    .map-pane {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .map-summary {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .flow-diagram-container {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .flow-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(15, 21, 36, 0.4);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* Scrollbar customization */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-base);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-group">
+      <div class="brand-logo">D</div>
+      <div>
+        <h1 class="brand-title">Dreamxec ERP</h1>
+        <div class="brand-subtitle">System Database Schema Documentation Hub</div>
+      </div>
+    </div>
+    <div class="meta-badge">
+      <span class="pulse"></span>
+      Active DB: MongoDB (Prisma Client JS)
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Sidebar navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-search">
+        <input type="text" id="searchBox" class="search-input" placeholder="Search models or fields..." oninput="filterNav()">
+      </div>
+      
+      <div class="nav-section">
+        <h4 class="nav-header">Global Overview</h4>
+        <ul class="nav-list">
+          <li class="nav-item active" onclick="switchPane('pane-overview')">
+            <span>🕸️ System Overview & Map</span>
+            <span class="badge-count">Diagram</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav-section">
+        <h4 class="nav-header">Database Tables</h4>
+        <ul class="nav-list" id="navDynamicList">
+          <!-- Dynamically populated menu items will go here -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area" id="mainContentArea">
+      
+      <!-- ==================== OVERVIEW PANE ==================== -->
+      <section id="pane-overview" class="model-pane active">
+        <div class="title-banner">
+          <h2 class="model-title">🕸️ System Overview & Architecture Map</h2>
+          <p class="model-desc">
+            Dreamxec is a comprehensive, multi-tenant University and Corporate Research ERP. It manages the entire research and innovation lifecycle: from user authentication, academic organizational hierarchies, ideation stages, project management, shared laboratory bookings, milestone-based grant funding, up to patent filings and royalty splits.
+          </p>
+        </div>
+
+        <h3 class="section-title">Global Database Relationship Model</h3>
+        <div class="flow-diagram-container">
+          <pre class="mermaid">
+classDiagram
+  direction TB
+
+  %% Models
+  class User {
+    +ObjectId id
+    +String email
+    +Role role
+  }
+  class Organization {
+    +ObjectId id
+    +String name
+    +OrgType type
+  }
+  class Department {
+    +ObjectId id
+    +String name
+  }
+  class ResearchGroup {
+    +ObjectId id
+    +String name
+  }
+  class Lab {
+    +ObjectId id
+    +String name
+  }
+  class UserOrganization {
+    +ObjectId id
+    +OrgRole role
+  }
+  class Equipment {
+    +ObjectId id
+    +String name
+  }
+  class EquipmentBooking {
+    +ObjectId id
+    +DateTime startTime
+  }
+  class Idea {
+    +ObjectId id
+    +String title
+    +IdeaStatus status
+  }
+  class IdeaReview {
+    +ObjectId id
+    +Int noveltyScore
+  }
+  class Project {
+    +ObjectId id
+    +String title
+    +ProjectStage stage
+  }
+  class ProjectMember {
+    +ObjectId id
+    +ProjectRole role
+  }
+  class Task {
+    +ObjectId id
+    +String title
+    +TaskStatus status
+  }
+  class Grant {
+    +ObjectId id
+    +String title
+    +Float budget
+  }
+  class GrantProposal {
+    +ObjectId id
+    +ProposalStatus status
+  }
+  class GrantAllocation {
+    +ObjectId id
+    +Float amountAllocated
+  }
+  class Patent {
+    +ObjectId id
+    +String title
+  }
+  class IPOwner {
+    +ObjectId id
+    +Float sharePercentage
+  }
+
+  %% Connections
+  User "1" *-- "0..1" StudentVerification : verifies
+  Organization "1" *-- "many" Department : contains
+  Department "1" *-- "many" ResearchGroup : contains
+  ResearchGroup "1" *-- "many" Lab : contains
+  Lab "1" *-- "many" Equipment : contains
+  User "1" <-- "many" UserOrganization : belongs
+  Organization "1" <-- "many" UserOrganization : hosts
+  User "1" <-- "many" EquipmentBooking : books
+  Equipment "1" <-- "many" EquipmentBooking : reserved
+  User "1" <-- "many" Idea : creates
+  Idea "1" <-- "many" IdeaReview : rated
+  User "1" <-- "many" IdeaReview : reviews
+  Project "1" <-- "many" Idea : converts
+  Project "1" *-- "many" ProjectMember : includes
+  User "1" <-- "many" ProjectMember : works
+  Project "1" *-- "many" Task : schedules
+  User "1" <-- "many" Task : executes
+  User "1" <-- "many" Grant : posts (Sponsor)
+  Organization "1" <-- "many" Grant : posts (Agency)
+  Grant "1" *-- "many" GrantProposal : receives
+  GrantProposal "1" *-- "many" GrantAllocation : releases
+  Project "1" <-- "many" GrantAllocation : funds
+  Patent "1" *-- "many" IPOwner : splits
+  User "0..1" <-- "many" IPOwner : owns
+  Organization "0..1" <-- "many" IPOwner : owns
+          </pre>
+        </div>
+
+        <div class="flow-legend">
+          <div class="legend-item"><div class="legend-dot" style="background-color:#4f46e5;"></div> <strong>Blue:</strong> Identity & Auth</div>
+          <div class="legend-item"><div class="legend-dot" style="background-color:#14b8a6;"></div> <strong>Teal:</strong> Multi-Tenancy Hierarchy</div>
+          <div class="legend-item"><div class="legend-dot" style="background-color:#a855f7;"></div> <strong>Purple:</strong> Lab Reservation & Booking</div>
+          <div class="legend-item"><div class="legend-dot" style="background-color:#f59e0b;"></div> <strong>Amber:</strong> Projects & Tasks</div>
+          <div class="legend-item"><div class="legend-dot" style="background-color:#22c55e;"></div> <strong>Green:</strong> Grants & IP Splits</div>
+        </div>
+      </section>
+
+      <!-- PANES LIST WILL BE INSERTED HERE BY JAVASCRIPT IN BROWSER FOR MAXIMUM ROBUSTNESS AND FULL DATA FIDELITY -->
+
+    </main>
+  </div>
+
+  <!-- Embed database schema JSON directly to let client-side JS build all tables on load, ensuring 100% field completeness and zero omissions -->
+  <script id="schemaData" type="application/json">
+  [
+    {
+      "name": "User",
+      "tag": "tag-auth",
+      "desc": "The main user account model. Stored in MongoDB to manage logins, profile information, academic tracks, and merged sponsor-specific business fields.",
+      "scenario": "A student logs in, updates their profile details with skills, and links their college verification documents.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY", "ObjectId"], "desc": "The unique user identity ID generated automatically.", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "email", "type": "String", "attributes": ["@unique", "REQUIRED"], "desc": "Unique account email address used for login and notifications.", "example": "\"student@college.edu\"" },
+        { "name": "password", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Securely scrambled password string. Empty for OAuth-only users.", "example": "\"$2a$12$K892jns...\"" },
+        { "name": "name", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Display name of the user.", "example": "\"Rohan Sharma\"" },
+        { "name": "role", "type": "Role", "attributes": ["@default(USER)"], "desc": "User access type role: USER, DONOR, ADMIN, PROFESSOR, etc.", "example": "\"USER\"" },
+        { "name": "googleId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Linked unique Google Account ID.", "example": "\"114502108466177338432\"" },
+        { "name": "linkedinId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Linked unique LinkedIn Profile ID.", "example": "\"li_abc123\"" },
+        { "name": "accountStatus", "type": "AccountStatus", "attributes": ["@default(ACTIVE)"], "desc": "User account state constraint: ACTIVE, BLOCKED, or SUSPENDED.", "example": "\"ACTIVE\"" },
+        { "name": "emailVerified", "type": "Boolean", "attributes": ["@default(false)"], "desc": "Has the user verified their email address?", "example": "true" },
+        { "name": "verificationToken", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Temp signed email validation token.", "example": "\"eyJhbGciOiJIUz...\"" },
+        { "name": "verificationTokenExpiry", "type": "DateTime?", "attributes": ["OPTIONAL"], "desc": "When email validation token expires.", "example": "\"2026-06-28T02:15:00Z\"" },
+        { "name": "resetPasswordToken", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Temp password recovery code.", "example": "null" },
+        { "name": "resetPasswordExpiry", "type": "DateTime?", "attributes": ["OPTIONAL"], "desc": "When password recovery code expires.", "example": "null" },
+        { "name": "phone", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Contact telephone number.", "example": "\"9876543210\"" },
+        { "name": "countryCode", "type": "String?", "attributes": ["@default(\"+91\")"], "desc": "Dial code prefix (defaults to +91).", "example": "\"+91\"" },
+        { "name": "gender", "type": "Gender?", "attributes": ["OPTIONAL"], "desc": "Gender selection of the user (MALE, FEMALE, OTHER).", "example": "\"MALE\"" },
+        { "name": "dateOfBirth", "type": "DateTime?", "attributes": ["OPTIONAL"], "desc": "User's date of birth.", "example": "\"2002-05-12T00:00:00Z\"" },
+        { "name": "address", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Home or office address.", "example": "\"Bangalore, India\"" },
+        { "name": "college", "type": "String?", "attributes": ["OPTIONAL"], "desc": "The college or university the user belongs to.", "example": "\"KL University\"" },
+        { "name": "yearOfStudy", "type": "YearOfStudy?", "attributes": ["OPTIONAL"], "desc": "Current student batch year (FIRST, SECOND, THIRD, FINAL).", "example": "\"THIRD\"" },
+        { "name": "bio", "type": "String?", "attributes": ["OPTIONAL"], "desc": "A short introductory biography of the user.", "example": "\"AI researcher interested in neural nets.\"" },
+        { "name": "profilePicture", "type": "String?", "attributes": ["OPTIONAL"], "desc": "S3 link containing profile picture thumbnail image.", "example": "\"https://s3.aws.com/dreamxec/pics/rohan.png\"" },
+        { "name": "skills", "type": "String[]", "attributes": ["@default([])"], "desc": "List of user expertise tags.", "example": "[\"AI Development\", \"Prisma\"]" },
+        { "name": "linkedinUrl", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Personal LinkedIn profile page URL.", "example": "\"https://linkedin.com/in/rohan\"" },
+        { "name": "githubUrl", "type": "String?", "attributes": ["OPTIONAL"], "desc": "GitHub repository profile page URL.", "example": "\"https://github.com/rohan\"" },
+        { "name": "organizationName", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Corporate sponsor name (applicable for DONOR role).", "example": "\"Google Devs Trust\"" },
+        { "name": "donorVerified", "type": "Boolean", "attributes": ["@default(false)"], "desc": "Has admin verified this corporate sponsor?", "example": "true" },
+        { "name": "profileComplete", "type": "Boolean", "attributes": ["@default(false)"], "desc": "Is user profile fields coverage >= 80%?", "example": "true" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Date and time when the user signed up.", "example": "\"2026-06-27T09:57:09Z\"" },
+        { "name": "updatedAt", "type": "DateTime", "attributes": ["@updatedAt"], "desc": "Last modified timestamp of user record.", "example": "\"2026-06-27T13:40:00Z\"" },
+        { "name": "userOrganizations", "type": "UserOrganization[]", "attributes": ["RELATION"], "desc": "List of organizations the user belongs to.", "example": "[]" },
+        { "name": "projectMemberships", "type": "ProjectMember[]", "attributes": ["RELATION"], "desc": "List of research projects user is working on.", "example": "[]" },
+        { "name": "ideasCreated", "type": "Idea[]", "attributes": ["RELATION"], "desc": "List of submitted ideas created by this user.", "example": "[]" },
+        { "name": "ideaReviews", "type": "IdeaReview[]", "attributes": ["RELATION"], "desc": "List of idea reviews submitted by this user.", "example": "[]" },
+        { "name": "assignedTasks", "type": "Task[]", "attributes": ["RELATION"], "desc": "List of tasks assigned to this user.", "example": "[]" },
+        { "name": "stageGateReviews", "type": "StageGateReview[]", "attributes": ["RELATION"], "desc": "List of stage gate reviews performed by this user.", "example": "[]" },
+        { "name": "equipmentBookings", "type": "EquipmentBooking[]", "attributes": ["RELATION"], "desc": "List of lab machinery reservations placed by this user.", "example": "[]" },
+        { "name": "labNotebookEntries", "type": "LabNotebookEntry[]", "attributes": ["RELATION"], "desc": "Research log signatures recorded by this user.", "example": "[]" },
+        { "name": "patentsOwned", "type": "IPOwner[]", "attributes": ["RELATION"], "desc": "Intellectual property ownership stakes.", "example": "[]" },
+        { "name": "royaltySplits", "type": "RoyaltySplit[]", "attributes": ["RELATION"], "desc": "Licensing split allocations recipient list.", "example": "[]" },
+        { "name": "studentVerification", "type": "StudentVerification?", "attributes": ["RELATION"], "desc": "Official student ID vetting record details.", "example": "null" },
+        { "name": "grantsPosted", "type": "Grant[]", "attributes": ["RELATION"], "desc": "Sponsor grants posted by this user (when role is DONOR).", "example": "[]" },
+        { "name": "projectComments", "type": "ProjectComment[]", "attributes": ["RELATION"], "desc": "Comments posted on project boards by this user.", "example": "[]" },
+        { "name": "auditLogs", "type": "AuditLog[]", "attributes": ["RELATION"], "desc": "Audit logs performed by this user (when role is ADMIN).", "example": "[]" },
+        { "name": "adminNotes", "type": "AdminNote[]", "attributes": ["RELATION"], "desc": "Moderator notes written by this admin user.", "example": "[]" },
+        { "name": "notesReceived", "type": "AdminNote[]", "attributes": ["RELATION"], "desc": "Moderator notes target on this user's profile.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "StudentVerification",
+      "tag": "tag-auth",
+      "desc": "Binds a student user profile with their verified academic documents and email approvals.",
+      "scenario": "A student signs up, uploads a PDF scans of their university student card. An admin reviews the card details and changes verification state to approved.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Unique document identifier ID.", "example": "\"66bc17ef57d38467ab3cd401\"" },
+        { "name": "fullName", "type": "String", "attributes": ["REQUIRED"], "desc": "The official student name matching academic records.", "example": "\"Rohan Sharma\"" },
+        { "name": "studentEmail", "type": "String", "attributes": ["REQUIRED"], "desc": "The student personal signup email.", "example": "\"rohan@gmail.com\"" },
+        { "name": "officialEmail", "type": "String", "attributes": ["REQUIRED"], "desc": "Student college-assigned email address.", "example": "\"student@college.edu\"" },
+        { "name": "mobileNumber", "type": "String", "attributes": ["REQUIRED"], "desc": "Student contact mobile number.", "example": "\"9876543222\"" },
+        { "name": "documentUrl", "type": "String", "attributes": ["REQUIRED"], "desc": "AWS S3 file link containing card scans.", "example": "\"https://s3.aws.com/dreamxec/docs/id_rohan.pdf\"" },
+        { "name": "status", "type": "String", "attributes": ["@default(\"PENDING\")"], "desc": "Current vetting state: PENDING, APPROVED, or REJECTED.", "example": "\"APPROVED\"" },
+        { "name": "userId", "type": "String", "attributes": ["@unique", "REQUIRED"], "desc": "Associated User ID (one-to-one constraint link).", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "user", "type": "User", "attributes": ["RELATION"], "desc": "The user account requesting student verification.", "example": "null" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "When the verification request was submitted.", "example": "\"2026-06-28T02:00:00Z\"" },
+        { "name": "updatedAt", "type": "DateTime", "attributes": ["@updatedAt"], "desc": "When the status was last changed.", "example": "\"2026-06-28T02:05:00Z\"" }
+      ]
+    },
+    {
+      "name": "Organization",
+      "tag": "tag-tenant",
+      "desc": "Institutional tenant container. Supports multi-tenant isolation, giving universities, R&D labs, and incubation hubs separate spaces.",
+      "scenario": "KL University registers on the platform. All university department lists, machinery slots, and student users operate under this organization identifier.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Organization unique ID.", "example": "\"6694a986779861fb1ff44d1e\"" },
+        { "name": "name", "type": "String", "attributes": ["REQUIRED"], "desc": "Official name of the institution.", "example": "\"KL University\"" },
+        { "name": "type", "type": "OrgType", "attributes": ["@default(UNIVERSITY)"], "desc": "Type of institution (UNIVERSITY, CORPORATE_RD, INCUBATOR, etc.).", "example": "\"UNIVERSITY\"" },
+        { "name": "verified", "type": "Boolean", "attributes": ["@default(false)"], "desc": "Has the organization tenant been approved by platform admin?", "example": "true" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Organization registration date.", "example": "\"2026-06-27T09:57:09Z\"" },
+        { "name": "updatedAt", "type": "DateTime", "attributes": ["@updatedAt"], "desc": "Last modified timestamp of organization profile.", "example": "\"2026-06-27T09:57:09Z\"" },
+        { "name": "departments", "type": "Department[]", "attributes": ["RELATION"], "desc": "Child departments within this organization.", "example": "[]" },
+        { "name": "members", "type": "UserOrganization[]", "attributes": ["RELATION"], "desc": "User members belonging to this organization.", "example": "[]" },
+        { "name": "grantsPosted", "type": "Grant[]", "attributes": ["RELATION"], "desc": "Grants posted by this organization (e.g. Funding Agency role).", "example": "[]" },
+        { "name": "ipOwned", "type": "IPOwner[]", "attributes": ["RELATION"], "desc": "Patent equity ownership shares held by this organization.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "Department",
+      "tag": "tag-tenant",
+      "desc": "Subdivide organizations into smaller divisions (e.g. Department of Computer Science).",
+      "scenario": "KL University creates a Department of Computer Science. This department hosts research clusters and laboratory resources.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Department unique ID.", "example": "\"6694a986779861fb1ff44d2f\"" },
+        { "name": "name", "type": "String", "attributes": ["REQUIRED"], "desc": "Name of department branch.", "example": "\"Department of Computer Science\"" },
+        { "name": "organizationId", "type": "String", "attributes": ["REQUIRED"], "desc": "Parent Organization ID it belongs to.", "example": "\"6694a986779861fb1ff44d1e\"" },
+        { "name": "organization", "type": "Organization", "attributes": ["RELATION"], "desc": "Parent Organization details (cascade deleted if parent organization is removed).", "example": "null" },
+        { "name": "researchGroups", "type": "ResearchGroup[]", "attributes": ["RELATION"], "desc": "Research clusters working inside this department.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "ResearchGroup",
+      "tag": "tag-tenant",
+      "desc": "Groups of researchers working on specific topics within a department.",
+      "scenario": "The CS department hosts an 'AI & Robotics Group'. Members of this group collaborate on robot grid navigation ideas.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "ResearchGroup unique ID.", "example": "\"6694a986779861fb1ff44d3a\"" },
+        { "name": "name", "type": "String", "attributes": ["@unique", "REQUIRED"], "desc": "Unique title of the research group.", "example": "\"AI & Robotics Group\"" },
+        { "name": "departmentId", "type": "String", "attributes": ["REQUIRED"], "desc": "Parent Department ID.", "example": "\"6694a986779861fb1ff44d2f\"" },
+        { "name": "department", "type": "Department", "attributes": ["RELATION"], "desc": "Parent Department record details.", "example": "null" },
+        { "name": "labs", "type": "Lab[]", "attributes": ["RELATION"], "desc": "Labs managed by this research group.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "Lab",
+      "tag": "tag-tenant",
+      "desc": "Physical laboratory environments hosting scientific equipment and equipment bookings.",
+      "scenario": "The AI & Robotics Group registers 'Robotics and IoT Lab' located in Room 304. High cost analyzer machines are installed here.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Lab unique ID.", "example": "\"6694a986779861fb1ff44d4b\"" },
+        { "name": "name", "type": "String", "attributes": ["REQUIRED"], "desc": "Name of the laboratory facility.", "example": "\"Robotics and IoT Lab\"" },
+        { "name": "researchGroupId", "type": "String", "attributes": ["REQUIRED"], "desc": "Parent Research Group ID.", "example": "\"6694a986779861fb1ff44d3a\"" },
+        { "name": "researchGroup", "type": "ResearchGroup", "attributes": ["RELATION"], "desc": "Parent ResearchGroup cluster details.", "example": "null" },
+        { "name": "equipment", "type": "Equipment[]", "attributes": ["RELATION"], "desc": "Available machinery in this lab.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "UserOrganization",
+      "tag": "tag-tenant",
+      "desc": "Connects users to organizations. Maps access privileges like Admin, Professor, or Researcher within a specific tenant.",
+      "scenario": "Rohan is mapped to KL University with the role of RESEARCHER. This allows him to book university lab machinery.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Membership unique ID.", "example": "\"66bc17ef57d38467ab3cd499\"" },
+        { "name": "userId", "type": "String", "attributes": ["REQUIRED"], "desc": "Associated User ID.", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "user", "type": "User", "attributes": ["RELATION"], "desc": "User profile details.", "example": "null" },
+        { "name": "organizationId", "type": "String", "attributes": ["REQUIRED"], "desc": "Associated Organization ID.", "example": "\"6694a986779861fb1ff44d1e\"" },
+        { "name": "organization", "type": "Organization", "attributes": ["RELATION"], "desc": "Organization profile details.", "example": "null" },
+        { "name": "role", "type": "OrgRole", "attributes": ["@default(RESEARCHER)"], "desc": "Organization role: ORG_ADMIN, PROFESSOR, RESEARCHER, MENTOR, etc.", "example": "\"RESEARCHER\"" },
+        { "name": "verified", "type": "Boolean", "attributes": ["@default(false)"], "desc": "Has organization admin approved this membership?", "example": "true" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Creation date of membership record.", "example": "\"2026-06-27T10:00:00Z\"" }
+      ]
+    },
+    {
+      "name": "Equipment",
+      "tag": "tag-resources",
+      "desc": "Physical machinery hosted in laboratories that can be reserved for research projects.",
+      "scenario": "A 'Spectrum Analyzer' machine is registered. It costs 50.0 per hour to rent from university grant budgets.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Equipment unique ID.", "example": "\"6694a986779861fb1ff44d5c\"" },
+        { "name": "name", "type": "String", "attributes": ["REQUIRED"], "desc": "Common name of the equipment.", "example": "\"Spectrum Analyzer\"" },
+        { "name": "model", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Model code of hardware unit.", "example": "\"Keysight N9020A\"" },
+        { "name": "specifications", "type": "String[]", "attributes": ["@default([])"], "desc": "Technical capabilities description list.", "example": "[\"9 kHz to 26.5 GHz\"]" },
+        { "name": "hourlyCost", "type": "Float", "attributes": ["@default(0)"], "desc": "Cost per hour charged to grants during bookings.", "example": "50.0" },
+        { "name": "labId", "type": "String", "attributes": ["REQUIRED"], "desc": "ID of host laboratory housing this equipment.", "example": "\"6694a986779861fb1ff44d4b\"" },
+        { "name": "lab", "type": "Lab", "attributes": ["RELATION"], "desc": "Host Lab details.", "example": "null" },
+        { "name": "bookings", "type": "EquipmentBooking[]", "attributes": ["RELATION"], "desc": "Schedule booking records for this equipment.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "EquipmentBooking",
+      "tag": "tag-resources",
+      "desc": "Schedules equipment slots for researchers, tracking usage costs and approvals.",
+      "scenario": "Rohan reserves the Spectrum Analyzer for 2 hours. The booking system checks for conflicts and locks a total cost of 100.0.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Booking unique ID.", "example": "\"66bc17ef57d38467ab3cd511\"" },
+        { "name": "equipmentId", "type": "String", "attributes": ["REQUIRED"], "desc": "ID of reserved equipment unit.", "example": "\"6694a986779861fb1ff44d5c\"" },
+        { "name": "equipment", "type": "Equipment", "attributes": ["RELATION"], "desc": "Reserved Equipment details.", "example": "null" },
+        { "name": "userId", "type": "String", "attributes": ["REQUIRED"], "desc": "User ID requesting the booking reservation.", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "user", "type": "User", "attributes": ["RELATION"], "desc": "User details.", "example": "null" },
+        { "name": "startTime", "type": "DateTime", "attributes": ["REQUIRED"], "desc": "Reservation start time.", "example": "\"2026-06-28T09:00:00Z\"" },
+        { "name": "endTime", "type": "DateTime", "attributes": ["REQUIRED"], "desc": "Reservation end time.", "example": "\"2026-06-28T11:00:00Z\"" },
+        { "name": "cost", "type": "Float", "attributes": ["REQUIRED"], "desc": "Total calculated cost (hours * hourly cost).", "example": "100.0" },
+        { "name": "status", "type": "BookingStatus", "attributes": ["@default(PENDING)"], "desc": "Lifecycle state: PENDING, CONFIRMED, CANCELLED, COMPLETED.", "example": "\"CONFIRMED\"" }
+      ]
+    },
+    {
+      "name": "Idea",
+      "tag": "tag-projects",
+      "desc": "Stores early-stage research concepts, supporting incubation reviews before conversion into live projects.",
+      "scenario": "A student registers a concept for clean graphene supercapacitor batteries. Incubation manager reviews it.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Idea unique ID.", "example": "\"66bc17ef57d38467ab3cd622\"" },
+        { "name": "title", "type": "String", "attributes": ["REQUIRED"], "desc": "Title of the research concept.", "example": "\"Graphene Supercapacitor Batteries\"" },
+        { "name": "description", "type": "String", "attributes": ["REQUIRED"], "desc": "Detailed explanation of idea roadmap.", "example": "\"Synthesizing graphene sheets for energy storage.\"" },
+        { "name": "researchArea", "type": "String", "attributes": ["REQUIRED"], "desc": "Academic area of classification.", "example": "\"Materials Science\"" },
+        { "name": "expectedImpact", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Value statement describing how this idea helps the world.", "example": "\"Double energy density compared to Li-Ion.\"" },
+        { "name": "trlLevel", "type": "Int", "attributes": ["@default(1)"], "desc": "Technology Readiness Level (1-9). Starts at TRL-1.", "example": "2" },
+        { "name": "sdgGoals", "type": "String[]", "attributes": ["@default([])"], "desc": "Associated UN Sustainable Development Goals.", "example": "[\"SDG-7: Clean Energy\", \"SDG-9: Innovation\"]" },
+        { "name": "status", "type": "IdeaStatus", "attributes": ["@default(SUBMITTED)"], "desc": "Vetting state: SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED.", "example": "\"UNDER_REVIEW\"" },
+        { "name": "creatorId", "type": "String", "attributes": ["REQUIRED"], "desc": "User ID of creator.", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "creator", "type": "User", "attributes": ["RELATION"], "desc": "User details of creator.", "example": "null" },
+        { "name": "reviews", "type": "IdeaReview[]", "attributes": ["RELATION"], "desc": "Peer reviews submitted for this idea.", "example": "[]" },
+        { "name": "projectId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Associated Project ID. Set once converted into project.", "example": "null" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Linked Project details.", "example": "null" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Submission timestamp.", "example": "\"2026-06-28T02:00:00Z\"" }
+      ]
+    },
+    {
+      "name": "IdeaReview",
+      "tag": "tag-projects",
+      "desc": "Stores scores and feedback submitted by academic reviewers evaluating submitted ideas.",
+      "scenario": "Professor Alice Smith evaluates the battery concept. She gives it a novelty score of 8/10 and writes suggestions.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Review unique ID.", "example": "\"66bc17ef57d38467ab3cd644\"" },
+        { "name": "ideaId", "type": "String", "attributes": ["REQUIRED"], "desc": "Target Idea ID.", "example": "\"66bc17ef57d38467ab3cd622\"" },
+        { "name": "idea", "type": "Idea", "attributes": ["RELATION"], "desc": "Reviewed Idea details.", "example": "null" },
+        { "name": "reviewerId", "type": "String", "attributes": ["REQUIRED"], "desc": "Reviewing User ID.", "example": "\"66bc17ef57d38467ab3cd3c6\"" },
+        { "name": "reviewer", "type": "User", "attributes": ["RELATION"], "desc": "Reviewer User details.", "example": "null" },
+        { "name": "noveltyScore", "type": "Int", "attributes": ["REQUIRED"], "desc": "Uniqueness score (1-10).", "example": "8" },
+        { "name": "feasibilityScore", "type": "Int", "attributes": ["REQUIRED"], "desc": "Build viability score (1-10).", "example": "6" },
+        { "name": "impactScore", "type": "Int", "attributes": ["REQUIRED"], "desc": "Potential value score (1-10).", "example": "9" },
+        { "name": "feedback", "type": "String", "attributes": ["REQUIRED"], "desc": "Text evaluation feedback notes.", "example": "\"High novelty, feasibility depends on budget.\"" }
+      ]
+    },
+    {
+      "name": "Project",
+      "tag": "tag-projects",
+      "desc": "Represents formal research projects or incubation campaigns that track members, dependencies, tasks, and budgets.",
+      "scenario": "An approved project called 'IoT Automation Grid System' is established. It tracks task backlogs and spends grant allocations.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Project unique ID.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "title", "type": "String", "attributes": ["REQUIRED"], "desc": "Title of project.", "example": "\"IoT Automation Grid System\"" },
+        { "name": "slug", "type": "String?", "attributes": ["@unique", "OPTIONAL"], "desc": "URL friendly unique slug.", "example": "\"iot-automation-grid-system\"" },
+        { "name": "description", "type": "String", "attributes": ["REQUIRED"], "desc": "Detailed roadmap description of project.", "example": "\"Research on local grid latency sensor systems.\"" },
+        { "name": "stage", "type": "ProjectStage", "attributes": ["@default(DISCOVERY)"], "desc": "Development stage: DISCOVERY, FEASIBILITY, PROTOTYPE, PILOT, etc.", "example": "\"DISCOVERY\"" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Project start date.", "example": "\"2026-06-27T09:57:09Z\"" },
+        { "name": "members", "type": "ProjectMember[]", "attributes": ["RELATION"], "desc": "List of project members.", "example": "[]" },
+        { "name": "tasks", "type": "Task[]", "attributes": ["RELATION"], "desc": "List of tasks under project.", "example": "[]" },
+        { "name": "ideas", "type": "Idea[]", "attributes": ["RELATION"], "desc": "Converted ideas linked to this project.", "example": "[]" },
+        { "name": "dependencies", "type": "ProjectDependency[]", "attributes": ["RELATION"], "desc": "Prerequisite projects this project depends on.", "example": "[]" },
+        { "name": "dependentOn", "type": "ProjectDependency[]", "attributes": ["RELATION"], "desc": "Other projects dependent on this project.", "example": "[]" },
+        { "name": "stageGateReviews", "type": "StageGateReview[]", "attributes": ["RELATION"], "desc": "Stage gate reviews verifying stage progress.", "example": "[]" },
+        { "name": "grantAllocations", "type": "GrantAllocation[]", "attributes": ["RELATION"], "desc": "Funding allocations assigned to this project.", "example": "[]" },
+        { "name": "labNotebooks", "type": "LabNotebookEntry[]", "attributes": ["RELATION"], "desc": "Timestamped research note records.", "example": "[]" },
+        { "name": "comments", "type": "ProjectComment[]", "attributes": ["RELATION"], "desc": "Board discussion comments.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "ProjectMember",
+      "tag": "tag-projects",
+      "desc": "Connects users to projects, setting roles like Principal Investigator (PI) or Researcher.",
+      "scenario": "Rohan is mapped to the IoT project as a RESEARCHER. Prof. Alice Smith is set as PI.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Project membership unique ID.", "example": "\"66bc17ef57d38467ab3cd711\"" },
+        { "name": "projectId", "type": "String", "attributes": ["REQUIRED"], "desc": "Project ID.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Project details.", "example": "null" },
+        { "name": "userId", "type": "String", "attributes": ["REQUIRED"], "desc": "User ID.", "example": "\"66bc17ef57d38467ab3cd3c6\"" },
+        { "name": "user", "type": "User", "attributes": ["RELATION"], "desc": "User details.", "example": "null" },
+        { "name": "role", "type": "ProjectRole", "attributes": ["@default(RESEARCHER)"], "desc": "Assigned role: PI, CO_PI, RESEARCHER, MENTOR.", "example": "\"PI\"" }
+      ]
+    },
+    {
+      "name": "Task",
+      "tag": "tag-projects",
+      "desc": "Task cards tracking execution deliverables like TODO, IN_PROGRESS, done.",
+      "scenario": "A task card 'Literature Review' is assigned to Rohan. When completed, he marks status as DONE.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Task unique ID.", "example": "\"66bc17ef57d38467ab3cd788\"" },
+        { "name": "title", "type": "String", "attributes": ["REQUIRED"], "desc": "Task name.", "example": "\"Literature Review\"" },
+        { "name": "description", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Explanation of task scope.", "example": "\"Read state of the art papers.\"" },
+        { "name": "projectId", "type": "String", "attributes": ["REQUIRED"], "desc": "Parent Project ID.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Parent Project details.", "example": "null" },
+        { "name": "assignedToId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Assigned team member User ID.", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "assignedTo", "type": "User", "attributes": ["RELATION"], "desc": "Assigned User details.", "example": "null" },
+        { "name": "startDate", "type": "DateTime?", "attributes": ["OPTIONAL"], "desc": "Task start schedule date.", "example": "\"2026-06-28T09:00:00Z\"" },
+        { "name": "endDate", "type": "DateTime?", "attributes": ["OPTIONAL"], "desc": "Task end schedule date.", "example": "\"2026-06-30T17:00:00Z\"" },
+        { "name": "status", "type": "TaskStatus", "attributes": ["@default(TODO)"], "desc": "Current task state: TODO, IN_PROGRESS, UNDER_REVIEW, DONE.", "example": "\"DONE\"" }
+      ]
+    },
+    {
+      "name": "ProjectDependency",
+      "tag": "tag-projects",
+      "desc": "Prerequisite connections between projects.",
+      "scenario": "Project B depends on Project A. The stage gate system will block B from moving to prototyping until A is marked complete.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Dependency record unique ID.", "example": "\"66bc17ef57d38467ab3cd811\"" },
+        { "name": "projectId", "type": "String", "attributes": ["REQUIRED"], "desc": "ID of project dependent on another.", "example": "\"66bc17ef57d38467ab3a0002\"" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Dependent Project details.", "example": "null" },
+        { "name": "requiresId", "type": "String", "attributes": ["REQUIRED"], "desc": "ID of required prerequisite project.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "requires", "type": "Project", "attributes": ["RELATION"], "desc": "Required Project details.", "example": "null" }
+      ]
+    },
+    {
+      "name": "StageGateReview",
+      "tag": "tag-projects",
+      "desc": "Stage gate reviews verifying milestone completion before project stage changes.",
+      "scenario": "Incubator manager reviews the IoT project's discovery phase documents. He marks approved: true and moves project to feasibility stage.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Review record unique ID.", "example": "\"66bc17ef57d38467ab3cd844\"" },
+        { "name": "projectId", "type": "String", "attributes": ["REQUIRED"], "desc": "Target Project ID.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Target Project details.", "example": "null" },
+        { "name": "stage", "type": "ProjectStage", "attributes": ["REQUIRED"], "desc": "Target stage of review evaluation.", "example": "\"FEASIBILITY\"" },
+        { "name": "approved", "type": "Boolean", "attributes": ["@default(false)"], "desc": "Review approval decision.", "example": "true" },
+        { "name": "reviewerId", "type": "String", "attributes": ["REQUIRED"], "desc": "Assigned reviewer User ID.", "example": "\"66bc17ef57d38467ab3cd3c6\"" },
+        { "name": "reviewer", "type": "User", "attributes": ["RELATION"], "desc": "Reviewer User details.", "example": "null" },
+        { "name": "comments", "type": "String", "attributes": ["REQUIRED"], "desc": "Review remarks.", "example": "\"Concept validation complete.\"" }
+      ]
+    },
+    {
+      "name": "LabNotebookEntry",
+      "tag": "tag-projects",
+      "desc": "Tamper-proof log of scientific findings, secured with SHA-256 signatures to support patent claims.",
+      "scenario": "Rohan records notes about an sensor test, generating a digital signature to lock changes.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Entry unique ID.", "example": "\"66bc17ef57d38467ab3cd899\"" },
+        { "name": "projectId", "type": "String", "attributes": ["REQUIRED"], "desc": "Associated Project ID.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Project details.", "example": "null" },
+        { "name": "authorId", "type": "String", "attributes": ["REQUIRED"], "desc": "Authoring researcher User ID.", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "author", "type": "User", "attributes": ["RELATION"], "desc": "Author User details.", "example": "null" },
+        { "name": "notes", "type": "String", "attributes": ["REQUIRED"], "desc": "Scientific notes text.", "example": "\"Conducted grid latency test. Latency is 4ms.\"" },
+        { "name": "hashSignature", "type": "String", "attributes": ["REQUIRED"], "desc": "Cryptographic signature verifying data safety.", "example": "\"d5f8e210ac76aef...\"" },
+        { "name": "timestamp", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Time of log entry signing.", "example": "\"2026-06-28T02:30:00Z\"" }
+      ]
+    },
+    {
+      "name": "ProjectComment",
+      "tag": "tag-projects",
+      "desc": "Discussion comments posted directly on project timelines.",
+      "scenario": "PI posts a message asking team members to upload the layout files by Friday.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Comment unique ID.", "example": "\"66bc17ef57d38467ab3cd922\"" },
+        { "name": "projectId", "type": "String", "attributes": ["REQUIRED"], "desc": "Target Project ID.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Target Project details.", "example": "null" },
+        { "name": "userId", "type": "String", "attributes": ["REQUIRED"], "desc": "Commenting User ID.", "example": "\"66bc17ef57d38467ab3cd3c6\"" },
+        { "name": "user", "type": "User", "attributes": ["RELATION"], "desc": "User details.", "example": "null" },
+        { "name": "content", "type": "String", "attributes": ["REQUIRED"], "desc": "Text content of comment.", "example": "\"Need to upload files by Friday.\"" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Time comment was posted.", "example": "\"2026-06-28T02:35:00Z\"" }
+      ]
+    },
+    {
+      "name": "Grant",
+      "tag": "tag-grants",
+      "desc": "Funding programs offered to researchers by funding agencies or private donors.",
+      "scenario": "Google Devs Trust posts 'Green Tech Innovation Fund' with a budget of 50000.0. Researchers submit proposals to compete.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Grant unique ID.", "example": "\"66bc17ef57d38467ab3cd955\"" },
+        { "name": "title", "type": "String", "attributes": ["REQUIRED"], "desc": "Title of grant funding program.", "example": "\"Green Tech Innovation Fund\"" },
+        { "name": "description", "type": "String", "attributes": ["REQUIRED"], "desc": "Funding focus eligibility criteria description.", "example": "\"Sponsoring clean energy solutions.\"" },
+        { "name": "budget", "type": "Float", "attributes": ["REQUIRED"], "desc": "Total grant fund budget capital.", "example": "50000.0" },
+        { "name": "agencyId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "ID of Organization agency sponsor.", "example": "null" },
+        { "name": "agency", "type": "Organization", "attributes": ["RELATION"], "desc": "Organization agency details.", "example": "null" },
+        { "name": "donorId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "ID of corporate sponsor User account.", "example": "\"66bc17ef57d38467ab3cd3d7\"" },
+        { "name": "donor", "type": "User", "attributes": ["RELATION"], "desc": "Sponsor User details.", "example": "null" },
+        { "name": "proposals", "type": "GrantProposal[]", "attributes": ["RELATION"], "desc": "Proposals submitted for this grant.", "example": "[]" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Date grant program was posted.", "example": "\"2026-06-27T09:57:09Z\"" }
+      ]
+    },
+    {
+      "name": "GrantProposal",
+      "tag": "tag-grants",
+      "desc": "Funding proposals submitted by project teams requesting grant support.",
+      "scenario": "A project team requests 12000.0 from the Green Tech fund to pay for laboratory booking and PCB synthesis.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Proposal unique ID.", "example": "\"66bc17ef57d38467ab3cd988\"" },
+        { "name": "grantId", "type": "String", "attributes": ["REQUIRED"], "desc": "Target Grant ID.", "example": "\"66bc17ef57d38467ab3cd955\"" },
+        { "name": "grant", "type": "Grant", "attributes": ["RELATION"], "desc": "Target Grant details.", "example": "null" },
+        { "name": "title", "type": "String", "attributes": ["REQUIRED"], "desc": "Title of the proposal.", "example": "\"IoT Automation Grid Proposal\"" },
+        { "name": "proposalText", "type": "String", "attributes": ["REQUIRED"], "desc": "Detailed research plan text.", "example": "\"Deploying local grid sensors...\"" },
+        { "name": "budgetPlan", "type": "Float", "attributes": ["REQUIRED"], "desc": "Total money capital requested.", "example": "12000.0" },
+        { "name": "status", "type": "ProposalStatus", "attributes": ["@default(SUBMITTED)"], "desc": "Vetting state: SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED.", "example": "\"SUBMITTED\"" },
+        { "name": "allocations", "type": "GrantAllocation[]", "attributes": ["RELATION"], "desc": "Capital disbursements linked to milestones.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "GrantAllocation",
+      "tag": "tag-grants",
+      "desc": "Milestone-linked capital disbursements funded from approved proposals.",
+      "scenario": "The proposal is approved. 4000.0 is allocated to the first milestone, released when stage gates are completed.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Allocation unique ID.", "example": "\"66bc17ef57d38467ab3cda11\"" },
+        { "name": "proposalId", "type": "String", "attributes": ["REQUIRED"], "desc": "Parent Proposal ID.", "example": "\"66bc17ef57d38467ab3cd988\"" },
+        { "name": "proposal", "type": "GrantProposal", "attributes": ["RELATION"], "desc": "Parent Proposal details.", "example": "null" },
+        { "name": "projectId", "type": "String", "attributes": ["REQUIRED"], "desc": "Target Project ID receiving the funding.", "example": "\"66bc17ef57d38467ab3a0001\"" },
+        { "name": "project", "type": "Project", "attributes": ["RELATION"], "desc": "Target Project details.", "example": "null" },
+        { "name": "amountAllocated", "type": "Float", "attributes": ["REQUIRED"], "desc": "Disbursement money value.", "example": "4000.0" },
+        { "name": "milestoneOrder", "type": "Int", "attributes": ["REQUIRED"], "desc": "Milestone order rank.", "example": "1" },
+        { "name": "released", "type": "Boolean", "attributes": ["@default(false)"], "desc": "Has the milestone money been paid out?", "example": "false" }
+      ]
+    },
+    {
+      "name": "Patent",
+      "tag": "tag-grants",
+      "desc": "Official intellectual property registry records tracking patent filing numbers and statuses.",
+      "scenario": "A patent PAT-12345/IN is filed for the sensor latency system. Owners are mapped to receive royalties.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Patent unique ID.", "example": "\"66bc17ef57d38467ab3cda44\"" },
+        { "name": "title", "type": "String", "attributes": ["REQUIRED"], "desc": "Official title description of intellectual property.", "example": "\"Grid Latency Optimization via IoT Sensors\"" },
+        { "name": "filingNumber", "type": "String", "attributes": ["@unique", "REQUIRED"], "desc": "Official registry number.", "example": "\"PAT-12345/IN\"" },
+        { "name": "filingDate", "type": "DateTime", "attributes": ["REQUIRED"], "desc": "Filing date.", "example": "\"2026-06-28T00:00:00Z\"" },
+        { "name": "status", "type": "String", "attributes": ["REQUIRED"], "desc": "Filing status: FILED, PUBLISHED, GRANTED.", "example": "\"FILED\"" },
+        { "name": "owners", "type": "IPOwner[]", "attributes": ["RELATION"], "desc": "Listed owners sharing equity.", "example": "[]" },
+        { "name": "royaltySplits", "type": "RoyaltySplit[]", "attributes": ["RELATION"], "desc": "Royalty share distribution splits.", "example": "[]" }
+      ]
+    },
+    {
+      "name": "IPOwner",
+      "tag": "tag-grants",
+      "desc": "Maps patent ownership shares among inventors and organizations.",
+      "scenario": "Ownership of patent PAT-12345/IN is split: 70% is owned by the student inventor, 30% by the hosting university.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Ownership record unique ID.", "example": "\"66bc17ef57d38467ab3cda77\"" },
+        { "name": "patentId", "type": "String", "attributes": ["REQUIRED"], "desc": "Patent ID.", "example": "\"66bc17ef57d38467ab3cda44\"" },
+        { "name": "patent", "type": "Patent", "attributes": ["RELATION"], "desc": "Patent details.", "example": "null" },
+        { "name": "userId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Inventor User ID (optional).", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "user", "type": "User", "attributes": ["RELATION"], "desc": "Inventor User details.", "example": "null" },
+        { "name": "orgId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Organization ID (optional).", "example": "\"6694a986779861fb1ff44d1e\"" },
+        { "name": "org", "type": "Organization", "attributes": ["RELATION"], "desc": "Organization details.", "example": "null" },
+        { "name": "sharePercentage", "type": "Float", "attributes": ["REQUIRED"], "desc": "Ownership split share (e.g. 70.0).", "example": "70.0" }
+      ]
+    },
+    {
+      "name": "RoyaltySplit",
+      "tag": "tag-grants",
+      "desc": "Defines license revenue shares among developers.",
+      "scenario": "Rohan receives a 5.5% royalty split from commercial battery licenses.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Split record unique ID.", "example": "\"66bc17ef57d38467ab3cdb11\"" },
+        { "name": "patentId", "type": "String", "attributes": ["REQUIRED"], "desc": "Patent ID.", "example": "\"66bc17ef57d38467ab3cda44\"" },
+        { "name": "patent", "type": "Patent", "attributes": ["RELATION"], "desc": "Patent details.", "example": "null" },
+        { "name": "recipientId", "type": "String", "attributes": ["REQUIRED"], "desc": "Recipient User ID.", "example": "\"66bc17ef57d38467ab3cd3c5\"" },
+        { "name": "recipient", "type": "User", "attributes": ["RELATION"], "desc": "Recipient User details.", "example": "null" },
+        { "name": "percentage", "type": "Float", "attributes": ["REQUIRED"], "desc": "Royalty share percentage.", "example": "5.5" }
+      ]
+    },
+    {
+      "name": "AuditLog",
+      "tag": "tag-system",
+      "desc": "System operations log tracking administrative changes for security audit.",
+      "scenario": "Admin approves Google Devs Trust. System logs a USER_VERIFIED action with IP and timestamp details.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Log unique ID.", "example": "\"66bc17ef57d38467ab3cdb33\"" },
+        { "name": "action", "type": "String", "attributes": ["REQUIRED"], "desc": "Action label: USER_VERIFIED, LOGIN_FAILED, etc.", "example": "\"DONOR_VERIFIED\"" },
+        { "name": "entity", "type": "String", "attributes": ["REQUIRED"], "desc": "Database collection target.", "example": "\"User\"" },
+        { "name": "entityId", "type": "String", "attributes": ["REQUIRED"], "desc": "Target record ID.", "example": "\"66bc17ef57d38467ab3cd3d7\"" },
+        { "name": "performedBy", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Admin User ID performing the action.", "example": "\"66bc17ef57d38467ab3cd3a1\"" },
+        { "name": "admin", "type": "User", "attributes": ["RELATION"], "desc": "Admin User details.", "example": "null" },
+        { "name": "details", "type": "Json?", "attributes": ["OPTIONAL"], "desc": "Custom action metadata description.", "example": "{\"organization\":\"Google Devs Trust\"}" },
+        { "name": "ipAddress", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Device IP address used.", "example": "\"127.0.0.1\"" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Log entry date.", "example": "\"2026-06-28T02:08:40Z\"" }
+      ]
+    },
+    {
+      "name": "AdminNote",
+      "tag": "tag-system",
+      "desc": "Moderation notes written by admins concerning specific user accounts.",
+      "scenario": "Admin notes that a sponsor's corporate filings have been validated.",
+      "fields": [
+        { "name": "id", "type": "String", "attributes": ["@id", "PRIMARY_KEY"], "desc": "Note unique ID.", "example": "\"66bc17ef57d38467ab3cdb66\"" },
+        { "name": "content", "type": "String", "attributes": ["REQUIRED"], "desc": "Note text content.", "example": "\"Verified documents match registry.\"" },
+        { "name": "createdAt", "type": "DateTime", "attributes": ["@default(now())"], "desc": "Creation timestamp.", "example": "\"2026-06-28T02:08:40Z\"" },
+        { "name": "authorId", "type": "String", "attributes": ["REQUIRED"], "desc": "Author admin User ID.", "example": "\"66bc17ef57d38467ab3cd3a1\"" },
+        { "name": "author", "type": "User", "attributes": ["RELATION"], "desc": "Author User details.", "example": "null" },
+        { "name": "targetUserId", "type": "String?", "attributes": ["OPTIONAL"], "desc": "Target moderated User ID.", "example": "\"66bc17ef57d38467ab3cd3d7\"" },
+        { "name": "targetUser", "type": "User", "attributes": ["RELATION"], "desc": "Target User details.", "example": "null" }
+      ]
+    }
+  ]
+  </script>
+
+  <script>
+    // Load schema JSON data and build DOM elements on fly
+    document.addEventListener("DOMContentLoaded", function() {
+      const data = JSON.parse(document.getElementById("schemaData").textContent);
+      const navList = document.getElementById("navDynamicList");
+      const mainArea = document.getElementById("mainContentArea");
+
+      data.forEach(model => {
+        // Build Sidebar Nav Item
+        let icon = '📄';
+        if (model.name === 'User') icon = '👤';
+        else if (model.name === 'StudentVerification') icon = '🆔';
+        else if (model.name === 'Organization') icon = '🏢';
+        else if (model.name === 'Department') icon = '🎓';
+        else if (model.name === 'ResearchGroup') icon = '🔬';
+        else if (model.name === 'Lab') icon = '🧫';
+        else if (model.name === 'UserOrganization') icon = '💼';
+        else if (model.name === 'Equipment') icon = '⚙️';
+        else if (model.name === 'EquipmentBooking') icon = '📅';
+        else if (model.name === 'Idea') icon = '💡';
+        else if (model.name === 'IdeaReview') icon = '📝';
+        else if (model.name === 'Project') icon = '🚀';
+        else if (model.name === 'ProjectMember') icon = '👥';
+        else if (model.name === 'Task') icon = '📋';
+        else if (model.name === 'ProjectDependency') icon = '🔗';
+        else if (model.name === 'StageGateReview') icon = '🏁';
+        else if (model.name === 'LabNotebookEntry') icon = '📓';
+        else if (model.name === 'ProjectComment') icon = '💬';
+        else if (model.name === 'Grant') icon = '💰';
+        else if (model.name === 'GrantProposal') icon = '📄';
+        else if (model.name === 'GrantAllocation') icon = '📈';
+        else if (model.name === 'Patent') icon = '📜';
+        else if (model.name === 'IPOwner') icon = '👑';
+        else if (model.name === 'RoyaltySplit') icon = '✂️';
+        else if (model.name === 'AuditLog') icon = '🔒';
+        else if (model.name === 'AdminNote') icon = '📌';
+
+        const li = document.createElement("li");
+        li.className = "nav-item";
+        li.setAttribute("onclick", `switchPane('pane-${model.name.toLowerCase()}')`);
+        li.innerHTML = `
+          <span>${icon} ${model.name}</span>
+          <span class="badge-count">${model.fields.length} fields</span>
+        `;
+        navList.appendChild(li);
+
+        // Build Pane Section
+        let rowsHtml = '';
+        model.fields.forEach(field => {
+          let attrBadges = '';
+          field.attributes.forEach(attr => {
+            let attrClass = 'attr-optional';
+            if (attr === 'PRIMARY_KEY') attrClass = 'attr-id';
+            else if (attr === 'UNIQUE') attrClass = 'attr-unique';
+            else if (attr === 'RELATION') attrClass = 'attr-relation';
+            attrBadges += `<span class="attr-badge ${attrClass}">${attr}</span> `;
+          });
+
+          rowsHtml += `
+            <tr>
+              <td class="field-name">${field.name}</td>
+              <td><span class="type-badge">${field.type}</span></td>
+              <td>${attrBadges || '<span style="color:var(--text-muted)">-</span>'}</td>
+              <td>${field.desc}</td>
+              <td class="example-value">${field.example}</td>
+            </tr>
+          `;
+        });
+
+        // Sample JSON doc construct
+        let sampleJsonObj = {};
+        model.fields.forEach(field => {
+          if (!field.attributes.includes("RELATION")) {
+            let val = field.example;
+            if (val.startsWith('"') && val.endsWith('"')) {
+              sampleJsonObj[field.name] = val.slice(1, -1);
+            } else if (val === 'true' || val === 'false') {
+              sampleJsonObj[field.name] = val === 'true';
+            } else if (!isNaN(val)) {
+              sampleJsonObj[field.name] = Number(val);
+            } else if (val.startsWith('{') || val.startsWith('[')) {
+              try {
+                sampleJsonObj[field.name] = JSON.parse(val);
+              } catch(e) {
+                sampleJsonObj[field.name] = val;
+              }
+            } else {
+              sampleJsonObj[field.name] = val;
+            }
+          }
+        });
+
+        let sampleJsonStr = JSON.stringify(sampleJsonObj, null, 2);
+        let formattedJson = sampleJsonStr
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+              if (/:$/.test(match)) {
+                cls = 'key';
+              } else {
+                cls = 'string';
+              }
+            } else if (/true|false/.test(match)) {
+              cls = 'boolean';
+            } else if (/null/.test(match)) {
+              cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+          });
+
+        const section = document.createElement("section");
+        section.id = `pane-${model.name.toLowerCase()}`;
+        section.className = "model-pane";
+        section.innerHTML = `
+          <div class="title-banner">
+            <span class="model-tag ${model.tag}">${model.name} Table</span>
+            <h2 class="model-title">${icon} ${model.name} Model</h2>
+            <p class="model-desc">${model.desc}</p>
+            <div class="scenario-box">
+              <h5>Example Application Scenario</h5>
+              <p>${model.scenario}</p>
+            </div>
+          </div>
+
+          <h3 class="section-title">Every Single Field (No Omissions)</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field Name</th>
+                  <th>Prisma Type</th>
+                  <th>Attributes</th>
+                  <th>Simple Description</th>
+                  <th>Example Real Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="json-wrapper">
+            <div class="json-header">
+              <span>Example Database Payload Document</span>
+              <button class="copy-btn">JSON Format</button>
+            </div>
+            <pre><code>${formattedJson}</code></pre>
+          </div>
+        `;
+        mainArea.appendChild(section);
+      });
+    });
+
+    // Tab Pane Switching
+    function switchPane(paneId) {
+      // Toggle nav active state
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => item.classList.remove('active'));
+      
+      // Toggle visible pane
+      const panes = document.querySelectorAll('.model-pane');
+      panes.forEach(pane => pane.classList.remove('active'));
+
+      // Mark clicked as active
+      event.currentTarget.classList.add('active');
+      document.getElementById(paneId).classList.add('active');
+      
+      // Auto scroll to top of content
+      document.querySelector('.content-area').scrollTop = 0;
+    }
+
+    // Sidebar search filter
+    function filterNav() {
+      const query = document.getElementById('searchBox').value.toLowerCase();
+      const navItems = document.querySelectorAll('.nav-item');
+      
+      navItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(query)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

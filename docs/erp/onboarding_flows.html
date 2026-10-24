@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DreamXec ERP - Database Entity & Data Flow Hub</title>
+  <!-- Google Fonts: Outfit & Sora -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Sora:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#003366',
+              orange: '#FF7F00',
+              green: '#0B9C2C',
+              cream: '#FFF7ED',
+              pastelBlue: '#E0F2FE',
+              darkBg: '#0F172A',
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            sora: ['Sora', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .neo-border {
+      border: 3px solid #003366;
+    }
+    .neo-shadow {
+      box-shadow: 6px 6px 0px #FF7F00;
+    }
+    .neo-shadow-green {
+      box-shadow: 6px 6px 0px #0B9C2C;
+    }
+    .neo-shadow-navy {
+      box-shadow: 6px 6px 0px #003366;
+    }
+    .active-tab {
+      background-color: #003366 !important;
+      color: #ffffff !important;
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0px #FF7F00;
+    }
+    .active-view {
+      background-color: #FF7F00 !important;
+      color: #ffffff !important;
+      box-shadow: 3px 3px 0px #003366;
+    }
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-navy min-h-screen pb-16 font-sans">
+
+  <!-- Header Banner -->
+  <header class="w-full bg-white neo-border border-t-0 sticky top-0 z-50 px-4 py-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <span class="inline-flex items-center justify-center w-8 h-8 text-white font-black text-lg bg-brand-orange neo-border">★</span>
+      <h1 class="text-xl sm:text-2xl font-black uppercase tracking-tight font-sora">DreamXec <span class="text-brand-orange">Database Hub</span></h1>
+    </div>
+    <nav class="flex gap-2">
+      <button onclick="switchView('onboarding')" id="btn-view-onboarding" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border active-view">
+        📋 1. Onboarding RBAC
+      </button>
+      <button onclick="switchView('schema')" id="btn-view-schema" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border">
+        🔗 2. Exact Prisma Schema
+      </button>
+      <button onclick="switchView('records')" id="btn-view-records" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border">
+        📂 3. Mock MongoDB Records
+      </button>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-8 mt-8">
+
+    <!-- ========================================================
+         VIEW 1: ONBOARDING RBAC
+         ======================================================== -->
+    <div id="view-onboarding" class="view-content block space-y-8">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow">
+        <span class="inline-block px-3 py-1 bg-brand-orange text-white text-xs font-black uppercase tracking-widest neo-border mb-4">Onboarding Blueprint</span>
+        <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight mb-4 font-sora">Verification & RBAC Roles</h2>
+        <p class="text-base sm:text-lg leading-relaxed text-brand-navy/80 font-semibold">
+          Interactive workflow blueprints showing how users register globally and scope memberships across tenants using the <code>UserOrganization</code> collection. Select a role profile tab to view verification gates.
+        </p>
+      </div>
+
+      <!-- Role switcher tabs inside view 1 -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <button onclick="switchRole('researcher')" id="btn-role-researcher" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border active-tab font-bold">🎓 Student Researcher</button>
+        <button onclick="switchRole('professor')" id="btn-role-professor" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border font-bold">🔬 Professor / PI</button>
+        <button onclick="switchRole('incubator')" id="btn-role-incubator" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border font-bold">💼 Incubator Manager</button>
+        <button onclick="switchRole('donor')" id="btn-role-donor" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border font-bold">💰 Corporate Sponsor</button>
+        <button onclick="switchRole('compliance')" id="btn-role-compliance" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border font-bold">🛡️ Compliance Officer</button>
+        <button onclick="switchRole('admin')" id="btn-role-admin" class="px-4 py-2 text-xs font-black uppercase tracking-wider bg-white neo-border font-bold">🏛️ Org Admin</button>
+      </div>
+
+      <div id="flows-container" class="space-y-6">
+        <!-- 🎓 Researcher Flow -->
+        <div id="flow-researcher" class="role-flow block bg-white p-6 neo-border border-brand-navy">
+          <h3 class="text-xl font-black uppercase mb-3">Student Researcher Onboarding Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 1: Domain Check</h4>
+              <p class="text-brand-navy/80 font-medium">Creates global user. Validates academic email domain (.edu).</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">User.role = "USER"</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 2: ID Upload</h4>
+              <p class="text-brand-navy/80 font-medium">Uploads Student ID card / Enrollment scanning documents.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">StudentVerification = PENDING</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 3: Approval</h4>
+              <p class="text-brand-navy/80 font-medium">Registrar Admin audits scanned credentials manually.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">User.studentVerified = true</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 4: Activation</h4>
+              <p class="text-brand-navy/80 font-medium">Creates university linkage. Unlocks shared lab book tools.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">UserOrg.role = "RESEARCHER"</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🔬 Professor Flow -->
+        <div id="flow-professor" class="role-flow hidden bg-white p-6 neo-border border-brand-navy">
+          <h3 class="text-xl font-black uppercase mb-3">Professor / PI Onboarding Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-green uppercase mb-1">Step 1: Faculty Input</h4>
+              <p class="text-brand-navy/80 font-medium">Faculty enters official ORCID iD for publication indexing audits.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">User.orcid = String</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-green uppercase mb-1">Step 2: Rank Scan</h4>
+              <p class="text-brand-navy/80 font-medium">Uploads official employment contract scan for university verification.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">UserOrg.verified = false</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-green uppercase mb-1">Step 3: Admin Review</h4>
+              <p class="text-brand-navy/80 font-medium">University registrar verifies appointment scan details.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">AuditLog.action = FACULTY_VERIFY</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-green uppercase mb-1">Step 4: Active PI</h4>
+              <p class="text-brand-navy/80 font-medium">Unlocks stage-gate reviews, lab booking, and grant oversight.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">UserOrg.role = "PROFESSOR"</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 💼 Incubator Flow -->
+        <div id="flow-incubator" class="role-flow hidden bg-white p-6 neo-border border-brand-navy">
+          <h3 class="text-xl font-black uppercase mb-3">Incubator Manager Onboarding Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-navy uppercase mb-1">Step 1: Direct Invite</h4>
+              <p class="text-brand-navy/80 font-medium">Invited directly via email invitation token sent by university admin.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">User.role = "USER"</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-navy uppercase mb-1">Step 2: Acceptance</h4>
+              <p class="text-brand-navy/80 font-medium">Accepts secure token, configures password, and joins university space.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">UserOrg.role = "INCUBATOR_MANAGER"</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-navy uppercase mb-1">Step 3: Board Active</h4>
+              <p class="text-brand-navy/80 font-medium">Unlocks evaluation scoring boards (Novelty & Feasibility gates).</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">UserOrg.verified = true</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 💰 Corporate Sponsor Flow -->
+        <div id="flow-donor" class="role-flow hidden bg-white p-6 neo-border border-brand-navy">
+          <h3 class="text-xl font-black uppercase mb-3">Corporate Sponsor / Donor Onboarding Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 1: Sponsor Signup</h4>
+              <p class="text-brand-navy/80 font-medium">Sponsor registers with corporate email domain password.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">User.role = "DONOR"</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 2: Biz Registry</h4>
+              <p class="text-brand-navy/80 font-medium">Inputs legal GSTIN/EIN registrations and banking profiles.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">Donor.verified = false</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 3: Compliance</h4>
+              <p class="text-brand-navy/80 font-medium">Platform admin validates standing against public registry indexes.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">Donor.verified = true</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-orange uppercase mb-1">Step 4: Grant Posting</h4>
+              <p class="text-brand-navy/80 font-medium">Unlocks grant creation, milestone audit review panels.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">prisma.grant.create()</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🛡️ Compliance Officer Flow -->
+        <div id="flow-compliance" class="role-flow hidden bg-white p-6 neo-border border-brand-navy">
+          <h3 class="text-xl font-black uppercase mb-3">Compliance Officer Onboarding Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-green uppercase mb-1">Step 1: Secure Invite</h4>
+              <p class="text-brand-navy/80 font-medium">Invited via direct cryptographic secure token sent by Org Admin.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">User.accountStatus = ACTIVE</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-green uppercase mb-1">Step 2: Board Setup</h4>
+              <p class="text-brand-navy/80 font-medium">Joins university workspace as verified compliance officer.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">UserOrg.role = "COMPLIANCE_OFFICER"</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-green uppercase mb-1">Step 3: IRB Active</h4>
+              <p class="text-brand-navy/80 font-medium">Unlocks review panels for ethical clearance protocol auditing.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">prisma.stageGateReview.create()</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🏛️ Org Admin Flow -->
+        <div id="flow-admin" class="role-flow hidden bg-white p-6 neo-border border-brand-navy">
+          <h3 class="text-xl font-black uppercase mb-3">Organization Admin Onboarding Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-navy uppercase mb-1">Step 1: Org Setup</h4>
+              <p class="text-brand-navy/80 font-medium">Registers legal university credentials and domain mappings.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">Organization.verified = false</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-navy uppercase mb-1">Step 2: Platform Clearance</h4>
+              <p class="text-brand-navy/80 font-medium">DreamXec Super-Admin validates institutional legitimacy.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">Organization.verified = true</div>
+            </div>
+            <div class="bg-brand-cream p-3 border neo-border">
+              <h4 class="font-bold text-brand-navy uppercase mb-1">Step 3: Tenant Control</h4>
+              <p class="text-brand-navy/80 font-medium">Unlocks domain whitelist setup, department creation, lab config.</p>
+              <div class="mt-2 text-[10px] font-mono bg-white p-1 border border-brand-navy/30">UserOrg.role = "ORG_ADMIN"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================
+         VIEW 2: EXACT PRISMA SCHEMA GRAPH (VISUAL SCHEMA MAP)
+         ======================================================== -->
+    <div id="view-schema" class="view-content hidden space-y-8">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow">
+        <span class="inline-block px-3 py-1 bg-brand-green text-white text-xs font-black uppercase tracking-widest neo-border mb-4">Relational Entity Mapping</span>
+        <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight mb-4 font-sora">Institutional Scopes & Model Properties</h2>
+        <p class="text-base sm:text-lg leading-relaxed text-brand-navy/80 font-semibold">
+          This map renders the exact properties and relationships declared inside the active <code>schema.prisma</code> file.
+        </p>
+      </div>
+
+      <!-- Models List Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- User Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-orange text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model User</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">User</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">email:</strong> String @unique</li>
+            <li><strong class="text-brand-navy">password:</strong> String?</li>
+            <li><strong class="text-brand-navy">name:</strong> String?</li>
+            <li><strong class="text-brand-navy">role:</strong> Role @default(USER)</li>
+            <li><strong class="text-brand-navy">googleId:</strong> String?</li>
+            <li><strong class="text-brand-navy">linkedinId:</strong> String?</li>
+            <li><strong class="text-brand-navy">accountStatus:</strong> AccountStatus @default(ACTIVE)</li>
+            <li><strong class="text-brand-navy">emailVerified:</strong> Boolean @default(false)</li>
+            <li><strong class="text-brand-navy">verificationToken:</strong> String?</li>
+            <li><strong class="text-brand-navy">verificationTokenExpiry:</strong> DateTime?</li>
+            <li><strong class="text-brand-navy">resetPasswordToken:</strong> String?</li>
+            <li><strong class="text-brand-navy">resetPasswordExpiry:</strong> DateTime?</li>
+            <li><strong class="text-brand-navy">phone:</strong> String?</li>
+            <li><strong class="text-brand-navy">countryCode:</strong> String? @default("+91")</li>
+            <li><strong class="text-brand-navy">gender:</strong> Gender?</li>
+            <li><strong class="text-brand-navy">dateOfBirth:</strong> DateTime?</li>
+            <li><strong class="text-brand-navy">address:</strong> String?</li>
+            <li><strong class="text-brand-navy">college:</strong> String?</li>
+            <li><strong class="text-brand-navy">yearOfStudy:</strong> YearOfStudy?</li>
+            <li><strong class="text-brand-navy">bio:</strong> String?</li>
+            <li><strong class="text-brand-navy">profilePicture:</strong> String?</li>
+            <li><strong class="text-brand-navy">skills:</strong> String[] @default([])</li>
+            <li><strong class="text-brand-navy">linkedinUrl:</strong> String?</li>
+            <li><strong class="text-brand-navy">githubUrl:</strong> String?</li>
+            <li><strong class="text-brand-navy">profileComplete:</strong> Boolean @default(false)</li>
+            <li><strong class="text-brand-navy">createdAt:</strong> DateTime @default(now())</li>
+            <li><strong class="text-brand-navy">updatedAt:</strong> DateTime @updatedAt</li>
+          </ul>
+        </div>
+
+        <!-- Donor Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-navy text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model Donor</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">Donor</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">name:</strong> String</li>
+            <li><strong class="text-brand-navy">email:</strong> String @unique</li>
+            <li><strong class="text-brand-navy">password:</strong> String?</li>
+            <li><strong class="text-brand-navy">organizationName:</strong> String?</li>
+            <li><strong class="text-brand-navy">verified:</strong> Boolean @default(false)</li>
+            <li><strong class="text-brand-navy">googleId:</strong> String?</li>
+            <li><strong class="text-brand-navy">linkedinId:</strong> String?</li>
+            <li><strong class="text-brand-navy">accountStatus:</strong> AccountStatus @default(ACTIVE)</li>
+            <li><strong class="text-brand-navy">emailVerified:</strong> Boolean @default(false)</li>
+            <li><strong class="text-brand-navy">verificationToken:</strong> String?</li>
+            <li><strong class="text-brand-navy">verificationTokenExpiry:</strong> DateTime?</li>
+            <li><strong class="text-brand-navy">resetPasswordToken:</strong> String?</li>
+            <li><strong class="text-brand-navy">resetPasswordExpiry:</strong> DateTime?</li>
+            <li><strong class="text-brand-navy">createdAt:</strong> DateTime @default(now())</li>
+            <li><strong class="text-brand-navy">updatedAt:</strong> DateTime @updatedAt</li>
+          </ul>
+        </div>
+
+        <!-- Organization Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-green text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model Organization</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">Organization</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">name:</strong> String</li>
+            <li><strong class="text-brand-navy">type:</strong> OrgType @default(UNIVERSITY)</li>
+            <li><strong class="text-brand-navy">verified:</strong> Boolean @default(false)</li>
+            <li><strong class="text-brand-navy">createdAt:</strong> DateTime @default(now())</li>
+            <li><strong class="text-brand-navy">updatedAt:</strong> DateTime @updatedAt</li>
+          </ul>
+        </div>
+
+        <!-- UserOrganization Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-green text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model UserOrganization</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">UserOrganization</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">userId:</strong> String @db.ObjectId</li>
+            <li><strong class="text-brand-navy">organizationId:</strong> String @db.ObjectId</li>
+            <li><strong class="text-brand-navy">role:</strong> OrgRole @default(RESEARCHER)</li>
+            <li><strong class="text-brand-navy">verified:</strong> Boolean @default(false)</li>
+            <li><strong class="text-brand-navy">createdAt:</strong> DateTime @default(now())</li>
+          </ul>
+        </div>
+
+        <!-- Project Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-orange text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model Project</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">Project</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">title:</strong> String</li>
+            <li><strong class="text-brand-navy">slug:</strong> String? @unique</li>
+            <li><strong class="text-brand-navy">description:</strong> String</li>
+            <li><strong class="text-brand-navy">stage:</strong> ProjectStage @default(DISCOVERY)</li>
+            <li><strong class="text-brand-navy">createdAt:</strong> DateTime @default(now())</li>
+          </ul>
+        </div>
+
+        <!-- ProjectMember Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-navy text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model ProjectMember</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">ProjectMember</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">projectId:</strong> String @db.ObjectId</li>
+            <li><strong class="text-brand-navy">userId:</strong> String @db.ObjectId</li>
+            <li><strong class="text-brand-navy">role:</strong> ProjectRole @default(RESEARCHER)</li>
+          </ul>
+        </div>
+
+        <!-- Task Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-green text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model Task</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">Task</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">title:</strong> String</li>
+            <li><strong class="text-brand-navy">description:</strong> String?</li>
+            <li><strong class="text-brand-navy">projectId:</strong> String @db.ObjectId</li>
+            <li><strong class="text-brand-navy">assignedToId:</strong> String? @db.ObjectId</li>
+            <li><strong class="text-brand-navy">startDate:</strong> DateTime?</li>
+            <li><strong class="text-brand-navy">endDate:</strong> DateTime?</li>
+            <li><strong class="text-brand-navy">status:</strong> TaskStatus @default(TODO)</li>
+          </ul>
+        </div>
+
+        <!-- LabNotebookEntry Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-orange text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model LabNotebookEntry</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">LabNotebookEntry</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">projectId:</strong> String @db.ObjectId</li>
+            <li><strong class="text-brand-navy">authorId:</strong> String @db.ObjectId</li>
+            <li><strong class="text-brand-navy">notes:</strong> String</li>
+            <li><strong class="text-brand-navy">hashSignature:</strong> String</li>
+            <li><strong class="text-brand-navy">timestamp:</strong> DateTime @default(now())</li>
+          </ul>
+        </div>
+
+        <!-- StudentVerification Model Card -->
+        <div class="bg-white p-5 neo-border border-brand-navy rounded relative">
+          <span class="absolute -top-3 right-3 bg-brand-navy text-white text-[9px] font-mono px-2 py-0.5 rounded neo-border">model StudentVerification</span>
+          <h3 class="font-black text-sm uppercase text-brand-navy border-b pb-1 mb-2">StudentVerification</h3>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li><strong class="text-brand-navy">id:</strong> String @id @map("_id") @db.ObjectId</li>
+            <li><strong class="text-brand-navy">fullName:</strong> String</li>
+            <li><strong class="text-brand-navy">studentEmail:</strong> String</li>
+            <li><strong class="text-brand-navy">officialEmail:</strong> String</li>
+            <li><strong class="text-brand-navy">mobileNumber:</strong> String</li>
+            <li><strong class="text-brand-navy">documentUrl:</strong> String</li>
+            <li><strong class="text-brand-navy">status:</strong> String @default("PENDING")</li>
+            <li><strong class="text-brand-navy">userId:</strong> String @unique @db.ObjectId</li>
+            <li><strong class="text-brand-navy">createdAt:</strong> DateTime @default(now())</li>
+            <li><strong class="text-brand-navy">updatedAt:</strong> DateTime @updatedAt</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================
+         VIEW 3: MOCK MONGO DATA (REAL OBJECT EXAMPLES)
+         ======================================================== -->
+    <div id="view-records" class="view-content hidden space-y-8">
+      <div class="bg-white p-6 sm:p-8 neo-border neo-shadow-green">
+        <span class="inline-block px-3 py-1 bg-brand-navy text-white text-xs font-black uppercase tracking-widest neo-border mb-4">MongoDB Documents</span>
+        <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight mb-4 font-sora">Populated Database Collections JSON</h2>
+        <p class="text-base sm:text-lg leading-relaxed text-brand-navy/80 mb-6">
+          Toggle each collection below to inspect a realistic payload from active MongoDB collections. This demonstrates how roles, scoping links, equipment booking logs, and project stages are saved.
+        </p>
+
+        <!-- Collection buttons -->
+        <div class="flex flex-wrap gap-2 mb-6 border-b border-brand-navy/20 pb-4 font-semibold">
+          <button onclick="showDoc('doc-user')" id="btn-doc-user" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border active-tab">collection("User")</button>
+          <button onclick="showDoc('doc-donor')" id="btn-doc-donor" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("Donor")</button>
+          <button onclick="showDoc('doc-org')" id="btn-doc-org" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("Organization")</button>
+          <button onclick="showDoc('doc-userorg')" id="btn-doc-userorg" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("UserOrganization")</button>
+          <button onclick="showDoc('doc-project')" id="btn-doc-project" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("Project")</button>
+          <button onclick="showDoc('doc-projectmember')" id="btn-doc-projectmember" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("ProjectMember")</button>
+          <button onclick="showDoc('doc-task')" id="btn-doc-task" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("Task")</button>
+          <button onclick="showDoc('doc-notebook')" id="btn-doc-notebook" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("LabNotebookEntry")</button>
+          <button onclick="showDoc('doc-verification')" id="btn-doc-verification" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-white neo-border">collection("StudentVerification")</button>
+        </div>
+
+        <!-- JSON Document boxes -->
+        <div class="space-y-4">
+          
+          <!-- User Document -->
+          <div id="doc-user" class="doc-code block">
+            <h4 class="font-black text-sm uppercase mb-2">Sample User Profile Record (Matching all Prisma properties)</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3cd3c5" },
+  "email": "rohan.sharma@mit.edu",
+  "password": "$2b$10$X8A2K...",
+  "name": "Rohan Sharma",
+  "role": "USER",
+  "googleId": "114502108466177338432",
+  "linkedinId": null,
+  "accountStatus": "ACTIVE",
+  "emailVerified": true,
+  "verificationToken": null,
+  "verificationTokenExpiry": null,
+  "resetPasswordToken": null,
+  "resetPasswordExpiry": null,
+  "phone": "5550199",
+  "countryCode": "+1",
+  "gender": "MALE",
+  "dateOfBirth": { "$date": "2004-06-27T00:00:00.000Z" },
+  "address": "77 Massachusetts Ave, Cambridge, MA",
+  "college": "Massachusetts Institute of Technology",
+  "yearOfStudy": "THIRD",
+  "bio": "Quantum Computing research major looking to optimize hardware allocations.",
+  "profilePicture": "https://dreamxec.s3.amazonaws.com/profiles/rohan.jpg",
+  "skills": ["Quantum Computing", "Python", "LaTeX"],
+  "linkedinUrl": "https://linkedin.com/in/rohansharma",
+  "githubUrl": "https://github.com/rohan-quantum",
+  "profileComplete": true,
+  "createdAt": { "$date": "2026-06-27T12:00:00.000Z" },
+  "updatedAt": { "$date": "2026-06-27T12:30:00.000Z" }
+}</pre>
+          </div>
+
+          <!-- Donor Document -->
+          <div id="doc-donor" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample Donor Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3cd3d0" },
+  "name": "Google DeepMind R&D Group",
+  "email": "funding@deepmind.com",
+  "password": "$2b$10$U982H...",
+  "organizationName": "Google DeepMind",
+  "verified": true,
+  "googleId": null,
+  "linkedinId": null,
+  "accountStatus": "ACTIVE",
+  "emailVerified": true,
+  "verificationToken": null,
+  "verificationTokenExpiry": null,
+  "resetPasswordToken": null,
+  "resetPasswordExpiry": null,
+  "createdAt": { "$date": "2026-06-27T12:00:00.000Z" },
+  "updatedAt": { "$date": "2026-06-27T12:00:00.000Z" }
+}</pre>
+          </div>
+
+          <!-- Org Document -->
+          <div id="doc-org" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample Organization Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3a0001" },
+  "name": "Massachusetts Institute of Technology",
+  "type": "UNIVERSITY",
+  "verified": true,
+  "createdAt": { "$date": "2026-06-27T10:00:00.000Z" },
+  "updatedAt": { "$date": "2026-06-27T10:00:00.000Z" }
+}</pre>
+          </div>
+
+          <!-- UserOrg Document -->
+          <div id="doc-userorg" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample UserOrganization Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3cd4f1" },
+  "userId": { "$oid": "66bc17ef57d38467ab3cd3c5" }, // References Rohan Sharma
+  "organizationId": { "$oid": "66bc17ef57d38467ab3a0001" }, // References MIT
+  "role": "RESEARCHER",
+  "verified": true,
+  "createdAt": { "$date": "2026-06-27T12:00:00.000Z" }
+}</pre>
+          </div>
+
+          <!-- Project Document -->
+          <div id="doc-project" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample Project Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3a000d" },
+  "title": "Quantum Laboratory Resource Planner",
+  "slug": "quantum-lab-planner",
+  "description": "Multi-tenant resource reservation engine for high-end optical benches.",
+  "stage": "FEASIBILITY",
+  "createdAt": { "$date": "2026-06-27T12:32:10.776Z" }
+}</pre>
+          </div>
+
+          <!-- ProjectMember Document -->
+          <div id="doc-projectmember" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample ProjectMember Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3cd998" },
+  "projectId": { "$oid": "66bc17ef57d38467ab3a000d" },
+  "userId": { "$oid": "66bc17ef57d38467ab3cd3c5" },
+  "role": "RESEARCHER"
+}</pre>
+          </div>
+
+          <!-- Task Document -->
+          <div id="doc-task" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample Task Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3cd9aa" },
+  "title": "Calibrate Optical Interconnects",
+  "description": "Ensure laser alignment matches optimal benchmark parameters.",
+  "projectId": { "$oid": "66bc17ef57d38467ab3a000d" },
+  "assignedToId": { "$oid": "66bc17ef57d38467ab3cd3c5" },
+  "startDate": { "$date": "2026-06-28T09:00:00.000Z" },
+  "endDate": { "$date": "2026-06-29T18:00:00.000Z" },
+  "status": "IN_PROGRESS"
+}</pre>
+          </div>
+
+          <!-- Notebook Document -->
+          <div id="doc-notebook" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample LabNotebookEntry Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3cd9bc" },
+  "projectId": { "$oid": "66bc17ef57d38467ab3a000d" },
+  "authorId": { "$oid": "66bc17ef57d38467ab3cd3c5" },
+  "notes": "Calibration complete. Wavelength deviation registered under 0.02nm threshold.",
+  "hashSignature": "a3f5b72cd189...",
+  "timestamp": { "$date": "2026-06-27T14:20:00.000Z" }
+}</pre>
+          </div>
+
+          <!-- StudentVerification Document -->
+          <div id="doc-verification" class="doc-code hidden">
+            <h4 class="font-black text-sm uppercase mb-2">Sample StudentVerification Record</h4>
+            <pre class="bg-brand-darkBg text-emerald-400 p-5 rounded neo-border font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+{
+  "_id": { "$oid": "66bc17ef57d38467ab3cd9cd" },
+  "fullName": "Rohan Sharma",
+  "studentEmail": "rohan.sharma@mit.edu",
+  "officialEmail": "registrar@mit.edu",
+  "mobileNumber": "+16175550199",
+  "documentUrl": "https://dreamxec.s3.amazonaws.com/verifications/mit_rohan_id.pdf",
+  "status": "PENDING",
+  "userId": { "$oid": "66bc17ef57d38467ab3cd3c5" },
+  "createdAt": { "$date": "2026-06-27T12:05:00.000Z" },
+  "updatedAt": { "$date": "2026-06-27T12:05:00.000Z" }
+}</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // View Switcher (Main Nav)
+    function switchView(viewName) {
+      document.querySelectorAll('.view-content').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+
+      const activeView = document.getElementById('view-' + viewName);
+      if (activeView) {
+        activeView.classList.remove('hidden');
+        activeView.classList.add('block');
+      }
+
+      document.querySelectorAll('header nav button').forEach(btn => {
+        btn.classList.remove('active-view');
+      });
+
+      const activeBtn = document.getElementById('btn-view-' + viewName);
+      if (activeBtn) {
+        activeBtn.classList.add('active-view');
+      }
+    }
+
+    // Role Switcher (View 1)
+    function switchRole(role) {
+      document.querySelectorAll('.role-flow').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+
+      const activeEl = document.getElementById('flow-' + role);
+      if (activeEl) {
+        activeEl.classList.remove('hidden');
+        activeEl.classList.add('block');
+      }
+
+      document.querySelectorAll('#view-onboarding button').forEach(btn => {
+        btn.classList.remove('active-tab');
+      });
+
+      const activeBtn = document.getElementById('btn-role-' + role);
+      if (activeBtn) {
+        activeBtn.classList.add('active-tab');
+      }
+    }
+
+    // Document JSON Switcher (View 3)
+    function showDoc(docId) {
+      document.querySelectorAll('.doc-code').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+
+      const activeEl = document.getElementById(docId);
+      if (activeEl) {
+        activeEl.classList.remove('hidden');
+        activeEl.classList.add('block');
+      }
+
+      document.querySelectorAll('#view-records button').forEach(btn => {
+        btn.classList.remove('active-tab');
+      });
+
+      const activeBtn = document.getElementById('btn-' + docId);
+      if (activeBtn) {
+        activeBtn.classList.add('active-tab');
+      }
+    }
+  </script>
+
+</body>
+</html>
