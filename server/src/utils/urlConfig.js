@@ -29,7 +29,9 @@ function getClientUrl(reqOrOrigin) {
         const host = parsed.hostname.toLowerCase();
         if (
           ['localhost', '127.0.0.1'].includes(host) ||
-          /(^|\.)dreamxec\.(com|org)$/.test(host)
+          /(^|\.)dreamxec\.(com|org)$/.test(host) ||
+          host.endsWith('.vercel.app') ||
+          host.endsWith('.onrender.com')
         ) {
           return parsed.origin;
         }

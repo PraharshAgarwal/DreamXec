@@ -54,8 +54,8 @@ export function getApiBaseUrl(): string {
       return "http://localhost:5000/api";
     }
 
-    // Render deployment
-    if (hostname.endsWith(".onrender.com")) {
+    // Render or Vercel deployment fallback
+    if (hostname.endsWith(".onrender.com") || hostname.endsWith(".vercel.app")) {
       return "https://dreamxec-backend.onrender.com/api";
     }
 
