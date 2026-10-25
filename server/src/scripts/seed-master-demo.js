@@ -45,39 +45,42 @@ async function seedMasterDemo() {
   // STEP 1: ENDANGERED SPECIES TAXONOMY & AVATARS
   // --------------------------------------------------------------------------
   console.log('[1/12] Seeding Endangered Species Taxonomy & Fun Avatars...');
-  for (const item of ENDANGERED_SPECIES_DATA) {
-    const avatarUrl = `/api/species/${item.slug}/avatar.svg`;
-    await prisma.endangeredSpecies.upsert({
-      where: { slug: item.slug },
-      update: {
-        commonName: item.commonName,
-        scientificName: item.scientificName,
-        taxonomicGroup: item.taxonomicGroup,
-        category: item.category,
-        estimatedCount: item.estimatedCount,
-        avatarUrl,
-        thumbnailUrl: avatarUrl,
-        habitat: item.habitat,
-        region: item.region,
-        description: item.description,
-        isActive: true,
-      },
-      create: {
-        commonName: item.commonName,
-        scientificName: item.scientificName,
-        slug: item.slug,
-        taxonomicGroup: item.taxonomicGroup,
-        category: item.category,
-        estimatedCount: item.estimatedCount,
-        assignedCount: 0,
-        avatarUrl,
-        thumbnailUrl: avatarUrl,
-        habitat: item.habitat,
-        region: item.region,
-        description: item.description,
-        isActive: true,
-      },
-    });
+  const existingSpeciesCount = await prisma.endangeredSpecies.count();
+  if (existingSpeciesCount < 100) {
+    for (const item of ENDANGERED_SPECIES_DATA) {
+      const avatarUrl = `/api/species/${item.slug}/avatar.svg`;
+      await prisma.endangeredSpecies.upsert({
+        where: { slug: item.slug },
+        update: {
+          commonName: item.commonName,
+          scientificName: item.scientificName,
+          taxonomicGroup: item.taxonomicGroup,
+          category: item.category,
+          estimatedCount: item.estimatedCount,
+          avatarUrl,
+          thumbnailUrl: avatarUrl,
+          habitat: item.habitat,
+          region: item.region,
+          description: item.description,
+          isActive: true,
+        },
+        create: {
+          commonName: item.commonName,
+          scientificName: item.scientificName,
+          slug: item.slug,
+          taxonomicGroup: item.taxonomicGroup,
+          category: item.category,
+          estimatedCount: item.estimatedCount,
+          assignedCount: 0,
+          avatarUrl,
+          thumbnailUrl: avatarUrl,
+          habitat: item.habitat,
+          region: item.region,
+          description: item.description,
+          isActive: true,
+        },
+      });
+    }
   }
   const allSpecies = await prisma.endangeredSpecies.findMany({ select: { id: true, slug: true, commonName: true } });
   console.log(`✓ Seeded ${allSpecies.length} endangered species.`);
@@ -93,29 +96,32 @@ async function seedMasterDemo() {
     category: permValue.split(':')[0].toUpperCase(),
   }));
 
-  for (const entry of permissionEntries) {
-    await prisma.permission.upsert({
-      where: { key: entry.key },
-      update: entry,
-      create: entry,
-    });
-  }
+  const existingRolePermCount = await prisma.rolePermission.count();
+  if (existingRolePermCount < 50) {
+    for (const entry of permissionEntries) {
+      await prisma.permission.upsert({
+        where: { key: entry.key },
+        update: entry,
+        create: entry,
+      });
+    }
 
-  for (const [permKey, allowedRoles] of Object.entries(PERMISSION_MATRIX)) {
-    for (const role of allowedRoles) {
-      await prisma.rolePermission.upsert({
-        where: {
-          role_permissionKey: {
+    for (const [permKey, allowedRoles] of Object.entries(PERMISSION_MATRIX)) {
+      for (const role of allowedRoles) {
+        await prisma.rolePermission.upsert({
+          where: {
+            role_permissionKey: {
+              role,
+              permissionKey: permKey,
+            },
+          },
+          update: {},
+          create: {
             role,
             permissionKey: permKey,
           },
-        },
-        update: {},
-        create: {
-          role,
-          permissionKey: permKey,
-        },
-      });
+        });
+      }
     }
   }
   console.log('✓ Seeded system permissions and role permission mappings.');
@@ -800,6 +806,18 @@ async function seedMasterDemo() {
       studentVerified: Boolean(uDef.studentVerified),
       institution: uDef.email.endsWith('@vit.ac.in') ? 'VIT Chennai' : 'DreamXec Ecosystem',
     };
+
+    if (uDef.username) {
+      const existingByUsername = await prisma.user.findUnique({
+        where: { username: uDef.username },
+      });
+      if (existingByUsername && existingByUsername.email !== uDef.email) {
+        await prisma.user.update({
+          where: { id: existingByUsername.id },
+          data: { email: uDef.email },
+        });
+      }
+    }
 
     const userRecord = await prisma.user.upsert({
       where: { email: uDef.email },
