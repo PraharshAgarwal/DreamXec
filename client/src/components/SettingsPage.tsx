@@ -43,7 +43,7 @@ export default function SettingsPage() {
   const [anonymousGiving, setAnonymousGiving] = useState(false);
 
   // Role Spec State - Org Admin
-  const [domainWhitelist, setDomainWhitelist] = useState('nitkkr.ac.in, aero.nitkkr.ac.in');
+  const [domainWhitelist, setDomainWhitelist] = useState('vit.ac.in, aero.vit.ac.in');
   const [verificationPolicy, setVerificationPolicy] = useState('AUTO_DOMAIN');
   const [escrowThreshold, setEscrowThreshold] = useState('50000');
 

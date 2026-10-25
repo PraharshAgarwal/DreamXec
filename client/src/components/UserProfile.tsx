@@ -1439,7 +1439,7 @@ export default function UserProfile({
                               type="text"
                               value={institution}
                               onChange={(e) => setInstitution(e.target.value)}
-                              placeholder="e.g. NIT Kurukshetra, IIT Bombay, Stanford University"
+                              placeholder="e.g. VIT Chennai, IIT Bombay, Stanford University"
                               className="w-full px-3.5 py-2.5 bg-[#FCFBF7] border-2 border-[#121316] text-xs font-bold uppercase focus:outline-none focus:bg-white"
                             />
                           </div>

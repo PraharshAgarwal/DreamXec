@@ -778,7 +778,7 @@ export default function AdminDashboard({
                               <div>
                                 <span className="text-[10px] font-bold text-gray-500 uppercase">Institution</span>
                                 <p className="font-headline font-black text-xs text-[#0F534A] truncate">
-                                  {c.tenant?.name || 'NIT Kurukshetra'}
+                                  {c.tenant?.name || 'VIT Chennai'}
                                 </p>
                               </div>
                             </div>
@@ -1008,7 +1008,7 @@ export default function AdminDashboard({
                       {reviewingCampaign.student?.name || reviewingCampaign.user?.name || 'Student Creator'} ({reviewingCampaign.student?.email || reviewingCampaign.user?.email || 'N/A'})
                     </p>
                     <p className="text-[10px] text-gray-500 font-bold uppercase">
-                      Institution: {reviewingCampaign.tenant?.name || 'NIT Kurukshetra'} • Category: {reviewingCampaign.category || 'Innovation'}
+                      Institution: {reviewingCampaign.tenant?.name || 'VIT Chennai'} • Category: {reviewingCampaign.category || 'Innovation'}
                     </p>
                   </div>
                 </div>

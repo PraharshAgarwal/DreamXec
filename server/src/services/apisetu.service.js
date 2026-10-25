@@ -122,16 +122,16 @@ class ApiSetuService {
     const SANDBOX_TEST_RECORDS = {
       '202400019992': {
         studentName: 'Aarav Sharma',
-        instituteName: 'National Institute of Technology Kurukshetra',
-        email: 'aarav.sharma@nitkkr.ac.in',
+        instituteName: 'Vellore Institute of Technology, Chennai',
+        email: 'aarav.sharma@vit.ac.in',
         abcId: 'ABC-2024-9992',
         creditScore: 48,
         academicStatus: 'ACTIVE',
       },
       '928374610546': {
         studentName: studentHint.name || 'Jay Kumar Gupta',
-        instituteName: studentHint.college || 'National Institute of Technology Kurukshetra',
-        email: studentHint.email || 'scholar@university.ac.in',
+        instituteName: studentHint.college || 'Vellore Institute of Technology, Chennai',
+        email: studentHint.email || 'scholar@vit.ac.in',
         abcId: 'ABC-9283-0546',
         creditScore: 44,
         academicStatus: 'ACTIVE',

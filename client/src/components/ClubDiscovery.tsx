@@ -92,7 +92,10 @@ function formatCollegeDisplayName(name?: string | null): string {
   if (!name) return "Campus Guild";
   const trimmed = name.trim();
   if (trimmed.toUpperCase() === "NITKKR" || trimmed.toUpperCase() === "NIT-KKR") {
-    return "NIT Kurukshetra";
+    return "VIT Chennai";
+  }
+  if (trimmed.toUpperCase() === "VIT" || trimmed.toUpperCase() === "VIT CHENNAI") {
+    return "VIT Chennai";
   }
   return trimmed;
 }

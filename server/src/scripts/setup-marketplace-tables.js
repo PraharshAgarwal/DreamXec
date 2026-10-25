@@ -500,9 +500,9 @@ async function setupMarketplaceTables() {
 
     const sampleAddress = {
       fullName: "Arjun Verma (Student Researcher)",
-      email: "arjun.verma@nitkkr.ac.in",
+      email: "arjun.verma@vit.ac.in",
       phoneNumber: "+91 98765 43210",
-      organizationName: "NIT Kurukshetra Robotics Lab",
+      organizationName: "VIT Chennai Robotics Lab",
       addressLine1: "Advanced Manufacturing Core, Dept of Mechanical Engineering",
       addressLine2: "National Institute of Technology",
       city: "Kurukshetra",

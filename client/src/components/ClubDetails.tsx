@@ -1298,7 +1298,7 @@ export default function ClubDetails() {
                       Official Verified Researcher Credential
                     </h4>
                     <p className="text-xs text-gray-600 mt-2 leading-relaxed">
-                      Earn a cryptographically verified researcher badge on your public DreamXec profile, validated against your university email (@nitkkr.ac.in) and club membership history.
+                      Earn a cryptographically verified researcher badge on your public DreamXec profile, validated against your university email (@vit.ac.in) and club membership history.
                     </p>
                   </div>
                   <div className="mt-6 pt-4 border-t border-gray-100">
@@ -1547,7 +1547,7 @@ export default function ClubDetails() {
                     {isMember ? 'Active Club Researcher' : 'Prospective Member'}
                   </p>
                   <p className="text-xs text-gray-500 font-mono mt-0.5">
-                    {user?.email || 'verified.student@nitkkr.ac.in'}
+                    {user?.email || 'verified.student@vit.ac.in'}
                   </p>
                 </div>
 

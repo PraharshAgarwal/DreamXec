@@ -32,12 +32,12 @@ async function main() {
   ];
 
   const orgMetadata = {
-    fullName: 'National Institute of Technology Kurukshetra',
+    fullName: 'Vellore Institute of Technology, Chennai',
     shortName: 'NIT KKR',
-    aliases: ['nit kkr', 'nit-kkr', 'nit kurukshetra', 'National Institute of Technology Kurukshetra'],
-    domain: 'nitkkr.ac.in',
-    website: 'https://www.nitkkr.ac.in',
-    location: 'Kurukshetra, Haryana, India',
+    aliases: ['nit kkr', 'nit-kkr', 'nit kurukshetra', 'Vellore Institute of Technology, Chennai'],
+    domain: 'vit.ac.in',
+    website: 'https://chennai.vit.ac.in',
+    location: 'Vandalur-Kelambakkam Road, Chennai, Tamil Nadu, India',
     established: 1963,
     accreditation: 'NIRF Tier-1 Institute of National Importance',
   };
@@ -103,7 +103,7 @@ async function main() {
     },
     // Also cross-link existing institutional accounts
     {
-      email: 'aarav.sharma@nitkkr.ac.in',
+      email: 'aarav.sharma@vit.ac.in',
       fullName: 'Aarav Sharma',
       username: 'aarav_sharma',
       role: Role.USER,
@@ -112,7 +112,7 @@ async function main() {
       department: 'Mechanical Engineering',
     },
     {
-      email: 'vikram.mentor@nitkkr.ac.in',
+      email: 'vikram.mentor@vit.ac.in',
       fullName: 'Vikram Aditya',
       username: 'vikram_aditya',
       role: Role.USER,
@@ -121,7 +121,7 @@ async function main() {
       department: 'Aerospace & Robotics',
     },
     {
-      email: 'registrar@nitkkr.ac.in',
+      email: 'registrar@vit.ac.in',
       fullName: 'Dean & Registrar Admin',
       username: 'registrar_nitkkr',
       role: Role.USER,

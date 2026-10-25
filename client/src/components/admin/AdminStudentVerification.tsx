@@ -373,7 +373,7 @@ export default function AdminStudentVerifications({ embedded = false }: { embedd
                       <div className="text-[11px] text-gray-600 font-semibold">{v.branch} - {v.year}</div>
                     </td>
                     <td className="p-4 font-bold text-gray-700">
-                      {v.institution || 'NIT Kurukshetra'}
+                      {v.institution || 'VIT Chennai'}
                     </td>
                     <td className="p-4">
                       {v.rosterMatchSource === 'ROSTER_SHA256_MATCH' ? (
@@ -709,7 +709,7 @@ export default function AdminStudentVerifications({ embedded = false }: { embedd
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. NIT Kurukshetra, IIT Delhi"
+                  placeholder="e.g. VIT Chennai, IIT Delhi"
                   value={rosterInstitution}
                   onChange={(e) => setRosterInstitution(e.target.value)}
                   className="w-full p-2 text-xs font-bold border-2 border-[#121316] bg-[#FCFBF7] focus:outline-none focus:bg-white"
@@ -737,7 +737,7 @@ export default function AdminStudentVerifications({ embedded = false }: { embedd
                 </div>
                 <textarea
                   rows={5}
-                  placeholder={`rollNumber,name,email,department,year\n2024CS101,Aarav Sharma,aarav@nitkkr.ac.in,Computer Science,3rd Year\n2024EC205,Priya Patel,priya@nitkkr.ac.in,Electronics,2nd Year`}
+                  placeholder={`rollNumber,name,email,department,year\n21BCE1001,Aarav Sharma,aarav@vit.ac.in,Computer Science,3rd Year\n22BME1045,Priya Patel,priya@vit.ac.in,Mechanical,2nd Year`}
                   value={rosterCsvText}
                   onChange={(e) => setRosterCsvText(e.target.value)}
                   className="w-full p-2.5 font-mono text-xs border-2 border-[#121316] bg-[#FCFBF7] focus:outline-none focus:bg-white leading-relaxed"

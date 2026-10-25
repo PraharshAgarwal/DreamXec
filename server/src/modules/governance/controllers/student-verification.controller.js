@@ -32,6 +32,7 @@ const computeRosterMatchStatus = (item, knownRosterHashes = null) => {
   // 2. Academic institution heuristics (.edu, .ac.in, nitkkr, iit, bits)
   const hasAcademicEmail =
     /\.(edu|ac\.in|edu\.in)$/.test(email) ||
+    email.includes('vit.ac.in') ||
     email.includes('nitkkr.ac.in') ||
     email.includes('iit') ||
     email.includes('bits');

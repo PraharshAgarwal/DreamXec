@@ -2,9 +2,9 @@
  * Production-Ready Data Seeding Script
  * 
  * Seeds:
- * 1. Organizations & Purposeful Clubs (4 campus-affiliated under NITKKR + 4 open/independent)
+ * 1. Organizations & Purposeful Clubs (4 campus-affiliated under VIT Chennai + 4 open/independent)
  * 2. Tiered Workflows:
- *    - NITKKR Student ID Verification via Official Mail (@nitkkr.ac.in) -> Zero manual review
+ *    - VIT Chennai Student ID Verification via Official Mail (@vit.ac.in) -> Zero manual review
  *    - Low-friction Donor & Member workflows -> Instant activation
  *    - High-stakes roles (Org Admin, Corporate Admin, Gov Official, Student President, Researcher)
  *      with 3 lean stages routed directly to Site Admin (dx.admin@dreamxec.com)
@@ -33,7 +33,7 @@ async function seedProductionData() {
   const findUserByEmail = (email) => users.find((u) => u.email.toLowerCase() === email.toLowerCase());
 
   const dxAdmin = findUserByEmail('dx.admin@dreamxec.com') || users[0];
-  const anshNitkkr = findUserByEmail('12212115@nitkkr.ac.in') || users[0];
+  const anshNitkkr = findUserByEmail('21bce1001@vit.ac.in') || users[0];
   const anshGoel = findUserByEmail('anshgoel2580@gmail.com') || anshNitkkr;
   const jayKumar = findUserByEmail('jaynrk2002@gmail.com') || findUserByEmail('jaystrp2022@gmail.com') || users[0];
   const ashishTrivedi = findUserByEmail('ashish.5core@gmail.com') || users[0];
@@ -48,7 +48,7 @@ async function seedProductionData() {
   // --------------------------------------------------------------------------
   console.log('\n[2/5] Seeding Organizations & Purposeful Clubs...');
 
-  // 1.1 NITKKR Organization
+  // 1.1 VIT Chennai Organization
   let nitkkr = await prisma.organization.findFirst({
     where: {
       OR: [
@@ -62,7 +62,7 @@ async function seedProductionData() {
     nitkkr = await prisma.organization.create({
       data: {
         id: '9c297f57-d379-4c80-bcc1-6e4fa389d286',
-        name: 'NITKKR',
+        name: 'VIT Chennai',
         slug: 'nit-kkr',
         orgType: 'COLLEGE',
         depth: 0,
@@ -76,7 +76,7 @@ async function seedProductionData() {
     nitkkr = await prisma.organization.update({
       where: { id: nitkkr.id },
       data: {
-        name: 'NITKKR',
+        name: 'VIT Chennai',
         lifecycleStatus: 'ACTIVE',
         allowedRoles: ['STUDENT', 'ORG_ADMIN', 'PROFESSOR', 'RESEARCHER', 'STUDENT_PRESIDENT'],
       },
@@ -128,26 +128,26 @@ async function seedProductionData() {
 
   // 1.4 Purposeful Clubs
   const clubsToSeed = [
-    // --- CAMPUS AFFILIATED UNDER NITKKR ---
+    // --- CAMPUS AFFILIATED UNDER VIT Chennai ---
     {
-      name: 'NITKKR Robotics & Autonomous Systems Club',
-      slug: 'nitkkr-robotics-club',
+      name: 'VIT Chennai Robotics & Autonomous Systems Club',
+      slug: 'vit-robotics-club',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-robotics-club`,
+      hierarchyPath: `${nitkkr.slug}.vit-robotics-club`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
         motto: '"Engineering next-gen autonomous field rovers for Indian precision agriculture 🌾"',
         tagline: 'Autonomous Field Robotics, ROS2 Navigation & Edge-AI Perception Chapter',
         category: 'Field Robotics & Autonomy',
-        labLocation: 'Robotics & Mechatronics Innovation Lab, Block B, NITKKR',
+        labLocation: 'Robotics & Mechatronics Innovation Lab, Block B, VIT Chennai',
         meetingSchedule: 'Wednesdays & Saturdays, 5:30 PM IST',
         facultyAdvisor: {
           name: 'Dr. P. K. Sharma',
           designation: 'Professor & Head of Mechatronics',
-          department: 'Dept. of Mechanical & Robotics, NITKKR',
+          department: 'Dept. of Mechanical & Robotics, VIT Chennai',
         },
         technicalStacks: [
           { name: 'ROS2 Humble & Gazebo', description: 'Real-time robot kinematics simulation and autonomous path planning.', tag: 'Framework' },
@@ -164,24 +164,24 @@ async function seedProductionData() {
       },
     },
     {
-      name: 'NITKKR Quantum Computing & AI Guild',
-      slug: 'nitkkr-quantum-ai-guild',
+      name: 'VIT Chennai Quantum Computing & AI Guild',
+      slug: 'vit-quantum-ai-guild',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-quantum-ai-guild`,
+      hierarchyPath: `${nitkkr.slug}.vit-quantum-ai-guild`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
         motto: '"Simulating quantum circuits & accelerating student-led AI compilers ⚛️"',
         tagline: 'Open Quantum Computation, Qiskit Circuit Design & Deep Learning Guild',
         category: 'Quantum Computing & AI',
-        labLocation: 'High Performance Computing Center (HPCC), Central Library 3rd Floor, NITKKR',
+        labLocation: 'High Performance Computing Center (HPCC), Central Library 3rd Floor, VIT Chennai',
         meetingSchedule: 'Tuesdays & Fridays, 6:00 PM IST',
         facultyAdvisor: {
           name: 'Dr. Rajesh Verma',
           designation: 'Associate Professor',
-          department: 'Dept. of Computer Engineering, NITKKR',
+          department: 'Dept. of Computer Engineering, VIT Chennai',
         },
         technicalStacks: [
           { name: 'Qiskit & PennyLane', description: 'Quantum circuit construction, statevector simulators, and VQE algorithms.', tag: 'Quantum SDK' },
@@ -189,31 +189,31 @@ async function seedProductionData() {
           { name: 'CUDA Quantum Kernels', description: 'Accelerated hybrid classical-quantum simulations on cluster GPUs.', tag: 'Compute' },
         ],
         facilities: [
-          'Access to NITKKR HPC GPU Cluster (Nvidia A100 Nodes)',
+          'Access to VIT Chennai HPC GPU Cluster (Nvidia A100 Nodes)',
           'IBM Quantum Cloud Educational Simulator Workstations',
           'Quantum Algorithm Code Review Sandbox',
         ],
       },
     },
     {
-      name: 'NITKKR Clean Mobility & EV Powertrain Club',
-      slug: 'nitkkr-clean-mobility-ev',
+      name: 'VIT Chennai Clean Mobility & EV Powertrain Club',
+      slug: 'vit-clean-mobility-ev',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-clean-mobility-ev`,
+      hierarchyPath: `${nitkkr.slug}.vit-clean-mobility-ev`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
         motto: '"Pioneering modular regenerative EV powertrains & telemetry for racing ⚡"',
         tagline: 'Electric Racing, Regenerative Powertrains & Formula Student Chapter',
         category: 'Clean Mobility & EV',
-        labLocation: 'Automotive Innovation Center, Central Workshop Wing C, NITKKR',
+        labLocation: 'Automotive Innovation Center, Central Workshop Wing C, VIT Chennai',
         meetingSchedule: 'Mondays, Thursdays & Weekends',
         facultyAdvisor: {
           name: 'Dr. Surender Singh',
           designation: 'Faculty Advisor, SAE Collegiate Club',
-          department: 'Dept. of Mechanical Engineering, NITKKR',
+          department: 'Dept. of Mechanical Engineering, VIT Chennai',
         },
         technicalStacks: [
           { name: 'Custom Modular BMS', description: 'Active cell-balancing, thermal cutoff telemetry, and CAN-bus reporting.', tag: 'Battery Electronics' },
@@ -228,24 +228,24 @@ async function seedProductionData() {
       },
     },
     {
-      name: 'NITKKR Assistive Bioengineering Chapter',
-      slug: 'nitkkr-assistive-bioeng',
+      name: 'VIT Chennai Assistive Bioengineering Chapter',
+      slug: 'vit-assistive-bioeng',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-assistive-bioeng`,
+      hierarchyPath: `${nitkkr.slug}.vit-assistive-bioeng`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
         motto: '"Building sub-₹15,000 myoelectric bionic limbs for rural amputees 🦾"',
         tagline: 'Affordable Prosthetics, EMG Signal Processing & Assistive Robotics Chapter',
         category: 'Biomedical & Assistive Robotics',
-        labLocation: 'Assistive Bioengineering Laboratory, Department of Electronics, NITKKR',
+        labLocation: 'Assistive Bioengineering Laboratory, Department of Electronics, VIT Chennai',
         meetingSchedule: 'Wednesdays & Saturdays, 4:00 PM IST',
         facultyAdvisor: {
           name: 'Dr. Amit Kumar Gupta',
           designation: 'Professor of Bio-Instrumentation',
-          department: 'Dept. of Electronics & Communication, NITKKR',
+          department: 'Dept. of Electronics & Communication, VIT Chennai',
         },
         technicalStacks: [
           { name: 'Surface EMG Signal Filtering', description: 'Differential analog front-end with Butterworth active filtering for muscle intent.', tag: 'Biosensing' },
@@ -392,7 +392,7 @@ async function seedProductionData() {
     let clubRecord;
     if (!existing) {
       clubRecord = await prisma.organization.create({ data: c });
-      console.log(`  + Created Club: "${clubRecord.name}" [${clubRecord.parentId ? 'Campus: NITKKR' : 'Open / Independent'}]`);
+      console.log(`  + Created Club: "${clubRecord.name}" [${clubRecord.parentId ? 'Campus: VIT Chennai' : 'Open / Independent'}]`);
     } else {
       clubRecord = await prisma.organization.update({
         where: { id: existing.id },
@@ -406,7 +406,7 @@ async function seedProductionData() {
           metadata: c.metadata || {},
         },
       });
-      console.log(`  • Updated Club: "${clubRecord.name}" [${clubRecord.parentId ? 'Campus: NITKKR' : 'Open / Independent'}]`);
+      console.log(`  • Updated Club: "${clubRecord.name}" [${clubRecord.parentId ? 'Campus: VIT Chennai' : 'Open / Independent'}]`);
     }
     seededClubsMap[c.slug] = clubRecord;
   }
@@ -414,18 +414,18 @@ async function seedProductionData() {
   // 1.5 Seed Active Memberships with Leadership for Clubs
   console.log('\n  • Seeding Active Club Memberships & Core Leads...');
   const clubMemberships = [
-    { clubSlug: 'nitkkr-robotics-club', user: anshNitkkr, role: 'STUDENT_PRESIDENT', designation: 'President & Rover Systems Lead', department: 'Dept. of Mechanical & Robotics, NITKKR' },
-    { clubSlug: 'nitkkr-robotics-club', user: jayKumar, role: 'RESEARCHER', designation: 'Autonomous Navigation Lead', department: 'Dept. of Computer Engg, NITKKR' },
-    { clubSlug: 'nitkkr-robotics-club', user: ashishTrivedi, role: 'STUDENT', designation: 'Embedded Firmware Contributor', department: 'Dept. of Electrical Engg, NITKKR' },
+    { clubSlug: 'vit-robotics-club', user: anshNitkkr, role: 'STUDENT_PRESIDENT', designation: 'President & Rover Systems Lead', department: 'Dept. of Mechanical & Robotics, VIT Chennai' },
+    { clubSlug: 'vit-robotics-club', user: jayKumar, role: 'RESEARCHER', designation: 'Autonomous Navigation Lead', department: 'Dept. of Computer Engg, VIT Chennai' },
+    { clubSlug: 'vit-robotics-club', user: ashishTrivedi, role: 'STUDENT', designation: 'Embedded Firmware Contributor', department: 'Dept. of Electrical Engg, VIT Chennai' },
 
-    { clubSlug: 'nitkkr-quantum-ai-guild', user: jayKumar, role: 'STUDENT_PRESIDENT', designation: 'Lead Quantum Researcher', department: 'Dept. of Computer Engg, NITKKR' },
-    { clubSlug: 'nitkkr-quantum-ai-guild', user: omMohanGaur, role: 'RESEARCHER', designation: 'Quantum Compiler Developer', department: 'Mathematics & Computing, NITKKR' },
+    { clubSlug: 'vit-quantum-ai-guild', user: jayKumar, role: 'STUDENT_PRESIDENT', designation: 'Lead Quantum Researcher', department: 'Dept. of Computer Engg, VIT Chennai' },
+    { clubSlug: 'vit-quantum-ai-guild', user: omMohanGaur, role: 'RESEARCHER', designation: 'Quantum Compiler Developer', department: 'Mathematics & Computing, VIT Chennai' },
 
-    { clubSlug: 'nitkkr-clean-mobility-ev', user: anshNitkkr, role: 'STUDENT_PRESIDENT', designation: 'Powertrain & Chassis Lead', department: 'Dept. of Mechanical Engg, NITKKR' },
-    { clubSlug: 'nitkkr-clean-mobility-ev', user: rajaRam, role: 'RESEARCHER', designation: 'BMS & Telemetry Engineer', department: 'Dept. of Electrical Engg, NITKKR' },
+    { clubSlug: 'vit-clean-mobility-ev', user: anshNitkkr, role: 'STUDENT_PRESIDENT', designation: 'Powertrain & Chassis Lead', department: 'Dept. of Mechanical Engg, VIT Chennai' },
+    { clubSlug: 'vit-clean-mobility-ev', user: rajaRam, role: 'RESEARCHER', designation: 'BMS & Telemetry Engineer', department: 'Dept. of Electrical Engg, VIT Chennai' },
 
-    { clubSlug: 'nitkkr-assistive-bioeng', user: niharika, role: 'STUDENT_PRESIDENT', designation: 'Bionic Prosthetics Lead', department: 'Assistive Tech Lab, NITKKR' },
-    { clubSlug: 'nitkkr-assistive-bioeng', user: ashishTrivedi, role: 'RESEARCHER', designation: 'EMG Signal Processing Lead', department: 'Dept. of Electronics, NITKKR' },
+    { clubSlug: 'vit-assistive-bioeng', user: niharika, role: 'STUDENT_PRESIDENT', designation: 'Bionic Prosthetics Lead', department: 'Assistive Tech Lab, VIT Chennai' },
+    { clubSlug: 'vit-assistive-bioeng', user: ashishTrivedi, role: 'RESEARCHER', designation: 'EMG Signal Processing Lead', department: 'Dept. of Electronics, VIT Chennai' },
 
     { clubSlug: 'open-aerospace-rocketry', user: anshGoel, role: 'STUDENT_PRESIDENT', designation: 'Hybrid Propulsion Lead', department: 'Aerospace Propulsion Group' },
     { clubSlug: 'open-aerospace-rocketry', user: jayKumar, role: 'RESEARCHER', designation: 'Avionics & Telemetry Engineer', department: 'Flight Software Group' },
@@ -498,12 +498,12 @@ async function seedProductionData() {
     // -------------------------------------------------------------
     // TIER 1: AUTOMATED VALIDATION (ZERO MANUAL REVIEW)
     // -------------------------------------------------------------
-    // A. NITKKR Student ID Verification via Official Mail (@nitkkr.ac.in)
+    // A. VIT Chennai Student ID Verification via Official Mail (@vit.ac.in)
     {
       tenantId: nitkkr.id,
-      name: 'NITKKR Student Verification & Onboarding',
+      name: 'VIT Chennai Student Verification & Onboarding',
       slug: 'nit-kkr-student-workflow',
-      description: 'Instant student verification via academic ID credentials and official @nitkkr.ac.in email OTP validation.',
+      description: 'Instant student verification via academic ID credentials and official @vit.ac.in email OTP validation.',
       stages: [
         {
           name: 'Academic Student Details',
@@ -523,9 +523,9 @@ async function seedProductionData() {
           stageType: 'EMAIL_VERIFICATION',
           executionOrder: 2,
           config: {
-            requiredDomain: 'nitkkr.ac.in',
+            requiredDomain: 'vit.ac.in',
             emailField: 'studentEmail',
-            instructions: 'Enter your official @nitkkr.ac.in email address. We will verify your student credentials via OTP.',
+            instructions: 'Enter your official @vit.ac.in email address. We will verify your student credentials via OTP.',
           },
         },
       ],
@@ -577,10 +577,10 @@ async function seedProductionData() {
     // -------------------------------------------------------------
     // TIER 2: HIGH-STAKES ROLES (FORM -> DOCUMENT -> SITE ADMIN MANUAL REVIEW)
     // -------------------------------------------------------------
-    // D. NITKKR College Administrator
+    // D. VIT Chennai College Administrator
     {
       tenantId: nitkkr.id,
-      name: 'NITKKR College Administrator Onboarding',
+      name: 'VIT Chennai College Administrator Onboarding',
       slug: 'nit-kkr-org-admin-workflow',
       description: 'Institutional administrator authorization for campus tenant governance.',
       stages: [
@@ -620,10 +620,10 @@ async function seedProductionData() {
       ],
     },
 
-    // E. NITKKR Student Club President
+    // E. VIT Chennai Student Club President
     {
       tenantId: nitkkr.id,
-      name: 'NITKKR Student Club President Authorization',
+      name: 'VIT Chennai Student Club President Authorization',
       slug: 'nit-kkr-student-president-workflow',
       description: 'Authorization for student club leaders to create verified campaigns and manage milestone disbursements.',
       stages: [
@@ -664,10 +664,10 @@ async function seedProductionData() {
       ],
     },
 
-    // F. NITKKR Research Scholar / PI
+    // F. VIT Chennai Research Scholar / PI
     {
       tenantId: nitkkr.id,
-      name: 'NITKKR Faculty & Research Scholar Onboarding',
+      name: 'VIT Chennai Faculty & Research Scholar Onboarding',
       slug: 'nit-kkr-researcher-workflow',
       description: 'Accreditation for faculty members and research scholars to submit institutional research grants.',
       stages: [
@@ -963,11 +963,11 @@ async function seedProductionData() {
   console.log('\n[4/5] Seeding Domain-Aligned Genuine Campaigns & Milestones...');
 
   const campaignsToSeed = [
-    // 1. NITKKR Robotics Club
+    // 1. VIT Chennai Robotics Club
     {
       title: 'KrishiBot: Autonomous Multipurpose Field Rover for Smallholder Farmers',
       slug: 'krishibot-autonomous-field-rover',
-      tenantId: seededClubsMap['nitkkr-robotics-club']?.id || nitkkr.id,
+      tenantId: seededClubsMap['vit-robotics-club']?.id || nitkkr.id,
       studentUserId: anshNitkkr.id,
       category: 'STARTUP_INNOVATION',
       campaignType: 'TEAM',
@@ -976,7 +976,7 @@ async function seedProductionData() {
       description: `### Empowering Sustainable Agriculture with Open Robotics
 Agricultural runoff and excessive chemical spraying in Haryana and Punjab have led to severe soil degradation, groundwater toxicity, and rising input costs for smallholder farmers.
 
-**KrishiBot** is an open-source, solar-assisted 4WD autonomous agricultural rover built by students at **NITKKR Robotics & Autonomous Systems Club**. Utilizing low-cost RTK-GPS centimeter-accurate positioning and an onboard Nvidia Jetson Orin Nano, KrishiBot identifies invasive weeds in real time using edge computer vision and applies precise micro-doses of organic bio-herbicide directly to weed foliage, saving up to 85% of chemical costs.
+**KrishiBot** is an open-source, solar-assisted 4WD autonomous agricultural rover built by students at **VIT Chennai Robotics & Autonomous Systems Club**. Utilizing low-cost RTK-GPS centimeter-accurate positioning and an onboard Nvidia Jetson Orin Nano, KrishiBot identifies invasive weeds in real time using edge computer vision and applies precise micro-doses of organic bio-herbicide directly to weed foliage, saving up to 85% of chemical costs.
 
 #### Key Engineering Deliverables:
 - **Chassis & Mobility**: Sealed IP66 tubular aluminum chassis with independent high-torque brushless hub motors.
@@ -995,7 +995,7 @@ Agricultural runoff and excessive chemical spraying in Haryana and Punjab have l
       status: 'LIVE',
       beneficiaryDetails: {
         recipientType: 'ORGANIZATION',
-        accountHolderName: 'NITKKR Robotics Club Innovation Fund',
+        accountHolderName: 'VIT Chennai Robotics Club Innovation Fund',
         bankAccountNumber: '91802001928374',
         ifscCode: 'SBIN0006261',
         upiId: 'nitkkr.robotics@sbi',
@@ -1048,11 +1048,11 @@ Agricultural runoff and excessive chemical spraying in Haryana and Punjab have l
       ],
     },
 
-    // 2. NITKKR Assistive Bioengineering Chapter
+    // 2. VIT Chennai Assistive Bioengineering Chapter
     {
       title: 'Sparsh-Arm: Sub-₹15,000 Myoelectric Bionic Prosthetic for Rural Amputees',
       slug: 'sparsh-myoelectric-prosthetic-arm',
-      tenantId: seededClubsMap['nitkkr-assistive-bioeng']?.id || nitkkr.id,
+      tenantId: seededClubsMap['vit-assistive-bioeng']?.id || nitkkr.id,
       studentUserId: jayKumar.id,
       category: 'RESEARCH_GRANT',
       campaignType: 'TEAM',
@@ -1061,7 +1061,7 @@ Agricultural runoff and excessive chemical spraying in Haryana and Punjab have l
       description: `### Accessible Human Dignity through Biomechatronics
 Advanced myoelectric prosthetic hands in India cost upwards of ₹3,00,000 to ₹12,00,000, making them completely inaccessible to 95% of amputees—most of whom lost their limbs in agricultural or factory machinery accidents.
 
-**Sparsh-Arm** is an open-source active myoelectric prosthesis designed by students at the **NITKKR Assistive Bioengineering Chapter**. By combining parametric 3D printing, compliant flexure finger joints, and custom dual-channel analog EMG signal conditioning circuits, Sparsh-Arm achieves 5 distinct grasp modes at a bill of materials under ₹12,500.
+**Sparsh-Arm** is an open-source active myoelectric prosthesis designed by students at the **VIT Chennai Assistive Bioengineering Chapter**. By combining parametric 3D printing, compliant flexure finger joints, and custom dual-channel analog EMG signal conditioning circuits, Sparsh-Arm achieves 5 distinct grasp modes at a bill of materials under ₹12,500.
 
 #### Core Innovations:
 - **Compliant Flexure Hinges**: Uses durable TPU flexures instead of expensive metallic miniature pins, making fingers shock-resistant.
@@ -1079,7 +1079,7 @@ Advanced myoelectric prosthetic hands in India cost upwards of ₹3,00,000 to �
       status: 'LIVE',
       beneficiaryDetails: {
         recipientType: 'ORGANIZATION',
-        accountHolderName: 'NITKKR Assistive Tech Chapter',
+        accountHolderName: 'VIT Chennai Assistive Tech Chapter',
         bankAccountNumber: '91802005829103',
         ifscCode: 'SBIN0006261',
         upiId: 'sparsh.nitkkr@sbi',
@@ -1131,11 +1131,11 @@ Advanced myoelectric prosthetic hands in India cost upwards of ₹3,00,000 to �
       ],
     },
 
-    // 3. NITKKR Clean Mobility & EV Club
+    // 3. VIT Chennai Clean Mobility & EV Club
     {
       title: 'Vidyut-X: Student Electric Racing Kart with Modular Regenerative BMS',
       slug: 'vidyut-x-modular-ev-racing-kart',
-      tenantId: seededClubsMap['nitkkr-clean-mobility-ev']?.id || nitkkr.id,
+      tenantId: seededClubsMap['vit-clean-mobility-ev']?.id || nitkkr.id,
       studentUserId: anshGoel.id,
       category: 'COMPETITION_TRAVEL',
       campaignType: 'TEAM',
@@ -1144,7 +1144,7 @@ Advanced myoelectric prosthetic hands in India cost upwards of ₹3,00,000 to �
       description: `### Accelerating Indigenous Clean Mobility Engineering
 Sustainable electric mobility requires deep engineering talent skilled in battery safety, thermal modeling, and motor control electronics.
 
-**Vidyut-X** is an electric competition kart developed by students of the **NITKKR Clean Mobility & EV Powertrain Club**. Built from the ground up to represent NITKKR at national student EV engineering challenges, Vidyut-X incorporates a custom-designed 72V LiFePO4 battery pack, active cell balancing, regenerative braking, and real-time telemetry transmitted via CAN-bus to the pit wall.
+**Vidyut-X** is an electric competition kart developed by students of the **VIT Chennai Clean Mobility & EV Powertrain Club**. Built from the ground up to represent VIT Chennai at national student EV engineering challenges, Vidyut-X incorporates a custom-designed 72V LiFePO4 battery pack, active cell balancing, regenerative braking, and real-time telemetry transmitted via CAN-bus to the pit wall.
 
 #### Technical Highlights:
 - **Powertrain**: 15 kW peak liquid-cooled IPM synchronous motor delivering 65 Nm instantaneous torque.
@@ -1162,7 +1162,7 @@ Sustainable electric mobility requires deep engineering talent skilled in batter
       status: 'LIVE',
       beneficiaryDetails: {
         recipientType: 'ORGANIZATION',
-        accountHolderName: 'NITKKR Clean Mobility Club',
+        accountHolderName: 'VIT Chennai Clean Mobility Club',
         bankAccountNumber: '91802009182374',
         ifscCode: 'SBIN0006261',
         upiId: 'vidyut.nitkkr@sbi',

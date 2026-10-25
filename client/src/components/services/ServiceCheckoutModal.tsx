@@ -731,7 +731,7 @@ export const ServiceCheckoutModal: React.FC<ServiceCheckoutModalProps> = ({
                               type="text"
                               value={shippingAddress.addressLine1}
                               onChange={(e) => setShippingAddress({ ...shippingAddress, addressLine1: e.target.value })}
-                              placeholder="e.g. Room 304, Mega Boys Hostel 7, NIT Kurukshetra Campus"
+                              placeholder="e.g. Room 304, Mega Boys Hostel, VIT Chennai Campus"
                               className="w-full p-2 bg-white border border-[#121316] text-xs font-body"
                             />
                           </div>

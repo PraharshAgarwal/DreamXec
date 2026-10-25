@@ -89,7 +89,7 @@ export default function AdminProjectDetails({ projectId, projectType, onClose }:
   const creatorName = project?.student?.name || project?.user?.name || project?.studentName || 'Student Creator';
   const creatorEmail = project?.student?.email || project?.user?.email || 'N/A';
   const creatorAvatar = project?.student?.avatar || project?.user?.avatar || null;
-  const institutionName = project?.tenant?.name || 'NIT Kurukshetra';
+  const institutionName = project?.tenant?.name || 'VIT Chennai';
   const departmentName = project?.department?.name || null;
 
   const teamRoster = Array.isArray(project?.members) && project.members.length > 0

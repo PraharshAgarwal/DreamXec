@@ -10,28 +10,28 @@
 
 module.exports = [
   // ============================================================================
-  // 1. COLLEGE / UNIVERSITY: NIT Kurukshetra
+  // 1. COLLEGE / UNIVERSITY: VIT Chennai
   // ============================================================================
   {
-    name: "National Institute of Technology Kurukshetra",
+    name: "Vellore Institute of Technology, Chennai",
     slug: "nit-kurukshetra",
     orgType: "COLLEGE", // COLLEGE | CLUB | RESEARCH_INSTITUTION | CORPORATE | INCUBATOR | NGO
     lifecycleStatus: "ACTIVE", // DRAFT | PENDING_VERIFICATION | ACTIVE | SUSPENDED
     allowedRoles: ["STUDENT", "PROFESSOR", "RESEARCHER", "STUDENT_PRESIDENT", "ORG_ADMIN"],
     metadata: {
-      location: "Kurukshetra, Haryana, India",
-      domain: "nitkkr.ac.in",
-      website: "https://www.nitkkr.ac.in",
+      location: "Vandalur-Kelambakkam Road, Chennai, Tamil Nadu, India",
+      domain: "vit.ac.in",
+      website: "https://chennai.vit.ac.in",
       established: 1963,
       category: "Institute of National Importance",
       accreditation: "NIRF Tier 1 Engineering Institute",
-      contactEmail: "admin@nitkkr.ac.in"
+      contactEmail: "admin@vit.ac.in"
     },
     workflows: [
       {
         role: "STUDENT",
         title: "Undergraduate / Graduate Student Verification",
-        description: "Official verification workflow for enrolled students at NIT Kurukshetra",
+        description: "Official verification workflow for enrolled students at VIT Chennai",
         stages: [
           {
             name: "Academic Credentials & Roll Number",
@@ -81,7 +81,7 @@ module.exports = [
               fields: [
                 { id: "employeeId", label: "Faculty / Employee ID", type: "text", required: true },
                 { id: "designation", label: "Designation", type: "select", options: ["Assistant Professor", "Associate Professor", "Professor", "Head of Department"], required: true },
-                { id: "facultyEmail", label: "Institutional Email (@nitkkr.ac.in)", type: "email", required: true },
+                { id: "facultyEmail", label: "Institutional Email (@vit.ac.in)", type: "email", required: true },
                 { id: "orcidId", label: "ORCID Researcher ID (0000-xxxx-xxxx-xxxx)", type: "text", required: false }
               ]
             }
@@ -308,11 +308,11 @@ module.exports = [
   },
 
   // ============================================================================
-  // 4. CAMPUS CLUB (Affiliated with NIT Kurukshetra)
+  // 4. CAMPUS CLUB (Affiliated with VIT Chennai)
   // ============================================================================
   {
-    name: "NIT Kurukshetra Robotics & Mechatronics Guild",
-    slug: "nitkkr-robotics-mechatronics",
+    name: "VIT Chennai Robotics & Mechatronics Guild",
+    slug: "vit-robotics-mechatronics",
     orgType: "CLUB",
     lifecycleStatus: "ACTIVE",
     parentSlug: "nit-kurukshetra", // Affiliated child org
@@ -321,7 +321,7 @@ module.exports = [
       tagline: "Autonomous Field Robotics, ROS2 Navigation & Drone Systems",
       motto: "Engineering autonomous physical systems for sustainable agriculture and space exploration",
       facultyAdvisor: "Dr. P. K. Sharma, Professor & Head of Mechatronics",
-      labLocation: "Innovation Lab 2, Central Workshop Block, NIT Kurukshetra"
+      labLocation: "Innovation Lab 2, Central Workshop Block, VIT Chennai"
     },
     workflows: [
       {

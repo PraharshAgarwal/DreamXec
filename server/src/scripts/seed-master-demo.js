@@ -5,7 +5,7 @@
  * 1. Endangered Species taxonomy & avatars (110 species)
  * 2. Permissions & RBAC matrix for all system and org roles
  * 3. Parent institutions, colleges, research authorities, incubators, trusts & corporates
- * 4. Campus-affiliated clubs (NIT Kurukshetra) & open/independent clubs
+ * 4. Campus-affiliated clubs (VIT Chennai) & open/independent clubs
  * 5. Complete test user personas from docs/USER_CREDENTIALS.md with password: Password@123
  * 6. Active memberships across all organizations & clubs with respective roles
  * 7. Tiered, multi-stage workflow templates (Form, Document Upload, Automated Check, Review)
@@ -155,27 +155,27 @@ async function seedMasterDemo() {
     },
   });
 
-  // 3.2 NIT Kurukshetra (COLLEGE)
+  // 3.2 VIT Chennai (COLLEGE)
   const nitkkr = await prisma.organization.upsert({
     where: { slug: 'nit-kkr' },
     update: {
-      name: 'National Institute of Technology Kurukshetra',
+      name: 'Vellore Institute of Technology, Chennai',
       orgType: 'COLLEGE',
       allowedRoles: ['STUDENT', 'ORG_ADMIN', 'PROFESSOR', 'RESEARCHER', 'STUDENT_PRESIDENT', 'MENTOR'],
       hierarchyPath: 'nit-kkr',
       depth: 0,
       lifecycleStatus: 'ACTIVE',
       metadata: {
-        location: 'Kurukshetra, Haryana, India',
-        domain: 'nitkkr.ac.in',
-        website: 'https://www.nitkkr.ac.in',
+        location: 'Vandalur-Kelambakkam Road, Chennai, Tamil Nadu, India',
+        domain: 'vit.ac.in',
+        website: 'https://chennai.vit.ac.in',
         established: 1963,
         accreditation: 'NIRF Tier-1 Institute of National Importance',
       },
     },
     create: {
       id: '9c297f57-d379-4c80-bcc1-6e4fa389d286',
-      name: 'National Institute of Technology Kurukshetra',
+      name: 'Vellore Institute of Technology, Chennai',
       slug: 'nit-kkr',
       orgType: 'COLLEGE',
       allowedRoles: ['STUDENT', 'ORG_ADMIN', 'PROFESSOR', 'RESEARCHER', 'STUDENT_PRESIDENT', 'MENTOR'],
@@ -183,9 +183,9 @@ async function seedMasterDemo() {
       depth: 0,
       lifecycleStatus: 'ACTIVE',
       metadata: {
-        location: 'Kurukshetra, Haryana, India',
-        domain: 'nitkkr.ac.in',
-        website: 'https://www.nitkkr.ac.in',
+        location: 'Vandalur-Kelambakkam Road, Chennai, Tamil Nadu, India',
+        domain: 'vit.ac.in',
+        website: 'https://chennai.vit.ac.in',
         established: 1963,
         accreditation: 'NIRF Tier-1 Institute of National Importance',
       },
@@ -196,7 +196,7 @@ async function seedMasterDemo() {
   await prisma.organization.upsert({
     where: { slug: 'nit-kurukshetra' },
     update: {
-      name: 'National Institute of Technology Kurukshetra',
+      name: 'Vellore Institute of Technology, Chennai',
       orgType: 'COLLEGE',
       allowedRoles: ['STUDENT', 'ORG_ADMIN', 'PROFESSOR', 'RESEARCHER', 'STUDENT_PRESIDENT', 'MENTOR'],
       hierarchyPath: 'nit-kurukshetra',
@@ -204,7 +204,7 @@ async function seedMasterDemo() {
       lifecycleStatus: 'ACTIVE',
     },
     create: {
-      name: 'National Institute of Technology Kurukshetra',
+      name: 'Vellore Institute of Technology, Chennai',
       slug: 'nit-kurukshetra',
       orgType: 'COLLEGE',
       allowedRoles: ['STUDENT', 'ORG_ADMIN', 'PROFESSOR', 'RESEARCHER', 'STUDENT_PRESIDENT', 'MENTOR'],
@@ -380,26 +380,26 @@ async function seedMasterDemo() {
   console.log('\n[4/12] Seeding Purposeful Campus & Independent Clubs...');
 
   const clubsToSeed = [
-    // 4.1 Aero Club NIT Kurukshetra (Featured in USER_CREDENTIALS.md)
+    // 4.1 Aero Club VIT Chennai (Featured in USER_CREDENTIALS.md)
     {
-      name: 'Aero Club NIT Kurukshetra',
-      slug: 'aero-club-nitkkr',
+      name: 'Aero Club VIT Chennai',
+      slug: 'aero-club-vit',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.aero-club-nitkkr`,
+      hierarchyPath: `${nitkkr.slug}.aero-club-vit`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER', 'MENTOR'],
       metadata: {
         motto: '"Pushing the frontiers of subscale autonomous flight & aerial robotics ✈️"',
         tagline: 'Autonomous Fixed-Wing, VTOL Drones & Atmospheric Flight Dynamics Guild',
         category: 'Aeronautics & Drone Robotics',
-        labLocation: 'Aerodynamics & Flight Dynamics Lab, Central Workshop Wing A, NITKKR',
+        labLocation: 'Aerodynamics & Flight Dynamics Lab, Central Workshop Wing A, VIT Chennai',
         meetingSchedule: 'Tuesdays, Thursdays & Saturdays, 5:00 PM IST',
         facultyAdvisor: {
           name: 'Prof. Rajesh Kumar',
           designation: 'Professor & Dean of Student Welfare',
-          department: 'Dept. of Mechanical Engineering, NIT Kurukshetra',
+          department: 'Dept. of Mechanical Engineering, VIT Chennai',
         },
         technicalStacks: [
           { name: 'PX4 & ArduPilot Autopilot', description: 'Custom firmware integration for autonomous waypoint tracking and VTOL transition.', tag: 'Flight Stack' },
@@ -414,88 +414,88 @@ async function seedMasterDemo() {
         ],
       },
     },
-    // 4.2 NITKKR Robotics & Autonomous Systems Club
+    // 4.2 VIT Chennai Robotics & Autonomous Systems Club
     {
-      name: 'NITKKR Robotics & Autonomous Systems Club',
-      slug: 'nitkkr-robotics-club',
+      name: 'VIT Chennai Robotics & Autonomous Systems Club',
+      slug: 'vit-robotics-club',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-robotics-club`,
+      hierarchyPath: `${nitkkr.slug}.vit-robotics-club`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER', 'MENTOR'],
       metadata: {
         motto: '"Engineering next-gen autonomous field rovers for Indian precision agriculture 🌾"',
         tagline: 'Autonomous Field Robotics, ROS2 Navigation & Edge-AI Perception Chapter',
         category: 'Field Robotics & Autonomy',
-        labLocation: 'Robotics & Mechatronics Innovation Lab, Block B, NITKKR',
+        labLocation: 'Robotics & Mechatronics Innovation Lab, Block B, VIT Chennai',
         meetingSchedule: 'Wednesdays & Saturdays, 5:30 PM IST',
         facultyAdvisor: {
           name: 'Dr. P. K. Sharma',
           designation: 'Professor & Head of Mechatronics',
-          department: 'Dept. of Mechanical & Robotics, NITKKR',
+          department: 'Dept. of Mechanical & Robotics, VIT Chennai',
         },
       },
     },
-    // 4.3 NITKKR Quantum Computing & AI Guild
+    // 4.3 VIT Chennai Quantum Computing & AI Guild
     {
-      name: 'NITKKR Quantum Computing & AI Guild',
-      slug: 'nitkkr-quantum-ai-guild',
+      name: 'VIT Chennai Quantum Computing & AI Guild',
+      slug: 'vit-quantum-ai-guild',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-quantum-ai-guild`,
+      hierarchyPath: `${nitkkr.slug}.vit-quantum-ai-guild`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
         motto: '"Simulating quantum circuits & accelerating student-led AI compilers ⚛️"',
         tagline: 'Open Quantum Computation, Qiskit Circuit Design & Deep Learning Guild',
         category: 'Quantum Computing & AI',
-        labLocation: 'High Performance Computing Center (HPCC), Central Library 3rd Floor, NITKKR',
+        labLocation: 'High Performance Computing Center (HPCC), Central Library 3rd Floor, VIT Chennai',
       },
     },
-    // 4.4 NITKKR Clean Mobility & EV Powertrain Club
+    // 4.4 VIT Chennai Clean Mobility & EV Powertrain Club
     {
-      name: 'NITKKR Clean Mobility & EV Powertrain Club',
-      slug: 'nitkkr-clean-mobility-ev',
+      name: 'VIT Chennai Clean Mobility & EV Powertrain Club',
+      slug: 'vit-clean-mobility-ev',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-clean-mobility-ev`,
+      hierarchyPath: `${nitkkr.slug}.vit-clean-mobility-ev`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
         motto: '"Pioneering modular regenerative EV powertrains & telemetry for racing ⚡"',
         tagline: 'Electric Racing, Regenerative Powertrains & Formula Student Chapter',
         category: 'Clean Mobility & EV',
-        labLocation: 'Automotive Innovation Center, Central Workshop Wing C, NITKKR',
+        labLocation: 'Automotive Innovation Center, Central Workshop Wing C, VIT Chennai',
       },
     },
-    // 4.5 NITKKR Assistive Bioengineering Chapter
+    // 4.5 VIT Chennai Assistive Bioengineering Chapter
     {
-      name: 'NITKKR Assistive Bioengineering Chapter',
-      slug: 'nitkkr-assistive-bioeng',
+      name: 'VIT Chennai Assistive Bioengineering Chapter',
+      slug: 'vit-assistive-bioeng',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-assistive-bioeng`,
+      hierarchyPath: `${nitkkr.slug}.vit-assistive-bioeng`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
         motto: '"Building sub-₹15,000 myoelectric bionic limbs for rural amputees 🦾"',
         tagline: 'Affordable Prosthetics, EMG Signal Processing & Assistive Robotics Chapter',
         category: 'Biomedical & Assistive Robotics',
-        labLocation: 'Assistive Bioengineering Laboratory, Department of Electronics, NITKKR',
+        labLocation: 'Assistive Bioengineering Laboratory, Department of Electronics, VIT Chennai',
       },
     },
-    // 4.6 NIT Kurukshetra Robotics & Mechatronics Guild
+    // 4.6 VIT Chennai Robotics & Mechatronics Guild
     {
-      name: 'NIT Kurukshetra Robotics & Mechatronics Guild',
-      slug: 'nitkkr-robotics-mechatronics',
+      name: 'VIT Chennai Robotics & Mechatronics Guild',
+      slug: 'vit-robotics-mechatronics',
       orgType: 'CLUB',
       parentId: nitkkr.id,
       depth: 1,
-      hierarchyPath: `${nitkkr.slug}.nitkkr-robotics-mechatronics`,
+      hierarchyPath: `${nitkkr.slug}.vit-robotics-mechatronics`,
       lifecycleStatus: 'ACTIVE',
       allowedRoles: ['STUDENT', 'STUDENT_PRESIDENT', 'RESEARCHER'],
       metadata: {
@@ -619,51 +619,51 @@ async function seedMasterDemo() {
       speciesSlug: 'great-indian-bustard',
       membership: { orgId: platformOrg.id, role: OrgRole.COMPLIANCE_OFFICER },
     },
-    // 3. Student President (Club Lead) - Aero Club NIT Kurukshetra
+    // 3. Student President (Club Lead) - Aero Club VIT Chennai
     {
-      email: 'aarav.sharma@nitkkr.ac.in',
+      email: 'aarav.sharma@vit.ac.in',
       fullName: 'Aarav Sharma',
       username: 'aarav_sharma',
       role: Role.USER,
-      bio: 'President of Aero Club NIT Kurukshetra | Autonomous VTOL & Fixed-Wing Drone Engineer',
+      bio: 'President of Aero Club VIT Chennai | Autonomous VTOL & Fixed-Wing Drone Engineer',
       speciesSlug: 'bengal-tiger',
-      membership: { orgId: clubsMap['aero-club-nitkkr'].id, role: OrgRole.STUDENT_PRESIDENT },
+      membership: { orgId: clubsMap['aero-club-vit'].id, role: OrgRole.STUDENT_PRESIDENT },
       studentVerified: true,
     },
-    // 4. Student Member - Aero Club NIT Kurukshetra
+    // 4. Student Member - Aero Club VIT Chennai
     {
-      email: 'student.member@nitkkr.ac.in',
+      email: 'student.member@vit.ac.in',
       fullName: 'Rohan Mehta',
       username: 'rohan_mehta',
       role: Role.USER,
-      bio: 'Undergraduate Aerospace Engineering Student & Avionics Lead at Aero Club NITKKR',
+      bio: 'Undergraduate Aerospace Engineering Student & Avionics Lead at Aero Club VIT Chennai',
       speciesSlug: 'gharial',
-      membership: { orgId: clubsMap['aero-club-nitkkr'].id, role: OrgRole.STUDENT },
+      membership: { orgId: clubsMap['aero-club-vit'].id, role: OrgRole.STUDENT },
       studentVerified: true,
     },
-    // 5. College / University Admin - NIT Kurukshetra
+    // 5. College / University Admin - VIT Chennai
     {
-      email: 'registrar@nitkkr.ac.in',
+      email: 'registrar@vit.ac.in',
       fullName: 'Dean & Registrar Admin',
-      username: 'nitkkr_registrar',
+      username: 'vit_registrar',
       role: Role.USER,
-      bio: 'Registrar & Dean of Student Affairs, National Institute of Technology Kurukshetra',
+      bio: 'Registrar & Dean of Student Affairs, Vellore Institute of Technology, Chennai',
       speciesSlug: 'indian-rhinoceros',
       membership: { orgId: nitkkr.id, role: OrgRole.ORG_ADMIN },
     },
-    // 6. Professor / Faculty Mentor - NIT Kurukshetra
+    // 6. Professor / Faculty Mentor - VIT Chennai
     {
-      email: 'prof.rajesh@nitkkr.ac.in',
+      email: 'prof.rajesh@vit.ac.in',
       fullName: 'Prof. Rajesh Kumar',
       username: 'prof_rajesh',
       role: Role.USER,
-      bio: 'Professor of Mechanical Engineering & Dean of Student Welfare, NIT Kurukshetra',
+      bio: 'Professor of Mechanical Engineering & Dean of Student Welfare, VIT Chennai',
       speciesSlug: 'asian-elephant',
       membership: { orgId: nitkkr.id, role: OrgRole.PROFESSOR },
     },
-    // 7. Principal Investigator / Researcher - NIT Kurukshetra & IISc
+    // 7. Principal Investigator / Researcher - VIT Chennai & IISc
     {
-      email: 'sneha.verma@nitkkr.ac.in',
+      email: 'sneha.verma@vit.ac.in',
       fullName: 'Dr. Sneha Verma',
       username: 'dr_sneha_verma',
       role: Role.USER,
@@ -673,7 +673,7 @@ async function seedMasterDemo() {
     },
     // 8. Incubator Manager - DreamX DeepTech Innovation Hub
     {
-      email: 'incubator.manager@nitkkr.ac.in',
+      email: 'incubator.manager@vit.ac.in',
       fullName: 'Dr. Ramesh Chandra',
       username: 'ramesh_incubator',
       role: Role.USER,
@@ -681,15 +681,15 @@ async function seedMasterDemo() {
       speciesSlug: 'red-panda',
       membership: { orgId: incubatorOrg.id, role: OrgRole.INCUBATOR_MANAGER },
     },
-    // 9. Industry Mentor - Aero Club NIT Kurukshetra
+    // 9. Industry Mentor - Aero Club VIT Chennai
     {
-      email: 'vikram.mentor@nitkkr.ac.in',
+      email: 'vikram.mentor@vit.ac.in',
       fullName: 'Vikram Aditya',
       username: 'vikram_aditya',
       role: Role.USER,
       bio: 'Aerospace Systems Architect & Veteran Flight Controls Mentor',
       speciesSlug: 'lion-tailed-macaque',
-      membership: { orgId: clubsMap['aero-club-nitkkr'].id, role: OrgRole.MENTOR },
+      membership: { orgId: clubsMap['aero-club-vit'].id, role: OrgRole.MENTOR },
     },
     // 10. Individual Donor (Philanthropist)
     {
@@ -713,13 +713,13 @@ async function seedMasterDemo() {
     },
     // 12. Project Lead: KrishiBot (Robotics Club)
     {
-      email: '12212115@nitkkr.ac.in',
+      email: '21bce1001@vit.ac.in',
       fullName: 'Ansh',
-      username: 'ansh_nitkkr',
+      username: 'ansh_vit',
       role: Role.USER,
-      bio: 'Robotics Team Lead & Field Rover Systems Architect at NITKKR Robotics Club',
+      bio: 'Robotics Team Lead & Field Rover Systems Architect at VIT Chennai Robotics Club',
       speciesSlug: 'snow-leopard',
-      membership: { orgId: clubsMap['nitkkr-robotics-club'].id, role: OrgRole.STUDENT_PRESIDENT },
+      membership: { orgId: clubsMap['vit-robotics-club'].id, role: OrgRole.STUDENT_PRESIDENT },
       studentVerified: true,
     },
     // 13. Project Lead: Vidyut-X (Clean Mobility)
@@ -728,9 +728,9 @@ async function seedMasterDemo() {
       fullName: 'Ansh Goel',
       username: 'ansh_goel',
       role: Role.USER,
-      bio: 'Electric Powertrain & BMS Engineer at NITKKR Clean Mobility Club',
+      bio: 'Electric Powertrain & BMS Engineer at VIT Chennai Clean Mobility Club',
       speciesSlug: 'bengal-tiger',
-      membership: { orgId: clubsMap['nitkkr-clean-mobility-ev'].id, role: OrgRole.STUDENT_PRESIDENT },
+      membership: { orgId: clubsMap['vit-clean-mobility-ev'].id, role: OrgRole.STUDENT_PRESIDENT },
       studentVerified: true,
     },
     // 14. Project Lead: Sparsh-Arm (Assistive Bioengineering)
@@ -741,7 +741,7 @@ async function seedMasterDemo() {
       role: Role.USER,
       bio: 'Lead Biomechatronics Researcher & Affordable Prosthetics Developer',
       speciesSlug: 'asian-elephant',
-      membership: { orgId: clubsMap['nitkkr-assistive-bioeng'].id, role: OrgRole.STUDENT_PRESIDENT },
+      membership: { orgId: clubsMap['vit-assistive-bioeng'].id, role: OrgRole.STUDENT_PRESIDENT },
       studentVerified: true,
     },
     // 15. Project Lead: JalNet (National Innovation Authority)
@@ -798,7 +798,7 @@ async function seedMasterDemo() {
       isAdmin: uDef.role === Role.ADMIN,
       emailVerified: true,
       studentVerified: Boolean(uDef.studentVerified),
-      institution: uDef.email.endsWith('@nitkkr.ac.in') ? 'NIT Kurukshetra' : 'DreamXec Ecosystem',
+      institution: uDef.email.endsWith('@vit.ac.in') ? 'VIT Chennai' : 'DreamXec Ecosystem',
     };
 
     const userRecord = await prisma.user.upsert({
@@ -855,18 +855,18 @@ async function seedMasterDemo() {
     console.log(`  ✓ [User] ${uDef.fullName} <${uDef.email}> (${uDef.role}) -> ${uDef.membership?.role || 'USER'}`);
   }
 
-  // Cross-enroll Aarav Sharma & Rohan Mehta in NITKKR parent college as well
+  // Cross-enroll Aarav Sharma & Rohan Mehta in VIT Chennai parent college as well
   await prisma.membership.upsert({
     where: {
       userId_organizationId_role: {
-        userId: userMap['aarav.sharma@nitkkr.ac.in'].id,
+        userId: userMap['aarav.sharma@vit.ac.in'].id,
         organizationId: nitkkr.id,
         role: OrgRole.STUDENT,
       },
     },
     update: { status: MembershipStatus.ACTIVE },
     create: {
-      userId: userMap['aarav.sharma@nitkkr.ac.in'].id,
+      userId: userMap['aarav.sharma@vit.ac.in'].id,
       organizationId: nitkkr.id,
       role: OrgRole.STUDENT,
       status: MembershipStatus.ACTIVE,
@@ -877,14 +877,14 @@ async function seedMasterDemo() {
   await prisma.membership.upsert({
     where: {
       userId_organizationId_role: {
-        userId: userMap['student.member@nitkkr.ac.in'].id,
+        userId: userMap['student.member@vit.ac.in'].id,
         organizationId: nitkkr.id,
         role: OrgRole.STUDENT,
       },
     },
     update: { status: MembershipStatus.ACTIVE },
     create: {
-      userId: userMap['student.member@nitkkr.ac.in'].id,
+      userId: userMap['student.member@vit.ac.in'].id,
       organizationId: nitkkr.id,
       role: OrgRole.STUDENT,
       status: MembershipStatus.ACTIVE,
@@ -899,15 +899,15 @@ async function seedMasterDemo() {
 
   const sampleVaultDocs = [
     {
-      userEmail: 'aarav.sharma@nitkkr.ac.in',
+      userEmail: 'aarav.sharma@vit.ac.in',
       documentType: 'STUDENT_ID',
-      title: 'NIT Kurukshetra Student Identity Card',
+      title: 'VIT Chennai Student Identity Card',
       fileName: 'aarav_nitkkr_id_card.pdf',
       fileUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
       isVerified: true,
     },
     {
-      userEmail: 'aarav.sharma@nitkkr.ac.in',
+      userEmail: 'aarav.sharma@vit.ac.in',
       documentType: 'UNIVERSITY_ENDORSEMENT',
       title: 'Dean of Student Affairs Club Presidential Authorization Letter',
       fileName: 'aero_club_president_endorsement.pdf',
@@ -915,15 +915,15 @@ async function seedMasterDemo() {
       isVerified: true,
     },
     {
-      userEmail: 'student.member@nitkkr.ac.in',
+      userEmail: 'student.member@vit.ac.in',
       documentType: 'STUDENT_ID',
-      title: 'NIT Kurukshetra Enrolled Student Identity Proof',
+      title: 'VIT Chennai Enrolled Student Identity Proof',
       fileName: 'rohan_student_id.pdf',
       fileUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
       isVerified: true,
     },
     {
-      userEmail: 'prof.rajesh@nitkkr.ac.in',
+      userEmail: 'prof.rajesh@vit.ac.in',
       documentType: 'GOVT_ID',
       title: 'Faculty Employee Identity Card & Gazette Notification',
       fileName: 'prof_rajesh_faculty_id.pdf',
@@ -972,9 +972,9 @@ async function seedMasterDemo() {
   const workflowDefinitions = [
     // Aero Club Student Workflow
     {
-      tenantId: clubsMap['aero-club-nitkkr'].id,
-      slug: 'aero-club-nitkkr-student-workflow',
-      name: 'Aero Club NIT Kurukshetra - Student Member Induction',
+      tenantId: clubsMap['aero-club-vit'].id,
+      slug: 'aero-club-vit-student-workflow',
+      name: 'Aero Club VIT Chennai - Student Member Induction',
       description: 'Technical division selection and enrolled student verification for Aero Club',
       stages: [
         {
@@ -984,7 +984,7 @@ async function seedMasterDemo() {
           config: {
             fields: [
               { id: 'division', label: 'Technical Division', type: 'select', options: ['Autonomous Flight Avionics', 'Aerodynamics & CFD', 'Airframe Composites', 'Ground Control Telemetry'], required: true },
-              { id: 'rollNumber', label: 'NIT Kurukshetra Roll Number', type: 'text', required: true },
+              { id: 'rollNumber', label: 'VIT Chennai Roll Number', type: 'text', required: true },
               { id: 'pilotExperience', label: 'Do you have RC or drone flight simulator experience?', type: 'select', options: ['Beginner', 'Intermediate (10+ hours)', 'Experienced Pilot'], required: true },
             ],
           },
@@ -1010,9 +1010,9 @@ async function seedMasterDemo() {
     },
     // Aero Club President Workflow
     {
-      tenantId: clubsMap['aero-club-nitkkr'].id,
-      slug: 'aero-club-nitkkr-student-president-workflow',
-      name: 'Aero Club NIT Kurukshetra - Club President Authorization',
+      tenantId: clubsMap['aero-club-vit'].id,
+      slug: 'aero-club-vit-student-president-workflow',
+      name: 'Aero Club VIT Chennai - Club President Authorization',
       description: 'Presidential accreditation endorsed by Faculty Advisor and Dean of Student Welfare',
       stages: [
         {
@@ -1044,20 +1044,20 @@ async function seedMasterDemo() {
         },
       ],
     },
-    // NITKKR Student Institutional Workflow
+    // VIT Chennai Student Institutional Workflow
     {
       tenantId: nitkkr.id,
       slug: 'nit-kkr-student-workflow',
-      name: 'NITKKR Student Verification & Onboarding',
-      description: 'Zero-friction student onboarding via official institutional email (@nitkkr.ac.in)',
+      name: 'VIT Chennai Student Verification & Onboarding',
+      description: 'Zero-friction student onboarding via official institutional email (@vit.ac.in)',
       stages: [
         {
           name: 'Official Email Verification',
           stageType: 'EMAIL_VERIFICATION',
           executionOrder: 1,
           config: {
-            allowedDomains: ['nitkkr.ac.in'],
-            instruction: 'Verify your @nitkkr.ac.in student email for instant institutional access.',
+            allowedDomains: ['vit.ac.in'],
+            instruction: 'Verify your @vit.ac.in student email for instant institutional access.',
           },
         },
         {
@@ -1074,11 +1074,11 @@ async function seedMasterDemo() {
         },
       ],
     },
-    // NITKKR Faculty / Professor Workflow
+    // VIT Chennai Faculty / Professor Workflow
     {
       tenantId: nitkkr.id,
       slug: 'nit-kkr-professor-workflow',
-      name: 'NITKKR Faculty & Research Supervisor Onboarding',
+      name: 'VIT Chennai Faculty & Research Supervisor Onboarding',
       description: 'Academic appointment verification for professors and research supervisors',
       stages: [
         {
@@ -1200,9 +1200,9 @@ async function seedMasterDemo() {
   console.log('\n[8/12] Seeding Live Workflow Instances & Verification Review Queue...');
 
   // 8.1 Completed Workflow for Aarav Sharma (President of Aero Club)
-  const aeroPresidentTpl = templateMap['aero-club-nitkkr-student-president-workflow'];
+  const aeroPresidentTpl = templateMap['aero-club-vit-student-president-workflow'];
   if (aeroPresidentTpl) {
-    const aaravUser = userMap['aarav.sharma@nitkkr.ac.in'];
+    const aaravUser = userMap['aarav.sharma@vit.ac.in'];
     const existingInstance = await prisma.workflowInstance.findFirst({
       where: {
         templateId: aeroPresidentTpl.id,
@@ -1214,7 +1214,7 @@ async function seedMasterDemo() {
       const instance = await prisma.workflowInstance.create({
         data: {
           templateId: aeroPresidentTpl.id,
-          tenantId: clubsMap['aero-club-nitkkr'].id,
+          tenantId: clubsMap['aero-club-vit'].id,
           applicantId: aaravUser.id,
           applicantEmail: aaravUser.email,
           applicantName: aaravUser.fullName,
@@ -1223,7 +1223,7 @@ async function seedMasterDemo() {
           completedAt: new Date(Date.now() - 14 * 24 * 3600 * 1000),
           instanceData: {
             tenureYear: '2026-2027',
-            executiveCouncilEmails: 'rohan_mehta@nitkkr.ac.in, avionics@nitkkr.ac.in',
+            executiveCouncilEmails: 'rohan_mehta@vit.ac.in, avionics@vit.ac.in',
             selectedRole: 'STUDENT_PRESIDENT',
             status: 'APPROVED',
           },
@@ -1249,7 +1249,7 @@ async function seedMasterDemo() {
       await prisma.verification.create({
         data: {
           instanceId: instance.id,
-          tenantId: clubsMap['aero-club-nitkkr'].id,
+          tenantId: clubsMap['aero-club-vit'].id,
           verificationType: 'STUDENT_PRESIDENT_AUTHORIZATION',
           status: 'VERIFIED',
           evidenceUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
@@ -1262,9 +1262,9 @@ async function seedMasterDemo() {
   }
 
   // 8.2 LIVE IN-PROGRESS Workflow Instance for Rohan Mehta (Pending Review in Admin Queue!)
-  const aeroStudentTpl = templateMap['aero-club-nitkkr-student-workflow'];
+  const aeroStudentTpl = templateMap['aero-club-vit-student-workflow'];
   if (aeroStudentTpl && aeroStudentTpl.stages.length >= 3) {
-    const rohanUser = userMap['student.member@nitkkr.ac.in'];
+    const rohanUser = userMap['student.member@vit.ac.in'];
     const reviewStage = aeroStudentTpl.stages[2]; // Stage 3: MANUAL_REVIEW
 
     const existingPending = await prisma.workflowInstance.findFirst({
@@ -1279,7 +1279,7 @@ async function seedMasterDemo() {
       const pendingInstance = await prisma.workflowInstance.create({
         data: {
           templateId: aeroStudentTpl.id,
-          tenantId: clubsMap['aero-club-nitkkr'].id,
+          tenantId: clubsMap['aero-club-vit'].id,
           applicantId: rohanUser.id,
           applicantEmail: rohanUser.email,
           applicantName: rohanUser.fullName,
@@ -1366,14 +1366,14 @@ async function seedMasterDemo() {
       await prisma.verification.create({
         data: {
           instanceId: pendingInstance.id,
-          tenantId: clubsMap['aero-club-nitkkr'].id,
+          tenantId: clubsMap['aero-club-vit'].id,
           verificationType: 'CLUB_MEMBER_ONBOARDING',
           status: 'PENDING',
           evidenceUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
           verificationData: {
             applicantName: rohanUser.fullName,
             applicantEmail: rohanUser.email,
-            clubName: 'Aero Club NIT Kurukshetra',
+            clubName: 'Aero Club VIT Chennai',
             division: 'Autonomous Flight Avionics',
             rollNumber: '12212089',
           },
@@ -1387,7 +1387,7 @@ async function seedMasterDemo() {
   // 8.3 Completed Faculty Verification for Prof. Rajesh Kumar
   const profTpl = templateMap['nit-kkr-professor-workflow'];
   if (profTpl) {
-    const profUser = userMap['prof.rajesh@nitkkr.ac.in'];
+    const profUser = userMap['prof.rajesh@vit.ac.in'];
     const existingProf = await prisma.workflowInstance.findFirst({
       where: { templateId: profTpl.id, applicantEmail: profUser.email },
     });
@@ -1418,7 +1418,7 @@ async function seedMasterDemo() {
           verificationType: 'FACULTY_CREDENTIAL_VERIFICATION',
           status: 'VERIFIED',
           evidenceUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
-          verificationData: { verifiedBy: 'registrar@nitkkr.ac.in', verifiedAt: new Date() },
+          verificationData: { verifiedBy: 'registrar@vit.ac.in', verifiedAt: new Date() },
           completedAt: new Date(Date.now() - 20 * 24 * 3600 * 1000),
         },
       });
@@ -1432,12 +1432,12 @@ async function seedMasterDemo() {
   console.log('\n[9/12] Seeding Domain-Aligned Production Campaigns & Escrow Accounts...');
 
   const campaignsMaster = [
-    // 1. Aero Club NIT Kurukshetra (Lead: Aarav Sharma)
+    // 1. Aero Club VIT Chennai (Lead: Aarav Sharma)
     {
       title: 'Garuda: Subscale Autonomous VTOL Disaster Response Drone',
       slug: 'garuda-autonomous-vtol-disaster-drone',
-      tenantId: clubsMap['aero-club-nitkkr'].id,
-      studentUserId: userMap['aarav.sharma@nitkkr.ac.in'].id,
+      tenantId: clubsMap['aero-club-vit'].id,
+      studentUserId: userMap['aarav.sharma@vit.ac.in'].id,
       category: 'STARTUP_INNOVATION',
       campaignType: 'TEAM',
       stage: 'PROTOTYPE',
@@ -1445,7 +1445,7 @@ async function seedMasterDemo() {
       description: `### Rapid Emergency Airborne Delivery for Crisis Zones
 When flash floods or natural disasters strike rural regions, bridges and roads are frequently washed out, cutting off critical medical supplies (insulin, snake venom antivenom, blood units) during the golden hour.
 
-**Garuda** is an autonomous hybrid Vertical Take-Off & Landing (VTOL) unmanned aerial vehicle engineered from the ground up by student aerospace engineers at **Aero Club NIT Kurukshetra**.
+**Garuda** is an autonomous hybrid Vertical Take-Off & Landing (VTOL) unmanned aerial vehicle engineered from the ground up by student aerospace engineers at **Aero Club VIT Chennai**.
 
 Combining the runway-independent vertical hover of a quadcopter with the aerodynamic lift and high cruise efficiency of a carbon-fiber flying wing, Garuda delivers 90 minutes of continuous operational endurance across a 45 km operational radius.
 
@@ -1466,18 +1466,18 @@ Combining the runway-independent vertical hover of a quadcopter with the aerodyn
       status: 'LIVE',
       beneficiaryDetails: {
         recipientType: 'ORGANIZATION',
-        accountHolderName: 'Aero Club NITKKR Garuda Project',
+        accountHolderName: 'Aero Club VIT Chennai Garuda Project',
         bankAccountNumber: '91802007819201',
         ifscCode: 'SBIN0006261',
         upiId: 'aeroclub.garuda@sbi',
       },
       teamMembers: [
-        { name: 'Aarav Sharma', role: 'Project Lead & Aerodynamics Engineer', email: 'aarav.sharma@nitkkr.ac.in' },
-        { name: 'Rohan Mehta', role: 'Avionics & Embedded Firmware Lead', email: 'student.member@nitkkr.ac.in' },
-        { name: 'Vikram Aditya', role: 'Industry Flight Controls Advisor', email: 'vikram.mentor@nitkkr.ac.in' },
+        { name: 'Aarav Sharma', role: 'Project Lead & Aerodynamics Engineer', email: 'aarav.sharma@vit.ac.in' },
+        { name: 'Rohan Mehta', role: 'Avionics & Embedded Firmware Lead', email: 'student.member@vit.ac.in' },
+        { name: 'Vikram Aditya', role: 'Industry Flight Controls Advisor', email: 'vikram.mentor@vit.ac.in' },
       ],
       faqs: [
-        { question: 'What is the flight testing plan?', answer: 'Initial tethered hover tests take place at NITKKR outdoor sports grounds, followed by DGCA-cleared long-range test flights.' },
+        { question: 'What is the flight testing plan?', answer: 'Initial tethered hover tests take place at VIT Chennai outdoor sports grounds, followed by DGCA-cleared long-range test flights.' },
         { question: 'Who owns the intellectual property?', answer: 'The airframe blueprints and PX4 flight controller mixing packages are released openly under open hardware CERN licenses.' },
       ],
       milestones: [
@@ -1519,12 +1519,12 @@ Combining the runway-independent vertical hover of a quadcopter with the aerodyn
         },
       ],
     },
-    // 2. NITKKR Robotics: KrishiBot (Lead: Ansh)
+    // 2. VIT Chennai Robotics: KrishiBot (Lead: Ansh)
     {
       title: 'KrishiBot: Autonomous Multipurpose Field Rover for Smallholder Farmers',
       slug: 'krishibot-autonomous-field-rover',
-      tenantId: clubsMap['nitkkr-robotics-club'].id,
-      studentUserId: userMap['12212115@nitkkr.ac.in'].id,
+      tenantId: clubsMap['vit-robotics-club'].id,
+      studentUserId: userMap['21bce1001@vit.ac.in'].id,
       category: 'STARTUP_INNOVATION',
       campaignType: 'TEAM',
       stage: 'PROTOTYPE',
@@ -1532,7 +1532,7 @@ Combining the runway-independent vertical hover of a quadcopter with the aerodyn
       description: `### Empowering Sustainable Agriculture with Open Robotics
 Agricultural runoff and excessive chemical spraying in Haryana and Punjab have led to severe soil degradation, groundwater toxicity, and rising input costs for smallholder farmers.
 
-**KrishiBot** is an open-source, solar-assisted 4WD autonomous agricultural rover built by students at **NITKKR Robotics & Autonomous Systems Club**. Utilizing low-cost RTK-GPS centimeter-accurate positioning and an onboard Nvidia Jetson Orin Nano, KrishiBot identifies invasive weeds in real time using edge computer vision and applies precise micro-doses of organic bio-herbicide directly to weed foliage, saving up to 85% of chemical costs.`,
+**KrishiBot** is an open-source, solar-assisted 4WD autonomous agricultural rover built by students at **VIT Chennai Robotics & Autonomous Systems Club**. Utilizing low-cost RTK-GPS centimeter-accurate positioning and an onboard Nvidia Jetson Orin Nano, KrishiBot identifies invasive weeds in real time using edge computer vision and applies precise micro-doses of organic bio-herbicide directly to weed foliage, saving up to 85% of chemical costs.`,
       coverImageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80',
       galleryImageUrls: [
         'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80',
@@ -1545,13 +1545,13 @@ Agricultural runoff and excessive chemical spraying in Haryana and Punjab have l
       status: 'LIVE',
       beneficiaryDetails: {
         recipientType: 'ORGANIZATION',
-        accountHolderName: 'NITKKR Robotics Club Innovation Fund',
+        accountHolderName: 'VIT Chennai Robotics Club Innovation Fund',
         bankAccountNumber: '91802001928374',
         ifscCode: 'SBIN0006261',
         upiId: 'nitkkr.robotics@sbi',
       },
       teamMembers: [
-        { name: 'Ansh', role: 'Project Lead & Robotics Engineer', email: '12212115@nitkkr.ac.in' },
+        { name: 'Ansh', role: 'Project Lead & Robotics Engineer', email: '21bce1001@vit.ac.in' },
         { name: 'Ashish Trivedi', role: 'Embedded Systems & AI Specialist', email: 'ashish.5core@gmail.com' },
       ],
       faqs: [
@@ -1600,7 +1600,7 @@ Agricultural runoff and excessive chemical spraying in Haryana and Punjab have l
     {
       title: 'Sparsh-Arm: Sub-₹15,000 Myoelectric Bionic Prosthetic for Rural Amputees',
       slug: 'sparsh-myoelectric-prosthetic-arm',
-      tenantId: clubsMap['nitkkr-assistive-bioeng'].id,
+      tenantId: clubsMap['vit-assistive-bioeng'].id,
       studentUserId: userMap['jaynrk2002@gmail.com'].id,
       category: 'RESEARCH_GRANT',
       campaignType: 'TEAM',
@@ -1622,7 +1622,7 @@ Advanced myoelectric prosthetic hands in India cost upwards of ₹3,00,000 to �
       status: 'LIVE',
       beneficiaryDetails: {
         recipientType: 'ORGANIZATION',
-        accountHolderName: 'NITKKR Assistive Tech Chapter',
+        accountHolderName: 'VIT Chennai Assistive Tech Chapter',
         bankAccountNumber: '91802005829103',
         ifscCode: 'SBIN0006261',
         upiId: 'sparsh.nitkkr@sbi',
@@ -1677,7 +1677,7 @@ Advanced myoelectric prosthetic hands in India cost upwards of ₹3,00,000 to �
     {
       title: 'Vidyut-X: Student Electric Racing Kart with Modular Regenerative BMS',
       slug: 'vidyut-x-modular-ev-racing-kart',
-      tenantId: clubsMap['nitkkr-clean-mobility-ev'].id,
+      tenantId: clubsMap['vit-clean-mobility-ev'].id,
       studentUserId: userMap['anshgoel2580@gmail.com'].id,
       category: 'COMPETITION_TRAVEL',
       campaignType: 'TEAM',
@@ -1686,7 +1686,7 @@ Advanced myoelectric prosthetic hands in India cost upwards of ₹3,00,000 to �
       description: `### Accelerating Indigenous Clean Mobility Engineering
 Sustainable electric mobility requires deep engineering talent skilled in battery safety, thermal modeling, and motor control electronics.
 
-**Vidyut-X** is an electric competition kart developed by students of the **NITKKR Clean Mobility & EV Powertrain Club**. Built from the ground up to represent NITKKR at national student EV engineering challenges, Vidyut-X incorporates a custom-designed 72V LiFePO4 battery pack, active cell balancing, regenerative braking, and real-time telemetry transmitted via CAN-bus to the pit wall.`,
+**Vidyut-X** is an electric competition kart developed by students of the **VIT Chennai Clean Mobility & EV Powertrain Club**. Built from the ground up to represent VIT Chennai at national student EV engineering challenges, Vidyut-X incorporates a custom-designed 72V LiFePO4 battery pack, active cell balancing, regenerative braking, and real-time telemetry transmitted via CAN-bus to the pit wall.`,
       coverImageUrl: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80',
       galleryImageUrls: [
         'https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=800&q=80',
@@ -1699,7 +1699,7 @@ Sustainable electric mobility requires deep engineering talent skilled in batter
       status: 'LIVE',
       beneficiaryDetails: {
         recipientType: 'ORGANIZATION',
-        accountHolderName: 'NITKKR Clean Mobility Club',
+        accountHolderName: 'VIT Chennai Clean Mobility Club',
         bankAccountNumber: '91802009182374',
         ifscCode: 'SBIN0006261',
         upiId: 'vidyut.nitkkr@sbi',
@@ -1783,7 +1783,7 @@ Industrial wastewater dumping into river tributaries often occurs during late-ni
       },
       teamMembers: [
         { name: 'Ashish Trivedi', role: 'Principal Investigator', email: 'ashish.5core@gmail.com' },
-        { name: 'Dr. Sneha Verma', role: 'Sensor Calibration Lead', email: 'sneha.verma@nitkkr.ac.in' },
+        { name: 'Dr. Sneha Verma', role: 'Sensor Calibration Lead', email: 'sneha.verma@vit.ac.in' },
       ],
       faqs: [
         { question: 'Who has access to the pollution data?', answer: 'The raw telemetry data is published openly under the Open Data Commons license for all citizens.' },
@@ -1935,7 +1935,7 @@ Frequent power outages in rural schools interrupt computer education and digital
       },
       teamMembers: [
         { name: 'Om Mohan Gaur', role: 'Propulsion Lead', email: 'ommohangaur029@gmail.com' },
-        { name: 'Aarav Sharma', role: 'Avionics & Parachute Recovery', email: 'aarav.sharma@nitkkr.ac.in' },
+        { name: 'Aarav Sharma', role: 'Avionics & Parachute Recovery', email: 'aarav.sharma@vit.ac.in' },
       ],
       faqs: [
         { question: 'Where will test fires occur?', answer: 'Static test firings are conducted at a licensed industrial testing site with strict safety barricades.' },
@@ -2194,7 +2194,7 @@ Every winter, millions of tons of stubble (parali) are burned across northern In
 
   const dxAdminUser = userMap['dx.admin@dreamxec.com'];
   const complianceUser = userMap['compliance@dreamxec.com'];
-  const profRajeshUser = userMap['prof.rajesh@nitkkr.ac.in'];
+  const profRajeshUser = userMap['prof.rajesh@vit.ac.in'];
 
   for (const campaign of Object.values(campaignMap)) {
     const milestones = await prisma.campaignMilestone.findMany({
@@ -2348,7 +2348,7 @@ Every winter, millions of tons of stubble (parali) are burned across northern In
       donorId: donorAnanya.id,
       amount: 40000.0,
       displayName: 'Ananya Singhania',
-      message: 'Go NIT Kurukshetra electric racing! Looking forward to the national championship podium.',
+      message: 'Go VIT Chennai electric racing! Looking forward to the national championship podium.',
     },
     {
       campaignSlug: 'jalnet-realtime-yamuna-sensing-grid',
@@ -2469,25 +2469,25 @@ Every winter, millions of tons of stubble (parali) are burned across northern In
   const facultyEndorsements = [
     {
       campaignSlug: 'garuda-autonomous-vtol-disaster-drone',
-      endorserEmail: 'prof.rajesh@nitkkr.ac.in',
+      endorserEmail: 'prof.rajesh@vit.ac.in',
       designation: 'Professor of Mechanical Engineering & Dean of Student Welfare',
       content: 'As Dean of Student Welfare and faculty advisor, I have reviewed the aerodynamics models and fail-safe recovery protocols. The Garuda VTOL represents exemplary student engineering of the highest national standard.',
     },
     {
       campaignSlug: 'garuda-autonomous-vtol-disaster-drone',
-      endorserEmail: 'vikram.mentor@nitkkr.ac.in',
+      endorserEmail: 'vikram.mentor@vit.ac.in',
       designation: 'Aerospace Systems Architect & Flight Controls Mentor',
       content: 'The tilt-motor flight dynamic transitions and carbon composite structural integrity meet rigorous unmanned aviation benchmarks.',
     },
     {
       campaignSlug: 'krishibot-autonomous-field-rover',
-      endorserEmail: 'prof.rajesh@nitkkr.ac.in',
+      endorserEmail: 'prof.rajesh@vit.ac.in',
       designation: 'Professor of Mechanical Engineering & Dean of Student Welfare',
       content: 'KrishiBot tackles a pressing agricultural challenge in our state. The hardware-software integration is exceptionally well executed.',
     },
     {
       campaignSlug: 'sparsh-myoelectric-prosthetic-arm',
-      endorserEmail: 'sneha.verma@nitkkr.ac.in',
+      endorserEmail: 'sneha.verma@vit.ac.in',
       designation: 'Principal Investigator & Senior Research Scientist',
       content: 'The surface EMG signal conditioning and parametric socket 3D printing demonstrate genuine clinical empathy and biomechanical rigor.',
     },
@@ -2525,7 +2525,7 @@ Every winter, millions of tons of stubble (parali) are burned across northern In
   const communityComments = [
     {
       campaignSlug: 'garuda-autonomous-vtol-disaster-drone',
-      userEmail: 'prof.rajesh@nitkkr.ac.in',
+      userEmail: 'prof.rajesh@vit.ac.in',
       content: 'Proud of Aarav and the entire Aero Club team! The wind tunnel tests were flawless.',
     },
     {

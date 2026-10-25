@@ -120,7 +120,7 @@ export const EndorsementsStream: React.FC<EndorsementsStreamProps> = ({
               required
               value={designation}
               onChange={(e) => setDesignation(e.target.value)}
-              placeholder="e.g. Professor & Head of Robotics Lab, NIT Kurukshetra / Senior ML Researcher"
+              placeholder="e.g. Professor & Head of Robotics Lab, VIT Chennai / Senior ML Researcher"
               className="w-full px-3 py-2 border-2 border-[#121316] bg-[#FCFBF7] font-bold text-xs sm:text-sm text-[#121316] focus:bg-white focus:border-[#FE4E1A] outline-none shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05)]"
             />
           </div>

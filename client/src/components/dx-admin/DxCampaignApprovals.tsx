@@ -451,7 +451,7 @@ export const DxCampaignApprovals: React.FC = () => {
                     Institutional Affiliation
                   </span>
                   <h4 className="text-sm font-headline font-black text-[#0F534A]">
-                    {inspectingCampaign.tenant?.name || inspectingCampaign.organization?.name || 'NIT Kurukshetra'}
+                    {inspectingCampaign.tenant?.name || inspectingCampaign.organization?.name || 'VIT Chennai'}
                   </h4>
                   <span className="text-[10px] text-gray-600 font-bold block">
                     Dept: {inspectingCampaign.department?.name || 'Innovation Center'}
