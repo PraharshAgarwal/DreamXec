@@ -7,6 +7,8 @@
     "test": "cd server && DATABASE_URL=\"${DATABASE_URL:-postgresql://localhost:5432/db}\" DIRECT_URL=\"${DIRECT_URL:-postgresql://localhost:5432/db}\" npx jest tests/integration/auth.test.js tests/integration/donations.test.js tests/integration/razorpay.test.js tests/integration/email.test.js tests/integration/clubs.test.js tests/integration/users.test.js tests/integration/projects.test.js tests/integration/interactions.test.js tests/integration/platform.test.js tests/integration/governance.test.js tests/integration/admin.test.js tests/integration/middleware.test.js tests/integration/subscribers.test.js --forceExit",
     "test:coverage": "cd server && DATABASE_URL=\"${DATABASE_URL:-postgresql://localhost:5432/db}\" DIRECT_URL=\"${DIRECT_URL:-postgresql://localhost:5432/db}\" npx jest tests/integration/auth.test.js tests/integration/donations.test.js tests/integration/razorpay.test.js tests/integration/email.test.js tests/integration/clubs.test.js tests/integration/users.test.js tests/integration/projects.test.js tests/integration/interactions.test.js tests/integration/platform.test.js tests/integration/governance.test.js tests/integration/admin.test.js tests/integration/middleware.test.js tests/integration/subscribers.test.js --coverage --forceExit",
     "build": "npm --prefix client run build",
+    "build:server": "npm --prefix server run build",
+    "start": "node server/server.js",
     "lint": "npm --prefix client run lint",
     "lint:ratchet": "node scripts/lint-ratchet.js",
     "audit": "npm audit --audit-level=high",
