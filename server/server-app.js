@@ -508,3 +508,36 @@ function gracefulShutdown(signal) {
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
+// --------------------------------------------
+// SELF-PING KEEP-ALIVE (Prevent Render free-tier sleep)
+// --------------------------------------------
+(function startKeepAlive() {
+  // Only run in production and when a public URL is available
+  const selfUrl = process.env.RENDER_EXTERNAL_URL || process.env.SELF_URL;
+  if (process.env.NODE_ENV !== 'production' || !selfUrl) return;
+
+  const https = require('https');
+  const http  = require('http');
+  const pingUrl = `${selfUrl.replace(/\/$/, '')}/health/live`;
+  const INTERVAL_MS = 10 * 60 * 1000; // every 10 minutes
+
+  const pingFn = () => {
+    const lib = pingUrl.startsWith('https') ? https : http;
+    const req = lib.get(pingUrl, (res) => {
+      console.log(`🏓 Keep-alive ping → ${pingUrl} [${res.statusCode}]`);
+    });
+    req.on('error', (err) => {
+      console.warn('⚠️  Keep-alive ping failed:', err.message);
+    });
+    req.end();
+  };
+
+  // First ping after 5 minutes (let server fully boot first)
+  setTimeout(() => {
+    pingFn();
+    setInterval(pingFn, INTERVAL_MS).unref();
+  }, 5 * 60 * 1000).unref();
+
+  console.log(`🏓 Keep-alive job scheduled → ${pingUrl} (every 10 min)`);
+})();
+

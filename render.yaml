@@ -22,6 +22,10 @@ services:
       - key: DIRECT_URL
         sync: false
 
+      # Self-URL for keep-alive pinging (Render injects this automatically)
+      - key: RENDER_EXTERNAL_URL
+        sync: false
+
       # Redis & Cache
       - key: REDIS_URL
         sync: false
